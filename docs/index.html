@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-JMZ3DtSfKrVm8R6O7hPnF0X6tWT0Cnff0zB75MRDgIc='; style-src 'unsafe-inline'; img-src data:; connect-src https://generativelanguage.googleapis.com https://api.anthropic.com https://openrouter.ai; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-4N6MAey+qtNFmGVUHq6lBaFwoggCeLPFXJ2SM7Wvfic='; style-src 'unsafe-inline'; img-src data:; connect-src https://generativelanguage.googleapis.com https://api.anthropic.com https://openrouter.ai; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="dark">
 <meta name="description" content="Décris un son, récupère des presets .prst prêts à charger dans ton Valeton GP-200. Tout se passe dans ton navigateur.">
@@ -215,6 +215,21 @@ footer.foot { margin-top: 34px; color: var(--ink-label); font-size: 13px; displa
   * { animation: none !important; transition: none !important; }
   .rack.scan .slot .led { background: var(--led-on); }
 }
+
+/* --- envoi USB ------------------------------------------------------------ */
+.pedal { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line-soft); display: grid; gap: 12px; }
+.pedal h3 { font-size: 17px; }
+.pedal ol { margin: 0; padding-left: 20px; }
+.pstate { display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--ink-dim); }
+.pstate.ok { color: var(--ink); }
+.pled { width: 11px; height: 11px; border-radius: 50%; background: var(--led-off); border: 1px solid #000; flex: none; }
+.pstate.ok .pled { background: var(--ok); box-shadow: 0 0 9px rgba(93,202,165,.85); }
+.slotrow { max-width: 360px; }
+.slotrow > * { flex: 1 1 120px; }
+.prog { display: grid; gap: 6px; font-size: 14px; color: var(--ink-dim); max-width: 460px; }
+.prog .bar { height: 8px; border-radius: 4px; background: var(--bg-field); box-shadow: inset 0 1px 2px rgba(0,0,0,.6); overflow: hidden; }
+.prog .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--acc-lo), var(--acc-hi)); transition: width .15s; }
+.btn.small.go { min-height: 36px; font-size: 15px; padding: 0 16px; }
 
 </style>
 </head>
@@ -1414,10 +1429,307 @@ footer.foot { margin-top: 34px; color: var(--ink-label); font-size: 13px; displa
   };
 });
 
+/* ============================================================================
+ * gp200usb.js -- envoi de presets au Valeton GP-200 par USB (Web MIDI)
+ *
+ * Port FIDELE de gp200_usb.py (protocole retro-ingenierie sur capture USBPcap) :
+ *   - memes trames SysEx (verifiees octet par octet contre le Python, voir tests/)
+ *   - meme sequence : handshake (ACK attendu, 5 essais de 100 ms) -> 7 morceaux
+ *     SysEx -> Bank Select + Program Change pour activer le preset.
+ *
+ * Aucun acces au DOM. La partie "protocole" est pure ; la classe MidiLink recoit
+ * l'objet MIDIAccess du navigateur (ou un faux dans les tests).
+ * ========================================================================= */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.GP200USB = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  // ------------------------------------------------------- constantes protocole
+  const NUX_ID = [0x21, 0x25, 0x7E, 0x47, 0x50, 0x2D, 0x32];            // "!%~GP-2"
+  const SYSEX_CMD_HDR = [0xF0].concat(NUX_ID, [0x12, 0x20, 0x09]);         // 11 octets
+  const CHUNK_SIZE = 183;
+  const DEV_HDR_SIZE = 36;
+  const PRST_HDR_OFFSET = 68;
+  const PRST_DATA_END = 1216;
+  const PRST_PC_OFFSET = 76;
+  const PRST_SIZE = 1224;
+  const GP200_MIDI_NAME = 'GP-200';
+  const MIDI_CHANNEL = 0;
+  const PC_MAX_MIDI = 127;
+  const SLOT_MAX = 64;
+  const SLOT_MAX_VERIFIED = 50;   // selection verifiee sur materiel jusqu'a 50-D
+
+  class UsbError extends Error {
+    constructor(code, message) { super(message); this.name = 'UsbError'; this.code = code; }
+  }
+
+  // ------------------------------------------------------------------ trames
+  /** Numero PC (0-based) d'un slot. letter = 'A'..'D' ou 0..3. */
+  function slotToPc(slot, letter) {
+    if (typeof letter === 'string') letter = letter.toUpperCase().charCodeAt(0) - 65;
+    if (!(slot >= 1 && slot <= SLOT_MAX) || Math.floor(slot) !== slot) {
+      throw new UsbError('slot', 'slot doit etre 1-' + SLOT_MAX + ', recu ' + slot);
+    }
+    if (!(letter >= 0 && letter <= 3) || Math.floor(letter) !== letter) {
+      throw new UsbError('letter', 'letter doit etre 0-3 ou A-D, recu ' + letter);
+    }
+    return (slot - 1) * 4 + letter;
+  }
+
+  function pcToSlotName(pc) {
+    const n = Math.floor(pc / 4) + 1;
+    return (n < 10 ? '0' : '') + n + '-' + 'ABCD'[pc % 4];
+  }
+
+  function nibbleEncode(data) {
+    const out = new Uint8Array(data.length * 2);
+    for (let i = 0; i < data.length; i++) {
+      out[2 * i] = (data[i] >> 4) & 0x0F;
+      out[2 * i + 1] = data[i] & 0x0F;
+    }
+    return out;
+  }
+
+  function buildDeviceHeader(destPc, prst) {
+    const h = new Uint8Array(DEV_HDR_SIZE);
+    h[2] = 0x04; h[4] = 0x01; h[6] = destPc;
+    h[8] = 0x01; h[10] = 0x04; h[12] = destPc; h[14] = destPc;
+    h[16] = 0x02; h[18] = 0x58; h[20] = destPc; h[22] = 0x78;
+    h[24] = prst[56];
+    h[28] = 0x05;
+    return h;
+  }
+
+  /** .prst (1224 octets) -> payload device (1184 octets). */
+  function prstToDevicePayload(prst, destPc) {
+    if (prst.length !== PRST_SIZE) throw new UsbError('size', '.prst doit faire 1224 bytes, recu ' + prst.length);
+    const header = buildDeviceHeader(destPc, prst);
+    const body = Uint8Array.from(prst.subarray ? prst.subarray(PRST_HDR_OFFSET, PRST_DATA_END) : prst.slice(PRST_HDR_OFFSET, PRST_DATA_END));
+    body[PRST_PC_OFFSET] = destPc;
+    const out = new Uint8Array(header.length + body.length);
+    out.set(header, 0); out.set(body, header.length);
+    return out;
+  }
+
+  /** Les 7 messages SysEx (F0 ... F7) qui ecrivent un preset. */
+  function buildSysexChunks(prst, destPc) {
+    const payload = prstToDevicePayload(prst, destPc);
+    const msgs = [];
+    for (let offset = 0; offset < payload.length; offset += CHUNK_SIZE) {
+      const chunk = payload.subarray(offset, Math.min(offset + CHUNK_SIZE, payload.length));
+      const nib = nibbleEncode(chunk);
+      const msg = new Uint8Array(SYSEX_CMD_HDR.length + 2 + nib.length + 1);
+      msg.set(SYSEX_CMD_HDR, 0);
+      msg[SYSEX_CMD_HDR.length] = offset & 0x7F;
+      msg[SYSEX_CMD_HDR.length + 1] = offset >> 7;
+      msg.set(nib, SYSEX_CMD_HDR.length + 2);
+      msg[msg.length - 1] = 0xF7;
+      msgs.push(msg);
+    }
+    return msgs;
+  }
+
+  /** Handshake (30 octets) envoye avant chaque preset. */
+  function buildHandshakeSysex(destPc) {
+    return Uint8Array.from([
+      0xF0, 0x21, 0x25, 0x7E, 0x47, 0x50, 0x2D, 0x32,
+      0x12, 0x08, 0x00, 0x00, 0x00, 0x00, 0x08, 0x01,
+      0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, (destPc >> 4) & 0x0F, destPc & 0x0F, 0x00, 0x00, 0xF7,
+    ]);
+  }
+
+  /** Bank Select (CC0) + Program Change pour activer un slot. */
+  function selectMessages(slot, letter, channel) {
+    const ch = (channel === undefined ? MIDI_CHANNEL : channel) & 0x0F;
+    const pc = slotToPc(slot, letter);
+    const bank = pc > PC_MAX_MIDI ? 1 : 0;
+    const prog = pc > PC_MAX_MIDI ? pc - 128 : pc;
+    return [Uint8Array.from([0xB0 | ch, 0, bank]), Uint8Array.from([0xC0 | ch, prog])];
+  }
+
+  // ------------------------------------------------------------------ liaison
+  const defaultSleep = ms => new Promise(r => setTimeout(r, ms));
+
+  /**
+   * Liaison avec la pedale. `access` = MIDIAccess (navigateur) ou equivalent.
+   *   const link = new MidiLink({ log, sleep });
+   *   await link.attach(access);              // liste les ports
+   *   link.select(outputId);                  // choisit la sortie (+ entree du meme nom)
+   *   await link.open();                      // ouvre les ports
+   *   await link.pushPreset(12, 'A', prstBytes, { onProgress });
+   */
+  class MidiLink {
+    constructor(o) {
+      o = o || {};
+      this.log = o.log || (() => {});
+      this.sleep = o.sleep || defaultSleep;
+      this.chunkDelay = o.chunkDelay === undefined ? 25 : o.chunkDelay;   // ms entre morceaux
+      this.hint = (o.hint || GP200_MIDI_NAME).toLowerCase();
+      this.access = null; this.out = null; this.inp = null;
+      this.rx = [];            // messages SysEx recus depuis le dernier drainage
+      this.onchange = null;
+      this.busy = false;
+    }
+
+    static supported(nav) {
+      nav = nav || (typeof navigator !== 'undefined' ? navigator : null);
+      return !!nav && typeof nav.requestMIDIAccess === 'function';
+    }
+
+    /** Demande l'acces MIDI avec SysEx (le navigateur affiche une demande d'autorisation). */
+    static async request(nav) {
+      nav = nav || navigator;
+      return nav.requestMIDIAccess({ sysex: true });
+    }
+
+    attach(access) {
+      this.access = access;
+      access.onstatechange = () => { if (this.onchange) this.onchange(); };
+    }
+
+    ports() {
+      const lst = m => { const r = []; if (m) m.forEach(p => r.push({ id: p.id, name: p.name || '', state: p.state })); return r; };
+      return { outputs: lst(this.access && this.access.outputs), inputs: lst(this.access && this.access.inputs) };
+    }
+
+    /** Id de la sortie qui ressemble a un GP-200, ou null. */
+    findGp200() {
+      const o = this.ports().outputs.filter(p => p.state !== 'disconnected');
+      const hit = o.find(p => p.name.toLowerCase().indexOf(this.hint) >= 0);
+      return hit ? hit.id : null;
+    }
+
+    select(outputId) {
+      const outs = this.access.outputs, ins = this.access.inputs;
+      this.closeInput();
+      this.out = outs.get ? outs.get(outputId) : null;
+      if (!this.out) throw new UsbError('noport', 'port MIDI introuvable');
+      // l'entree a le meme nom que la sortie (c'est elle qui porte l'ACK du handshake)
+      let inp = null;
+      const name = (this.out.name || '').toLowerCase();
+      ins.forEach(p => { if (!inp && p.state !== 'disconnected' && (p.name || '').toLowerCase() === name) inp = p; });
+      if (!inp) ins.forEach(p => { if (!inp && p.state !== 'disconnected' && (p.name || '').toLowerCase().indexOf(this.hint) >= 0 && name.indexOf(this.hint) >= 0) inp = p; });
+      this.inp = inp;
+    }
+
+    async open() {
+      if (!this.out) throw new UsbError('noport', 'aucune sortie choisie');
+      try { if (this.out.open) await this.out.open(); }
+      catch (e) { throw new UsbError('busy', 'impossible d\'ouvrir la sortie : ' + (e && e.message || e)); }
+      this.rx = [];
+      if (this.inp) {
+        try {
+          if (this.inp.open) await this.inp.open();
+          this.inp.onmidimessage = ev => {
+            const d = ev.data;
+            if (d && d[0] === 0xF0) this.rx.push(Uint8Array.from(d));
+          };
+        } catch (e) {
+          // Sans entree on travaille "en aveugle", comme le Python sans port IN.
+          this.log('input_blind', String(e && e.message || e));
+          this.inp = null;
+        }
+      }
+    }
+
+    closeInput() {
+      if (this.inp) { try { this.inp.onmidimessage = null; if (this.inp.close) this.inp.close(); } catch (e) { /* rien */ } }
+      this.inp = null;
+    }
+
+    async close() {
+      this.closeInput();
+      if (this.out && this.out.close) { try { await this.out.close(); } catch (e) { /* rien */ } }
+      this.out = null;
+    }
+
+    get blind() { return !this.inp; }
+
+    _send(bytes) {
+      if (!this.out || this.out.state === 'disconnected') throw new UsbError('gone', 'la pedale a ete debranchee');
+      this.out.send(Array.from(bytes));
+    }
+
+    /**
+     * Ecrit un .prst dans un slot (= write_preset du Python).
+     * onProgress(step, total, label) : 0 = handshake, 1..N = morceaux, N+1 = fin.
+     * Renvoie {ack, attempts, blind}.
+     */
+    async writePreset(slot, letter, prst, o) {
+      o = o || {};
+      if (this.busy) throw new UsbError('busy', 'un envoi est deja en cours');
+      const destPc = slotToPc(slot, letter);
+      const chunks = buildSysexChunks(prst, destPc);   // valide aussi la taille
+      const total = chunks.length;
+      const progress = o.onProgress || (() => {});
+      this.busy = true;
+      try {
+        progress(0, total, 'handshake');
+        this.rx = [];
+        let hsOk = false, attempts = 0;
+        for (let attempt = 0; attempt < 5; attempt++) {
+          attempts = attempt + 1;
+          this._send(buildHandshakeSysex(destPc));
+          this.log('handshake', attempts);
+          await this.sleep(100);
+          if (this.inp) {
+            // meme critere que le Python : un SysEx d'au moins 20 octets de donnees
+            const got = this.rx.splice(0, this.rx.length);
+            if (got.some(m => m.length - 2 >= 20)) { hsOk = true; }
+          } else if (attempt >= 1) {
+            hsOk = true;                      // aucun MIDI IN : 2 envois minimum puis on tente
+          }
+          if (hsOk) break;
+        }
+        if (!hsOk) this.log('no_ack');
+        await this.sleep(50);
+        for (let i = 0; i < total; i++) {
+          progress(i + 1, total, 'chunk ' + (i + 1) + '/' + total);
+          this._send(chunks[i]);
+          if (i < total - 1 && this.chunkDelay > 0) await this.sleep(this.chunkDelay);
+        }
+        await this.sleep(100);               // laisse la pedale finir (flush_input du Python)
+        this.rx = [];
+        progress(total + 1, total, 'done');
+        return { ack: hsOk && !this.blind, attempts, blind: this.blind, pc: destPc };
+      } finally {
+        this.busy = false;
+      }
+    }
+
+    /** Active un slot (Bank Select + Program Change). */
+    selectPreset(slot, letter, channel) {
+      for (const m of selectMessages(slot, letter, channel)) this._send(m);
+      return slotToPc(slot, letter);
+    }
+
+    /** write + pause + select (= push_preset du Python). */
+    async pushPreset(slot, letter, prst, o) {
+      o = o || {};
+      const r = await this.writePreset(slot, letter, prst, o);
+      if (o.activate !== false) {
+        await this.sleep(o.delayAfterWrite === undefined ? 350 : o.delayAfterWrite);
+        this.selectPreset(slot, letter, o.channel);
+      }
+      return r;
+    }
+  }
+
+  return {
+    NUX_ID, SYSEX_CMD_HDR, CHUNK_SIZE, DEV_HDR_SIZE, PRST_SIZE, GP200_MIDI_NAME, MIDI_CHANNEL, SLOT_MAX, SLOT_MAX_VERIFIED,
+    UsbError, slotToPc, pcToSlotName, nibbleEncode, buildDeviceHeader, prstToDevicePayload, buildSysexChunks,
+    buildHandshakeSysex, selectMessages, MidiLink,
+  };
+});
+
 /* GP-200 Studio Web -- interface. Tout le moteur est dans gp200core.js (global GP200). */
 (function () {
   'use strict';
   const G = self.GP200;
+  const USB = self.GP200USB;
   const B = JSON.parse(document.getElementById('gp200-bundle').textContent);
   const tb = new G.Tables(B.tables);
   const template = Uint8Array.from(atob(B.template), c => c.charCodeAt(0));
@@ -1457,7 +1769,7 @@ footer.foot { margin-top: 34px; color: var(--ink-label); font-size: 13px; displa
       presets_ready: '%d presets prêts', empty_slot: 'vide', bypass: 'bypass', active: 'actif',
       inspector_hint: 'Clique un module pour voir tous ses réglages.',
       download: 'Télécharger ce preset (.prst)', download_all: 'Tout télécharger (.zip)',
-      dl_hint: "Importe les fichiers .prst avec l'éditeur Valeton GP-200, ou envoie-les directement par USB avec GP-200 Studio pour Windows.",
+      dl_hint: "Importe les fichiers .prst avec l'éditeur Valeton GP-200, ou envoie-les directement à la pédale avec la section ci-dessous.",
       rig: 'Rig identifié', structure_l: 'Structure', notes: 'Notes', angle: 'Angle', listen: 'À écouter', file: 'Fichier', section: 'Section',
       log: 'Journal technique', log_empty: 'Rien pour le moment.',
       warn_title: 'Remarques du convertisseur',
@@ -1476,6 +1788,23 @@ footer.foot { margin-top: 34px; color: var(--ink-label); font-size: 13px; displa
       l_tokens: '  tokens : %s entrée, %s sortie', l_trunc: '  ! réponse tronquée (limite de tokens)', l_switch: '  modèle remplacé par %s', l_http: '  ! erreur %s, nouvel essai dans %s s',
       foot_a: "Tout se passe dans ton navigateur : cette page ne charge aucune police, aucun script ni aucun suivi extérieur. Les fichiers .prst sont fabriqués ici, avec le même encodeur que GP-200 Studio.",
       foot_b: 'Projet libre, non affilié à Valeton.', repo: 'Code source et version Windows',
+      pedal_title: 'Envoyer sur la pédale', pedal_sub: "Écris le preset directement dans ton GP-200 par USB, sans éditeur.",
+      pedal_unsupported: "Ce navigateur ne peut pas parler à la pédale en USB (c'est le cas de Safari et des iPhone/iPad). Ouvre cette page avec Chrome ou Edge sur ordinateur, ou télécharge les fichiers .prst ci-dessus.",
+      pedal_steps: ['Branche le GP-200 en USB et allume-le.', "Ferme l'éditeur Valeton et GP-200 Studio s'ils sont ouverts : un seul programme peut utiliser la pédale à la fois.", "Clique sur « Connecter la pédale » et autorise l'accès MIDI quand le navigateur le demande."],
+      pedal_connect: 'Connecter la pédale', pedal_asking: "Autorise l'accès MIDI dans la fenêtre du navigateur…",
+      pedal_denied: "L'accès MIDI a été refusé. Clique sur le cadenas à gauche de l'adresse, autorise les appareils MIDI, puis réessaie.",
+      pedal_found: 'GP-200 détectée : %s', pedal_none: "Aucune pédale GP-200 détectée. Vérifie le câble USB, que la pédale est allumée, et qu'aucun autre programme ne l'utilise.",
+      pedal_port: 'Port MIDI', pedal_retry: 'Chercher à nouveau',
+      pedal_slot: 'Emplacement dans la pédale', pedal_bank: 'Numéro (1 à 50)', pedal_letter: 'Lettre',
+      pedal_send_one: 'Envoyer ce preset sur %s', pedal_send_three: 'Envoyer les %d variantes sur %s',
+      pedal_confirm: "Ça va écraser ce qui se trouve actuellement sur %s. Ces presets de la pédale seront perdus : sauvegarde-les avant si tu y tiens.",
+      pedal_confirm_go: 'Écraser et envoyer', cancel: 'Annuler',
+      pedal_hs: 'Poignée de main avec la pédale…', pedal_chunk: 'Envoi %d/%d…', pedal_job: ' (preset %d sur %d)',
+      pedal_done: 'Terminé : %s. La pédale est positionnée sur le premier preset envoyé.',
+      pedal_noack: "La pédale n'a pas confirmé la poignée de main : l'envoi a quand même été tenté. Si le preset n'apparaît pas, ferme les autres programmes qui utilisent la pédale et recommence.",
+      pedal_blind: "Le canal de retour de la pédale n'a pas pu être ouvert : l'envoi s'est fait sans confirmation.",
+      e_pedal_busy: "Impossible d'ouvrir la pédale : un autre programme (éditeur Valeton, GP-200 Studio…) l'utilise sûrement. Ferme-le puis réessaie.",
+      e_pedal_gone: "La pédale a été débranchée pendant l'envoi.", e_pedal_generic: "Erreur d'envoi : %s",
     },
     en: {
       tagline: 'AI-generated presets for the Valeton GP-200',
@@ -1507,7 +1836,7 @@ footer.foot { margin-top: 34px; color: var(--ink-label); font-size: 13px; displa
       presets_ready: '%d presets ready', empty_slot: 'empty', bypass: 'bypassed', active: 'on',
       inspector_hint: 'Click a module to see all its settings.',
       download: 'Download this preset (.prst)', download_all: 'Download all (.zip)',
-      dl_hint: 'Import the .prst files with the Valeton GP-200 editor, or send them straight over USB with GP-200 Studio for Windows.',
+      dl_hint: 'Import the .prst files with the Valeton GP-200 editor, or send them straight to the pedal with the section below.',
       rig: 'Identified rig', structure_l: 'Structure', notes: 'Notes', angle: 'Angle', listen: 'Listen for', file: 'File', section: 'Section',
       log: 'Technical log', log_empty: 'Nothing yet.',
       warn_title: 'Converter remarks',
@@ -1526,6 +1855,23 @@ footer.foot { margin-top: 34px; color: var(--ink-label); font-size: 13px; displa
       l_tokens: '  tokens: %s in, %s out', l_trunc: '  ! response truncated (token limit)', l_switch: '  model replaced by %s', l_http: '  ! error %s, retrying in %s s',
       foot_a: 'Everything happens in your browser: this page loads no font, script or tracker from elsewhere. The .prst files are built here, with the same encoder as GP-200 Studio.',
       foot_b: 'Free project, not affiliated with Valeton.', repo: 'Source code and Windows version',
+      pedal_title: 'Send to the pedal', pedal_sub: 'Write the preset straight into your GP-200 over USB, no editor needed.',
+      pedal_unsupported: 'This browser cannot talk to the pedal over USB (Safari and iPhone/iPad cannot). Open this page with Chrome or Edge on a computer, or download the .prst files above.',
+      pedal_steps: ['Plug the GP-200 in over USB and switch it on.', 'Close the Valeton editor and GP-200 Studio if they are open: only one program can use the pedal at a time.', 'Click “Connect the pedal” and allow MIDI access when the browser asks.'],
+      pedal_connect: 'Connect the pedal', pedal_asking: 'Allow MIDI access in the browser prompt…',
+      pedal_denied: 'MIDI access was refused. Click the padlock left of the address, allow MIDI devices, then try again.',
+      pedal_found: 'GP-200 found: %s', pedal_none: 'No GP-200 found. Check the USB cable, that the pedal is on, and that no other program is using it.',
+      pedal_port: 'MIDI port', pedal_retry: 'Search again',
+      pedal_slot: 'Location in the pedal', pedal_bank: 'Number (1 to 50)', pedal_letter: 'Letter',
+      pedal_send_one: 'Send this preset to %s', pedal_send_three: 'Send the %d variants to %s',
+      pedal_confirm: 'This will overwrite what is currently stored in %s. Those presets on the pedal will be lost: back them up first if you care about them.',
+      pedal_confirm_go: 'Overwrite and send', cancel: 'Cancel',
+      pedal_hs: 'Handshaking with the pedal…', pedal_chunk: 'Sending %d/%d…', pedal_job: ' (preset %d of %d)',
+      pedal_done: 'Done: %s. The pedal is now on the first preset sent.',
+      pedal_noack: 'The pedal did not confirm the handshake: the transfer was attempted anyway. If the preset does not show up, close other programs that use the pedal and try again.',
+      pedal_blind: "The pedal's return channel could not be opened: the transfer was sent without confirmation.",
+      e_pedal_busy: 'Could not open the pedal: another program (Valeton editor, GP-200 Studio…) is probably using it. Close it and try again.',
+      e_pedal_gone: 'The pedal was unplugged during the transfer.', e_pedal_generic: 'Transfer error: %s',
     },
   };
   const SLOT_NAMES = {
@@ -1543,6 +1889,8 @@ footer.foot { margin-top: 34px; color: var(--ink-label); font-size: 13px; displa
     modelList: {}, modelMsg: '',
     run: null,          // {running, status, log:[], error, controller}
     res: null, sel: { si: 0, vi: 0, slot: 'AMP' }, fresh: false, notice: null,
+    usb: { link: null, state: (USB && USB.MidiLink.supported()) ? 'idle' : 'unsupported', outId: null, ports: [], bank: 1, letter: 'A',
+           confirm: null, sending: null, result: null, flags: {}, error: '' },
   };
   function load() {
     try {
@@ -1553,12 +1901,14 @@ footer.foot { margin-top: 34px; color: var(--ink-label); font-size: 13px; displa
       if (o.keys && typeof o.keys === 'object') s.keys = o.keys;
       if (typeof o.remember === 'boolean') s.remember = o.remember;
       if (o.pickup) s.pickup = o.pickup;
+      if (o.usb && o.usb.bank >= 1 && o.usb.bank <= USB.SLOT_MAX_VERIFIED) s.usb.bank = o.usb.bank | 0;
+      if (o.usb && 'ABCD'.indexOf(o.usb.letter) >= 0 && o.usb.letter) s.usb.letter = o.usb.letter;
     } catch (e) { /* stockage indisponible : on travaille en memoire */ }
   }
   function save() {
     try {
       localStorage.setItem(STORE, JSON.stringify({
-        lang: s.lang, provider: s.provider, models: s.models, remember: s.remember, pickup: s.pickup,
+        lang: s.lang, provider: s.provider, models: s.models, remember: s.remember, pickup: s.pickup, usb: { bank: s.usb.bank, letter: s.usb.letter },
         keys: s.remember ? s.keys : {},
       }));
     } catch (e) { /* idem */ }
@@ -1751,6 +2101,7 @@ footer.foot { margin-top: 34px; color: var(--ink-label); font-size: 13px; displa
     app.appendChild(h('div', { class: 'wrap' }, header(), noticeBar(), setupPanel(), describePanel(), rackPanel(), footer()));
     window.scrollTo(0, keep.y);
     const lb = document.getElementById('logbox'); if (lb) paintLog(lb);
+    if (s.fresh) { clearTimeout(render.t); render.t = setTimeout(() => { s.fresh = false; const r = document.querySelector('.rack.lit'); if (r) r.classList.remove('lit'); }, 1600); }
   }
 
   function header() {
@@ -1927,10 +2278,128 @@ footer.foot { margin-top: 34px; color: var(--ink-label); font-size: 13px; displa
           pl.notes ? h('p', null, h('b', { text: T('notes') + ' : ' }), String(pl.notes)) : null));
       }
       panel.appendChild(h('div', { class: 'dl' }, h('p', { class: 'hint', text: T('dl_hint') })));
+      panel.appendChild(pedalBlock(groups[s.sel.si] || []));
     } else if (!res) {
       panel.appendChild(h('p', { class: 'rack-empty', text: '' }));
     }
     return panel;
+  }
+
+
+  // ------------------------------------------------------------ pedale (USB)
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const slotName2 = (bank, letter) => USB.pcToSlotName(USB.slotToPc(bank, letter));
+  function usbErr(e) {
+    const m = String((e && e.name) + ' ' + (e && e.message));
+    if (e && e.code === 'busy') return T('e_pedal_busy');
+    if (e && e.code === 'gone') return T('e_pedal_gone');
+    if (/denied|security|not allowed|permission/i.test(m)) return T('pedal_denied');
+    return T('e_pedal_generic', String((e && e.message) || e).slice(0, 300));
+  }
+  function pedalRefresh() {
+    const u = s.usb;
+    if (!u.link) return;
+    u.ports = u.link.ports().outputs.filter(p => p.state !== 'disconnected');
+    if (!u.ports.some(p => p.id === u.outId)) u.outId = u.link.findGp200();
+  }
+  async function pedalConnect() {
+    const u = s.usb;
+    u.state = 'asking'; u.result = null; u.error = ''; render();
+    try {
+      const access = await USB.MidiLink.request();
+      const link = new USB.MidiLink({ log: kind => { if (kind === 'no_ack') u.flags.noAck = true; if (kind === 'input_blind') u.flags.blind = true; } });
+      link.attach(access);
+      link.onchange = () => { pedalRefresh(); if (!u.sending) render(); };
+      u.link = link; u.state = 'ready'; pedalRefresh();
+    } catch (e) {
+      u.state = /denied|security|not allowed|permission/i.test(String((e && e.name) + ' ' + (e && e.message))) ? 'denied' : 'error';
+      u.error = usbErr(e);
+    }
+    render();
+  }
+  function setPedalProgress(pct, label) {
+    const b = document.getElementById('pedal-bar'), l = document.getElementById('pedal-label');
+    if (b) b.style.width = Math.max(0, Math.min(100, pct)).toFixed(0) + '%';
+    if (l) l.textContent = label;
+  }
+  function pedalJobs(kind, gr) {
+    const u = s.usb;
+    return kind === 'three' ? gr.slice(0, 3).map((f, i) => ({ f, letter: 'ABCD'[i] })) : [{ f: gr[s.sel.vi], letter: u.letter }];
+  }
+  async function pedalSend(kind, gr) {
+    const u = s.usb, jobs = pedalJobs(kind, gr), bank = u.bank;
+    u.confirm = null; u.result = null; u.flags = {}; u.sending = { label: T('pedal_hs') };
+    render();
+    try {
+      u.link.select(u.outId);
+      await u.link.open();
+      for (let k = 0; k < jobs.length; k++) {
+        const j = jobs[k], suffix = jobs.length > 1 ? T('pedal_job', k + 1, jobs.length) : '';
+        await u.link.pushPreset(bank, j.letter, j.f.raw, {
+          onProgress: (step, total) => setPedalProgress(((k * (total + 2) + step) / (jobs.length * (total + 2))) * 100,
+            (step === 0 ? T('pedal_hs') : step <= total ? T('pedal_chunk', step, total) : T('pedal_hs').replace(/…$/, '') + ' ✓') + suffix),
+        });
+      }
+      if (jobs.length > 1) { await sleep(350); u.link.selectPreset(bank, jobs[0].letter); }
+      u.result = { kind: 'ok', text: T('pedal_done', jobs.map(j => slotName2(bank, j.letter)).join(', ')) };
+    } catch (e) {
+      u.result = { kind: 'err', text: usbErr(e) };
+    } finally {
+      try { await u.link.close(); } catch (e) { /* rien */ }
+      u.sending = null; render();
+    }
+  }
+
+  function pedalBlock(gr) {
+    const u = s.usb;
+    const box = h('section', { class: 'pedal', 'aria-labelledby': 'h-pedal' },
+      h('h3', { id: 'h-pedal', text: T('pedal_title') }), h('p', { class: 'help', text: T('pedal_sub') }));
+    if (u.state === 'unsupported') { box.appendChild(h('p', { class: 'note', text: T('pedal_unsupported') })); return box; }
+    if (u.state !== 'ready') {
+      box.appendChild(h('ol', { class: 'help' }, D[s.lang].pedal_steps.map(x => h('li', { text: x }))));
+      if (u.state === 'denied' || u.state === 'error') box.appendChild(h('p', { class: 'note err', role: 'alert', text: u.error }));
+      box.appendChild(h('div', null, h('button', { type: 'button', class: 'btn', id: 'pedal-connect', disabled: u.state === 'asking', onclick: pedalConnect },
+        u.state === 'asking' ? T('pedal_asking') : T('pedal_connect'))));
+      return box;
+    }
+    const busy = !!u.sending, found = !!u.outId;
+    const cur = u.ports.find(p => p.id === u.outId);
+    box.appendChild(h('p', { class: 'pstate' + (found ? ' ok' : ''), role: 'status' }, h('span', { class: 'pled' }),
+      found ? T('pedal_found', cur ? cur.name : '') : T('pedal_none')));
+    if ((!found && u.ports.length) || u.ports.filter(p => /gp-200/i.test(p.name)).length > 1) {
+      box.appendChild(h('label', { class: 'f', style: 'max-width:340px' }, T('pedal_port'),
+        h('select', { id: 'pedal-port', disabled: busy, onchange: e => { u.outId = e.target.value || null; render(); } },
+          h('option', { value: '' }, '–'), u.ports.map(p => h('option', { value: p.id, selected: p.id === u.outId }, p.name || p.id)))));
+    }
+    if (!found) box.appendChild(h('div', null, h('button', { type: 'button', class: 'btn small', onclick: () => { pedalRefresh(); render(); } }, T('pedal_retry'))));
+    if (found) {
+      const bankStr = n => slotName2(u.bank, n);
+      const n3 = Math.min(3, gr.length);
+      box.appendChild(h('div', { class: 'row slotrow' },
+        h('label', { class: 'f' }, T('pedal_bank'), h('select', { id: 'pedal-bank', disabled: busy, onchange: e => { u.bank = +e.target.value; u.confirm = null; save(); render(); } },
+          Array.from({ length: USB.SLOT_MAX_VERIFIED }, (_, i) => h('option', { value: String(i + 1), selected: i + 1 === u.bank }, String(i + 1))))),
+        h('label', { class: 'f' }, T('pedal_letter'), h('select', { id: 'pedal-letter', disabled: busy, onchange: e => { u.letter = e.target.value; u.confirm = null; save(); render(); } },
+          ['A', 'B', 'C', 'D'].map(l => h('option', { value: l, selected: l === u.letter }, l))))));
+      if (u.confirm) {
+        const names = u.confirm === 'three' ? Array.from({ length: n3 }, (_, i) => bankStr('ABCD'[i])).join(', ') : bankStr(u.letter);
+        box.appendChild(h('div', { class: 'note', role: 'alertdialog' }, h('p', { text: T('pedal_confirm', names) }),
+          h('div', { class: 'actions', style: 'margin-top:10px' },
+            h('button', { type: 'button', class: 'btn go small', id: 'pedal-yes', onclick: () => pedalSend(u.confirm, gr) }, T('pedal_confirm_go')),
+            h('button', { type: 'button', class: 'btn small', onclick: () => { u.confirm = null; render(); } }, T('cancel')))));
+      } else {
+        box.appendChild(h('div', { class: 'actions' },
+          h('button', { type: 'button', class: 'btn', id: 'pedal-one', disabled: busy, onclick: () => { u.confirm = 'one'; u.result = null; render(); } }, T('pedal_send_one', bankStr(u.letter))),
+          n3 > 1 ? h('button', { type: 'button', class: 'btn', id: 'pedal-three', disabled: busy, onclick: () => { u.confirm = 'three'; u.result = null; render(); } },
+            T('pedal_send_three', n3, Array.from({ length: n3 }, (_, i) => bankStr('ABCD'[i])).join(', '))) : null));
+      }
+    }
+    if (busy) box.appendChild(h('div', { class: 'prog', role: 'progressbar' }, h('div', { class: 'bar' }, h('i', { id: 'pedal-bar', style: 'width:2%' })), h('span', { id: 'pedal-label', text: u.sending.label })));
+    if (u.result) {
+      box.appendChild(h('p', { class: 'note ' + (u.result.kind === 'ok' ? 'ok' : 'err'), role: u.result.kind === 'ok' ? 'status' : 'alert', text: u.result.text }));
+      if (u.result.kind === 'ok' && u.flags.noAck) box.appendChild(h('p', { class: 'note', text: T('pedal_noack') }));
+      if (u.result.kind === 'ok' && u.flags.blind) box.appendChild(h('p', { class: 'note', text: T('pedal_blind') }));
+    }
+    return box;
   }
 
   function inspector(file) {
