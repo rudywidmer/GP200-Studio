@@ -1,0 +1,499 @@
+[
+ {
+  "amp": "Tweedy",
+  "amp_id": 1,
+  "cab_id": 2,
+  "cab_name": "TWD PRC",
+  "defcab_in_table": 2
+ },
+ {
+  "amp": "Bellman 59N",
+  "amp_id": 3,
+  "cab_id": 22,
+  "cab_name": "Bellman 1",
+  "defcab_in_table": 22
+ },
+ {
+  "amp": "Dark Twin",
+  "amp_id": 4,
+  "cab_id": 18,
+  "cab_name": "Dark Twin",
+  "defcab_in_table": 18
+ },
+ {
+  "amp": "Dark DLX",
+  "amp_id": 5,
+  "cab_id": 11,
+  "cab_name": "TWD LUX",
+  "defcab_in_table": 11
+ },
+ {
+  "amp": "Dark Vibra",
+  "amp_id": 9,
+  "cab_id": 4,
+  "cab_name": "DARK VIT",
+  "defcab_in_table": 4
+ },
+ {
+  "amp": "Silver Twin",
+  "amp_id": 13,
+  "cab_id": 3,
+  "cab_name": "DARK LUX",
+  "defcab_in_table": 3
+ },
+ {
+  "amp": "SUPDual CL",
+  "amp_id": 15,
+  "cab_id": 23,
+  "cab_name": "SUP",
+  "defcab_in_table": 23
+ },
+ {
+  "amp": "Foxy 15TB",
+  "amp_id": 16,
+  "cab_id": 8,
+  "cab_name": "FOXY 1",
+  "defcab_in_table": 8
+ },
+ {
+  "amp": "Foxy 30N",
+  "amp_id": 17,
+  "cab_id": 15,
+  "cab_name": "FOXY 2",
+  "defcab_in_table": 15
+ },
+ {
+  "amp": "J-120 CL",
+  "amp_id": 20,
+  "cab_id": 17,
+  "cab_name": "J-120",
+  "defcab_in_table": 17
+ },
+ {
+  "amp": "Match CL",
+  "amp_id": 21,
+  "cab_id": 16,
+  "cab_name": "Match",
+  "defcab_in_table": 16
+ },
+ {
+  "amp": "L-Star CL",
+  "amp_id": 25,
+  "cab_id": 25,
+  "cab_name": "SUP Star",
+  "defcab_in_table": 25
+ },
+ {
+  "amp": "BogSV CL",
+  "amp_id": 26,
+  "cab_id": 6,
+  "cab_name": "BogSV",
+  "defcab_in_table": 6
+ },
+ {
+  "amp": "Z38 CL",
+  "amp_id": 27,
+  "cab_id": 41,
+  "cab_name": "Juice",
+  "defcab_in_table": 41
+ },
+ {
+  "amp": "Knights CL",
+  "amp_id": 31,
+  "cab_id": 7,
+  "cab_name": "Bad-KT",
+  "defcab_in_table": 7
+ },
+ {
+  "amp": "Bad-KT CL",
+  "amp_id": 34,
+  "cab_id": 7,
+  "cab_name": "Bad-KT",
+  "defcab_in_table": 7
+ },
+ {
+  "amp": "Solo100 CL",
+  "amp_id": 35,
+  "cab_id": 40,
+  "cab_name": "Solo",
+  "defcab_in_table": 40
+ },
+ {
+  "amp": "Bellman 59B",
+  "amp_id": 36,
+  "cab_id": 22,
+  "cab_name": "Bellman 1",
+  "defcab_in_table": 22
+ },
+ {
+  "amp": "Foxy 30TB",
+  "amp_id": 39,
+  "cab_id": 15,
+  "cab_name": "FOXY 2",
+  "defcab_in_table": 15
+ },
+ {
+  "amp": "SUPDual OD",
+  "amp_id": 40,
+  "cab_id": 23,
+  "cab_name": "SUP",
+  "defcab_in_table": 23
+ },
+ {
+  "amp": "UK 45",
+  "amp_id": 42,
+  "cab_id": 31,
+  "cab_name": "UK LD",
+  "defcab_in_table": 31
+ },
+ {
+  "amp": "UK 45+",
+  "amp_id": 43,
+  "cab_id": 14,
+  "cab_name": "UK G12",
+  "defcab_in_table": 14
+ },
+ {
+  "amp": "UK 45JP",
+  "amp_id": 44,
+  "cab_id": 14,
+  "cab_name": "UK G12",
+  "defcab_in_table": 14
+ },
+ {
+  "amp": "UK 50",
+  "amp_id": 45,
+  "cab_id": 33,
+  "cab_name": "UK MD",
+  "defcab_in_table": 33
+ },
+ {
+  "amp": "UK 50+",
+  "amp_id": 46,
+  "cab_id": 33,
+  "cab_name": "UK MD",
+  "defcab_in_table": 33
+ },
+ {
+  "amp": "UK 50JP",
+  "amp_id": 47,
+  "cab_id": 33,
+  "cab_name": "UK MD",
+  "defcab_in_table": 33
+ },
+ {
+  "amp": "UK SLP",
+  "amp_id": 48,
+  "cab_id": 27,
+  "cab_name": "Dark CS",
+  "defcab_in_table": 27
+ },
+ {
+  "amp": "UK 800",
+  "amp_id": 53,
+  "cab_id": 34,
+  "cab_name": "UK GRN 2",
+  "defcab_in_table": 34
+ },
+ {
+  "amp": "Mess2C+ 1",
+  "amp_id": 57,
+  "cab_id": 36,
+  "cab_name": "Mess",
+  "defcab_in_table": 36
+ },
+ {
+  "amp": "Mess2C+ 2",
+  "amp_id": 58,
+  "cab_id": 36,
+  "cab_name": "Mess",
+  "defcab_in_table": 36
+ },
+ {
+  "amp": "Mess2C+ 3",
+  "amp_id": 59,
+  "cab_id": 36,
+  "cab_name": "Mess",
+  "defcab_in_table": 36
+ },
+ {
+  "amp": "BogSV OD",
+  "amp_id": 61,
+  "cab_id": 6,
+  "cab_name": "BogSV",
+  "defcab_in_table": 6
+ },
+ {
+  "amp": "Juice30 OD",
+  "amp_id": 62,
+  "cab_id": 41,
+  "cab_name": "Juice",
+  "defcab_in_table": 41
+ },
+ {
+  "amp": "Flagman 1",
+  "amp_id": 64,
+  "cab_id": 32,
+  "cab_name": "UK TD",
+  "defcab_in_table": 32
+ },
+ {
+  "amp": "Flagman 2",
+  "amp_id": 65,
+  "cab_id": 32,
+  "cab_name": "UK TD",
+  "defcab_in_table": 32
+ },
+ {
+  "amp": "Bog BlueV",
+  "amp_id": 67,
+  "cab_id": 37,
+  "cab_name": "Bog",
+  "defcab_in_table": 37
+ },
+ {
+  "amp": "Bog BlueM",
+  "amp_id": 68,
+  "cab_id": 37,
+  "cab_name": "Bog",
+  "defcab_in_table": 37
+ },
+ {
+  "amp": "Solo100 OD",
+  "amp_id": 71,
+  "cab_id": 40,
+  "cab_name": "Solo",
+  "defcab_in_table": 40
+ },
+ {
+  "amp": "Match OD",
+  "amp_id": 72,
+  "cab_id": 24,
+  "cab_name": "MATT TWD",
+  "defcab_in_table": 24
+ },
+ {
+  "amp": "Z38 OD",
+  "amp_id": 73,
+  "cab_id": 41,
+  "cab_name": "Juice",
+  "defcab_in_table": 41
+ },
+ {
+  "amp": "L-Star OD",
+  "amp_id": 74,
+  "cab_id": 25,
+  "cab_name": "SUP Star",
+  "defcab_in_table": 25
+ },
+ {
+  "amp": "Bad-KT OD",
+  "amp_id": 75,
+  "cab_id": 7,
+  "cab_name": "Bad-KT",
+  "defcab_in_table": 7
+ },
+ {
+  "amp": "UK 900",
+  "amp_id": 78,
+  "cab_id": 34,
+  "cab_name": "UK GRN 2",
+  "defcab_in_table": 34
+ },
+ {
+  "amp": "Juice R100",
+  "amp_id": 83,
+  "cab_id": 41,
+  "cab_name": "Juice",
+  "defcab_in_table": 41
+ },
+ {
+  "amp": "Mess4 LD",
+  "amp_id": 85,
+  "cab_id": 36,
+  "cab_name": "Mess",
+  "defcab_in_table": 36
+ },
+ {
+  "amp": "Mess4 LD 2",
+  "amp_id": 86,
+  "cab_id": 36,
+  "cab_name": "Mess",
+  "defcab_in_table": 36
+ },
+ {
+  "amp": "Mess4 LD 3",
+  "amp_id": 87,
+  "cab_id": 36,
+  "cab_name": "Mess",
+  "defcab_in_table": 36
+ },
+ {
+  "amp": "Solo100 LD",
+  "amp_id": 89,
+  "cab_id": 40,
+  "cab_name": "Solo",
+  "defcab_in_table": 40
+ },
+ {
+  "amp": "EV 51",
+  "amp_id": 90,
+  "cab_id": 35,
+  "cab_name": "EV",
+  "defcab_in_table": 35
+ },
+ {
+  "amp": "Flagman+ 1",
+  "amp_id": 93,
+  "cab_id": 32,
+  "cab_name": "UK TD",
+  "defcab_in_table": 32
+ },
+ {
+  "amp": "Flagman+ 2",
+  "amp_id": 94,
+  "cab_id": 32,
+  "cab_name": "UK TD",
+  "defcab_in_table": 32
+ },
+ {
+  "amp": "Eagle 120",
+  "amp_id": 95,
+  "cab_id": 38,
+  "cab_name": "Eagle",
+  "defcab_in_table": 38
+ },
+ {
+  "amp": "Eagle 120+",
+  "amp_id": 96,
+  "cab_id": 38,
+  "cab_name": "Eagle",
+  "defcab_in_table": 38
+ },
+ {
+  "amp": "Power LD",
+  "amp_id": 99,
+  "cab_id": 38,
+  "cab_name": "Eagle",
+  "defcab_in_table": 38
+ },
+ {
+  "amp": "Dizz VH",
+  "amp_id": 101,
+  "cab_id": 46,
+  "cab_name": "Dizz",
+  "defcab_in_table": 46
+ },
+ {
+  "amp": "Dizz VH S",
+  "amp_id": 102,
+  "cab_id": 46,
+  "cab_name": "Dizz",
+  "defcab_in_table": 46
+ },
+ {
+  "amp": "Mess DualV",
+  "amp_id": 104,
+  "cab_id": 36,
+  "cab_name": "Mess",
+  "defcab_in_table": 36
+ },
+ {
+  "amp": "Mess DualM",
+  "amp_id": 105,
+  "cab_id": 36,
+  "cab_name": "Mess",
+  "defcab_in_table": 36
+ },
+ {
+  "amp": "Dizz VH+",
+  "amp_id": 106,
+  "cab_id": 46,
+  "cab_name": "Dizz",
+  "defcab_in_table": 46
+ },
+ {
+  "amp": "Dizz VH+ S",
+  "amp_id": 107,
+  "cab_id": 46,
+  "cab_name": "Dizz",
+  "defcab_in_table": 46
+ },
+ {
+  "amp": "Bog RedV",
+  "amp_id": 109,
+  "cab_id": 37,
+  "cab_name": "Bog",
+  "defcab_in_table": 37
+ },
+ {
+  "amp": "Bog RedM",
+  "amp_id": 110,
+  "cab_id": 37,
+  "cab_name": "Bog",
+  "defcab_in_table": 37
+ },
+ {
+  "amp": "Classic Bass",
+  "amp_id": 115,
+  "cab_id": 59,
+  "cab_name": "AMPG 2",
+  "defcab_in_table": 59
+ },
+ {
+  "amp": "Foxy Bass",
+  "amp_id": 117,
+  "cab_id": 55,
+  "cab_name": "ADM 2",
+  "defcab_in_table": 55
+ },
+ {
+  "amp": "Mess Bass",
+  "amp_id": 119,
+  "cab_id": 56,
+  "cab_name": "AMPG 1",
+  "defcab_in_table": 56
+ },
+ {
+  "amp": "Knights CL+",
+  "amp_id": 123,
+  "cab_id": 7,
+  "cab_name": "Bad-KT",
+  "defcab_in_table": 7
+ },
+ {
+  "amp": "Knights OD",
+  "amp_id": 124,
+  "cab_id": 7,
+  "cab_name": "Bad-KT",
+  "defcab_in_table": 7
+ },
+ {
+  "amp": "Mini Bass",
+  "amp_id": 117,
+  "cab_id": 53,
+  "cab_name": "US BASS",
+  "defcab_in_table": null
+ },
+ {
+  "amp": "Bass Pre",
+  "amp_id": 118,
+  "cab_id": 52,
+  "cab_name": "F-TOP",
+  "defcab_in_table": null
+ },
+ {
+  "amp": "AC Pre",
+  "amp_id": 122,
+  "cab_id": 60,
+  "cab_name": "AC",
+  "defcab_in_table": null
+ },
+ {
+  "amp": "AC Pre 2",
+  "amp_id": 123,
+  "cab_id": 61,
+  "cab_name": "AC Dream",
+  "defcab_in_table": null
+ }
+]

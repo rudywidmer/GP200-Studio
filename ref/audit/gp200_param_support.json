@@ -1,0 +1,10266 @@
+[
+ {
+  "module": "PRE",
+  "model": "COMP",
+  "id": 0,
+  "cat": 0,
+  "params": [
+   {
+    "param": "Sustain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 11.16,
+    "where": "silence/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 105.64,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "COMP4",
+  "id": 1,
+  "cat": 0,
+  "params": [
+   {
+    "param": "Sustain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 9.22,
+    "where": "silence/niveau",
+    "context": "exact"
+   },
+   {
+    "param": "Attack",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 15.47,
+    "where": "note/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 105.82,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Clipping",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 4.26,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "S-Comp",
+  "id": 3,
+  "cat": 0,
+  "params": [
+   {
+    "param": "Threshold",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 8.47,
+    "where": "bruit/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Ratio",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 15.24,
+    "where": "note/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 110.95,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Attack",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 11.38,
+    "where": "note/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Release",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 22.84,
+    "where": "note/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 7.78,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Blend",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 7.98,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "AC Boost",
+  "id": 10,
+  "cat": 0,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 19.05,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 109.78,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 7.31,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 11.0,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "B-Boost",
+  "id": 11,
+  "cat": 0,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 27.19,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 108.14,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 17.3,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 23.19,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "P-Boost",
+  "id": 12,
+  "cat": 0,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 14.34,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 108.83,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 17.24,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 21.58,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "14 Boost",
+  "id": 14,
+  "cat": 0,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 75.0,
+    "where": "note/5079 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "Micro Boost",
+  "id": 20,
+  "cat": 0,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 126.5,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "FAT BB",
+  "id": 25,
+  "cat": 0,
+  "params": [
+   {
+    "param": "Bass",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 11.89,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 24.46,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 51.52,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Low Cut",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.09,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "Boost",
+  "id": 26,
+  "cat": 0,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 9.47,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "+3dB",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 2.1,
+    "where": "silence/niveau",
+    "context": "exact"
+   },
+   {
+    "param": "Bright",
+    "slot": 2,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.37,
+    "prst_ref_db": 1.04
+   }
+  ]
+ },
+ {
+  "module": "NR",
+  "model": "Gate 1",
+  "id": 27,
+  "cat": 0,
+  "params": [
+   {
+    "param": "Threshold",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 30.29,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "NR",
+  "model": "Gate 2",
+  "id": 29,
+  "cat": 0,
+  "params": [
+   {
+    "param": "Threshold",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 26.13,
+    "where": "silence/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Attack",
+    "slot": 1,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 17.56,
+    "prst_ref_db": 1.05
+   },
+   {
+    "param": "Release",
+    "slot": 2,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 17.71,
+    "prst_ref_db": 3.79
+   }
+  ]
+ },
+ {
+  "module": "NR",
+  "model": "Gate 3",
+  "id": 33,
+  "cat": 0,
+  "params": [
+   {
+    "param": "Threshold",
+    "slot": 0,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 17.5,
+    "prst_ref_db": 1.31
+   },
+   {
+    "param": "Ratio",
+    "slot": 1,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 17.78,
+    "prst_ref_db": 1.41
+   },
+   {
+    "param": "Attack",
+    "slot": 2,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 66.95,
+    "prst_ref_db": 3.89
+   },
+   {
+    "param": "Release",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 66.37,
+    "prst_ref_db": 2.38
+   },
+   {
+    "param": "Hold",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 66.15,
+    "prst_ref_db": 1.84
+   },
+   {
+    "param": "Hysteresis",
+    "slot": 5,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.7,
+    "prst_ref_db": 4.38
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "AC Refiner",
+  "id": 0,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Shape",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 10.34,
+    "where": "silence/niveau",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "AC Sim",
+  "id": 1,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Body",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 16.97,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Top",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 8.77,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 107.7,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mode",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 16.43,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "T-Wah",
+  "id": 15,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Sense",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 17.62,
+    "where": "bruit/2015 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Range",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 6.18,
+    "where": "note/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Q",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 9.4,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mix",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 14.85,
+    "where": "bruit/2015 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mode",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.97,
+    "prst_ref_db": 2.34
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "A-WAH",
+  "id": 21,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 25.54,
+    "where": "bruit/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 9.58,
+    "where": "note/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 86.59,
+    "where": "bruit/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Low",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.62,
+    "where": "note/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Q",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.93,
+    "where": "bruit/niveau",
+    "context": "exact"
+   },
+   {
+    "param": "High",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 17.85,
+    "where": "bruit/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 3.05,
+    "where": "bruit/1007 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "Step Filter",
+  "id": 25,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Step 1",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 18.47,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Step 2",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 11.64,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Step 3",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 8.66,
+    "where": "silence/niveau",
+    "context": "exact"
+   },
+   {
+    "param": "Step 4",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.31,
+    "where": "silence/2015 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 72.22,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 5,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.94,
+    "prst_ref_db": 1.26
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "OCTA",
+  "id": 33,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Low Oct",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 32.17,
+    "where": "note/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "High Oct",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 13.76,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Dry",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 15.12,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "Pitch",
+  "id": 35,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Hi Pitch",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 5.1,
+    "where": "silence/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Low Pitch",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 15.87,
+    "where": "note/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Dry",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 11.96,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Hi Vol",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 9.59,
+    "where": "silence/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Low Vol",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 31.61,
+    "where": "note/100 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "P-Bend",
+  "id": 36,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Hi Pitch",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 27.3,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Low Pitch",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 18.62,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Wet",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 92.72,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Dry",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 34.77,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Range",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 12.67,
+    "where": "note/800 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Detune",
+  "id": 41,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Detune",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 4.4,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Wet",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 24.3,
+    "where": "silence/niveau",
+    "context": "exact"
+   },
+   {
+    "param": "Dry",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 8.28,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Bit Smash",
+  "id": 46,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 11.53,
+    "where": "bruit/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Krush",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 64.8,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bit",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 35.92,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Hi Cut",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.05,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Lo Cut",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 5.32,
+    "where": "bruit/251 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "Ring Mod",
+  "id": 47,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 71.41,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Freq",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 62.36,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Fine",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 59.52,
+    "where": "note/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 1.98,
+    "where": "bruit/4031 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "Saturate",
+  "id": 51,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Saturation",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 36.67,
+    "where": "note/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mix",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 57.26,
+    "where": "note/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 103.24,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "High Cut",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 5.42,
+    "where": "silence/4031 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "EQ",
+  "model": "Guitar EQ 1",
+  "id": 53,
+  "cat": 1,
+  "params": [
+   {
+    "param": "125Hz",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 19.2,
+    "where": "silence/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "400Hz",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 18.96,
+    "where": "bruit/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "800Hz",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 18.86,
+    "where": "bruit/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "1.6kHz",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 19.01,
+    "where": "note/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "4kHz",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 18.97,
+    "where": "silence/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 106.77,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "EQ",
+  "model": "Guitar EQ 2",
+  "id": 54,
+  "cat": 1,
+  "params": [
+   {
+    "param": "100Hz",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 12.6,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "500Hz",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 18.39,
+    "where": "bruit/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "1kHz",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 18.2,
+    "where": "bruit/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "3kHz",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 18.17,
+    "where": "bruit/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "6kHz",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 17.43,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 104.21,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "EQ",
+  "model": "Bass EQ 1",
+  "id": 57,
+  "cat": 1,
+  "params": [
+   {
+    "param": "33Hz",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 4.93,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "150Hz",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 18.97,
+    "where": "bruit/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "600Hz",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 18.88,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "2kHz",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 19.0,
+    "where": "bruit/2015 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "8kHz",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 18.74,
+    "where": "bruit/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 105.96,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "EQ",
+  "model": "Bass EQ 2",
+  "id": 58,
+  "cat": 1,
+  "params": [
+   {
+    "param": "50Hz",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 9.7,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "120Hz",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 19.02,
+    "where": "silence/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "400Hz",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 19.08,
+    "where": "bruit/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "800Hz",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 18.98,
+    "where": "bruit/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "4.5kHz",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 18.41,
+    "where": "bruit/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 106.55,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "EQ",
+  "model": "Mess EQ",
+  "id": 60,
+  "cat": 1,
+  "params": [
+   {
+    "param": "80Hz",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 16.88,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "240Hz",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 14.12,
+    "where": "bruit/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "750Hz",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 15.97,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "2.2kHz",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 12.73,
+    "where": "note/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "6.6kHz",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 15.26,
+    "where": "silence/6400 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "EQ",
+  "model": "Hyper EQ",
+  "id": 67,
+  "cat": 1,
+  "params": [
+   {
+    "param": "31Hz",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 0.88,
+    "where": "bruit/niveau",
+    "context": "default"
+   },
+   {
+    "param": "63Hz",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 3.21,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "125Hz",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 17.88,
+    "where": "silence/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "250Hz",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 18.19,
+    "where": "bruit/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "500Hz",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 17.63,
+    "where": "bruit/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "1kHz",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 18.4,
+    "where": "bruit/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "2kHz",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 18.95,
+    "where": "bruit/2015 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "4kHz",
+    "slot": 7,
+    "status": "ok_live",
+    "diff_db": 19.04,
+    "where": "silence/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "8kHz",
+    "slot": 8,
+    "status": "ok_live",
+    "diff_db": 18.84,
+    "where": "silence/8063 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "16kHz",
+    "slot": 9,
+    "status": "ok_live",
+    "diff_db": 4.2,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 10,
+    "status": "ok_live",
+    "diff_db": 107.44,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "WAH",
+  "model": "Hammy",
+  "id": 73,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Range",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 44.65,
+    "where": "note/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Harmony",
+    "slot": 1,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.49,
+    "prst_ref_db": 11.12
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 99.66,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Position",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 64.1,
+    "where": "note/317 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "Harmonizer 1",
+  "id": 77,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 16.67,
+    "where": "silence/niveau",
+    "context": "exact"
+   },
+   {
+    "param": "Key",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 19.76,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mode",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 1.62,
+    "where": "bruit/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Interval",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.4,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Smooth Mode",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 1.47,
+    "where": "note/251 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "PRE",
+  "model": "Harmonizer 2",
+  "id": 78,
+  "cat": 1,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 84.08,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Key",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 2.4,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mode",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 2.63,
+    "where": "silence/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Interval 1",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 35.59,
+    "where": "note/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Interval 2",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 20.54,
+    "where": "note/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Smooth Mode",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 5.04,
+    "where": "note/1269 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Green OD",
+  "id": 0,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 13.23,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 6.81,
+    "where": "note/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 109.12,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "OD 9",
+  "id": 1,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 13.23,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 6.81,
+    "where": "note/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 108.41,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Yellow OD",
+  "id": 2,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 21.87,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 108.48,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Swarm",
+  "id": 4,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 33.59,
+    "where": "silence/2015 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 5.86,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 118.49,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Super OD",
+  "id": 6,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 19.32,
+    "where": "silence/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 10.15,
+    "where": "bruit/2015 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 109.06,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Scream OD",
+  "id": 8,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 13.2,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 6.81,
+    "where": "silence/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 109.92,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Fat",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 5.34,
+    "where": "silence/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Air",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 2.97,
+    "where": "bruit/5079 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Blues OD",
+  "id": 9,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 30.18,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 20.94,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 114.66,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Force",
+  "id": 10,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 27.87,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 24.32,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 117.9,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mode",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.64,
+    "where": "note/1269 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Tube",
+  "id": 11,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 43.45,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 6.26,
+    "where": "silence/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 11.77,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 5.61,
+    "where": "bruit/317 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Blues Master",
+  "id": 14,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 24.28,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 18.33,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 117.96,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Master OD",
+  "id": 15,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 24.57,
+    "where": "silence/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 112.13,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 9.3,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 11.2,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 17.07,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "TaiChi OD",
+  "id": 16,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 43.31,
+    "where": "silence/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 9.39,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 114.44,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Voice",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 13.99,
+    "where": "silence/4031 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Penesas",
+  "id": 20,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 45.63,
+    "where": "silence/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 19.87,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 109.39,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Precise OD",
+  "id": 28,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 26.96,
+    "where": "silence/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 18.0,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 101.55,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Attack",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 16.97,
+    "where": "silence/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Gate",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.77,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Timmy OD",
+  "id": 30,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 34.1,
+    "where": "silence/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 114.05,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 9.09,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 15.17,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mode",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 4.27,
+    "where": "silence/niveau",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Lazaro",
+  "id": 34,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Sustain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 18.33,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 12.81,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 120.79,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Red Haze",
+  "id": 36,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Fuzz",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 110.26,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 114.9,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Sora Fuzz",
+  "id": 38,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Fuzz",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 111.66,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 118.03,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Plustortion",
+  "id": 41,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 14.33,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 116.25,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "SM Dist",
+  "id": 42,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 12.63,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 24.88,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 113.89,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Darktale",
+  "id": 43,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 28.56,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Filter",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 17.56,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 113.72,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Chief",
+  "id": 45,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 32.55,
+    "where": "silence/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 112.35,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 8.72,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.68,
+    "where": "note/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 9.45,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Master Dist",
+  "id": 46,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 25.53,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 110.97,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 24.82,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Contour",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 17.93,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.7,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "La Charger",
+  "id": 48,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 45.77,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 13.51,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 114.77,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Revolt",
+  "id": 50,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 29.02,
+    "where": "note/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 18.24,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 106.95,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mode",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 11.7,
+    "where": "note/1269 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Flex OD",
+  "id": 63,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 23.69,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 11.95,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 119.22,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mode",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 5.38,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Blend",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 18.99,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Bass OD",
+  "id": 64,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 21.34,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Blend",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 32.35,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 108.16,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 16.05,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 20.79,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Black Bass",
+  "id": 68,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 29.59,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Blend",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 38.83,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 44.84,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Low",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 15.15,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Lo-mid",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 8.13,
+    "where": "silence/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Hi-mid",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 20.71,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 8,
+    "status": "ok_live",
+    "diff_db": 23.11,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Attack",
+    "slot": 9,
+    "status": "ok_live",
+    "diff_db": 7.01,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Empire OD",
+  "id": 80,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 27.88,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 19.77,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 125.1,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mode",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 11.1,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Bass Hammer",
+  "id": 81,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 55.58,
+    "where": "note/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Master",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 119.92,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 20.51,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 24.01,
+    "where": "silence/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mid Freq",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 4.09,
+    "prst_ref_db": 1.93
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 34.71,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Drive",
+    "slot": 6,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.69,
+    "prst_ref_db": 1.45
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "Flagman Dist",
+  "id": 82,
+  "cat": 3,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 18.51,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 111.47,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 3.51,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 28.95,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 11.08,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tight",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 8.23,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "A-Chorus",
+  "id": 0,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 8.9,
+    "where": "bruit/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 53.23,
+    "where": "note/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 27.25,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.97,
+    "prst_ref_db": 2.21
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "G-Chorus",
+  "id": 1,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 17.1,
+    "where": "note/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 18.25,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 10.02,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.83,
+    "prst_ref_db": 2.31
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "C-Chorus",
+  "id": 2,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Mode",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 4.46,
+    "where": "bruit/251 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "B-Chorus",
+  "id": 8,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 8.36,
+    "where": "note/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 30.07,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 10.53,
+    "where": "silence/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.83,
+    "prst_ref_db": 2.15
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "M-Chorus",
+  "id": 15,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 33.08,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 7.86,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Filter",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 4.71,
+    "where": "note/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Depth L",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 3.43,
+    "where": "bruit/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Depth C",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 8.16,
+    "where": "note/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Depth R",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 5.71,
+    "where": "note/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 6,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.88,
+    "prst_ref_db": 1.99
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Jet",
+  "id": 17,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 19.54,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 22.84,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 7.42,
+    "where": "bruit/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 42.77,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.39,
+    "prst_ref_db": 1.08
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "B-Jet",
+  "id": 18,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 10.04,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 22.66,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 10.95,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 44.02,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.53,
+    "prst_ref_db": 2.08
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "N-Jet",
+  "id": 19,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 8.58,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 39.85,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 11.88,
+    "where": "bruit/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 36.85,
+    "where": "note/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.59,
+    "prst_ref_db": 1.99
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Trem Jet",
+  "id": 20,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Flg Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 11.7,
+    "where": "note/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Flg Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 20.93,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 7.49,
+    "where": "silence/niveau",
+    "context": "exact"
+   },
+   {
+    "param": "Trm Depth",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 13.71,
+    "where": "bruit/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trm Rate",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 3.22,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Flg Sync",
+    "slot": 5,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.46,
+    "prst_ref_db": 1.37
+   },
+   {
+    "param": "Trm Sync",
+    "slot": 6,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.79,
+    "prst_ref_db": 3.82
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "V-Roto",
+  "id": 21,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 19.48,
+    "where": "bruit/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 15.87,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 2,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.71,
+    "prst_ref_db": 2.18
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "G-Roto",
+  "id": 22,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 9.47,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 7.81,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 101.98,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.76,
+    "prst_ref_db": 2.38
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Vibrato",
+  "id": 23,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 18.36,
+    "where": "bruit/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 28.7,
+    "where": "note/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 90.6,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.14,
+    "prst_ref_db": 0.85
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Vibrato T",
+  "id": 24,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Sens",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 16.54,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 1.46,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Output",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 105.25,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.57,
+    "prst_ref_db": 2.06
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "O-Phase",
+  "id": 25,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Rate",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 11.66,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 1,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.53,
+    "prst_ref_db": 1.04
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "G-Phase",
+  "id": 26,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 12.24,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.11,
+    "where": "silence/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 2,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.73,
+    "prst_ref_db": 2.0
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "S-Phase",
+  "id": 27,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Color",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 9.92,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 57.06,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 2,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.49,
+    "prst_ref_db": 1.61
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Pan Phase",
+  "id": 30,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Phs Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 17.01,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Phs Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 15.09,
+    "where": "note/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pan Depth",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 4.46,
+    "where": "silence/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pan Rate",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.46,
+    "prst_ref_db": 2.08
+   },
+   {
+    "param": "Phs Sync",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.11,
+    "prst_ref_db": 1.87
+   },
+   {
+    "param": "Pan Sync",
+    "slot": 5,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.74,
+    "prst_ref_db": 4.24
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "M-Vibe",
+  "id": 31,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 19.04,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 51.29,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 2,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.3,
+    "prst_ref_db": 1.12
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Vibe",
+  "id": 32,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 7.74,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 59.88,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 100.38,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mode",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 15.15,
+    "where": "bruit/6400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.35,
+    "prst_ref_db": 1.38
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "O-Trem",
+  "id": 33,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 4.46,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.37,
+    "prst_ref_db": 1.66
+   },
+   {
+    "param": "Sync",
+    "slot": 2,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.47,
+    "prst_ref_db": 2.4
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Sine Trem",
+  "id": 38,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 13.97,
+    "where": "bruit/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 31.57,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 101.0,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.66,
+    "prst_ref_db": 0.98
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Triangle Trem",
+  "id": 39,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 14.17,
+    "where": "note/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 39.13,
+    "where": "note/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 102.09,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.48,
+    "prst_ref_db": 0.96
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Bias Trem",
+  "id": 40,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Depth",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 13.97,
+    "where": "note/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Rate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 57.23,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 97.99,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.6,
+    "prst_ref_db": 2.0
+   },
+   {
+    "param": "Bias",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.58,
+    "prst_ref_db": 1.58
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Auto Swell",
+  "id": 45,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Attack",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 29.97,
+    "where": "bruit/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Curve",
+    "slot": 1,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.71,
+    "prst_ref_db": 2.46
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Hold",
+  "id": 47,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Volume",
+    "slot": 0,
+    "status": "inaudible_with_test_signal"
+   },
+   {
+    "param": "Activate",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 34.06,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "MOD",
+  "model": "Freeze",
+  "id": 48,
+  "cat": 4,
+  "params": [
+   {
+    "param": "Volume",
+    "slot": 0,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.5,
+    "prst_ref_db": 2.03
+   },
+   {
+    "param": "Attack",
+    "slot": 1,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.5,
+    "prst_ref_db": 2.01
+   },
+   {
+    "param": "Release",
+    "slot": 2,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.5,
+    "prst_ref_db": 2.48
+   },
+   {
+    "param": "Activate",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 34.31,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "WAH",
+  "model": "V-Wah",
+  "id": 1,
+  "cat": 5,
+  "params": [
+   {
+    "param": "Range",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 20.13,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Q",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 25.27,
+    "where": "note/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 106.57,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Position",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 15.57,
+    "where": "note/400 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "WAH",
+  "model": "S-Wah",
+  "id": 6,
+  "cat": 5,
+  "params": [
+   {
+    "param": "Range",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 16.12,
+    "where": "silence/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Q",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 23.77,
+    "where": "bruit/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 102.5,
+    "where": "note/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Position",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 11.2,
+    "where": "note/800 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "WAH",
+  "model": "B-Wah",
+  "id": 7,
+  "cat": 5,
+  "params": [
+   {
+    "param": "Range",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 22.55,
+    "where": "bruit/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Q",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 22.21,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 109.24,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Position",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 18.22,
+    "where": "bruit/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "WAH",
+  "model": "C-Wah",
+  "id": 8,
+  "cat": 5,
+  "params": [
+   {
+    "param": "Range",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 19.37,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Q",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 25.47,
+    "where": "note/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 103.96,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Position",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 14.81,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "WAH",
+  "model": "P-Wah",
+  "id": 10,
+  "cat": 5,
+  "params": [
+   {
+    "param": "Range",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 23.1,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Q",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 20.79,
+    "where": "bruit/2015 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 114.51,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Position",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 17.35,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "EQ",
+    "slot": 4,
+    "status": "inaudible_with_test_signal"
+   }
+  ]
+ },
+ {
+  "module": "VOL",
+  "model": "Volume",
+  "id": 3,
+  "cat": 6,
+  "params": [
+   {
+    "param": "Volume",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 100.1,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Tweedy",
+  "id": 1,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 115.36,
+    "where": "note/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 41.51,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 112.1,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Bellman 59N",
+  "id": 3,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 76.18,
+    "where": "silence/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 15.86,
+    "where": "silence/8063 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 118.55,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.57,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 11.42,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 11.69,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Dark Twin",
+  "id": 4,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 74.2,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 109.46,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 15.46,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.72,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 24.04,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bright",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 12.61,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Dark DLX",
+  "id": 5,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 117.19,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 111.75,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 12.48,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 19.3,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Dark Vibra",
+  "id": 9,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 101.36,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 111.63,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 12.54,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 18.86,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bright",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 9.32,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Silver Twin",
+  "id": 13,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 75.7,
+    "where": "silence/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 109.19,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 12.37,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.37,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 18.23,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "SUPDual CL",
+  "id": 15,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 116.55,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 16.04,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 116.12,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Foxy 15TB",
+  "id": 16,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 84.43,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone Cut",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 8.41,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 107.62,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 16.27,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 5.06,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Foxy 30N",
+  "id": 17,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 83.15,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone Cut",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 27.7,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 110.12,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bright",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 23.47,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "J-120 CL",
+  "id": 20,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 105.32,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 14.38,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 13.05,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 21.53,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bright",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 9.08,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Match CL",
+  "id": 21,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 116.34,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.42,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 108.79,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 10.78,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 13.59,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 18.7,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "L-Star CL",
+  "id": 25,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 79.12,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 14.38,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 34.9,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 15.62,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 9.67,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 18.23,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "BogSV CL",
+  "id": 26,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 117.34,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 6.76,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 114.27,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 12.98,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 15.71,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bright",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 15.67,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Z38 CL",
+  "id": 27,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 114.04,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone Cut",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 21.4,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 109.84,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 13.03,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.23,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 18.23,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Knights CL",
+  "id": 31,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 69.93,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 110.3,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 12.11,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 10.45,
+    "where": "note/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 18.61,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Bad-KT CL",
+  "id": 34,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 74.32,
+    "where": "silence/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 17.97,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 106.46,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Solo100 CL",
+  "id": 35,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 113.3,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 2.04,
+    "where": "silence/8063 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 105.73,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.81,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.47,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 10.61,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Bellman 59B",
+  "id": 36,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 76.23,
+    "where": "silence/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 2.96,
+    "where": "silence/niveau",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 115.75,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.66,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 11.25,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 11.5,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Foxy 30TB",
+  "id": 39,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 75.95,
+    "where": "silence/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone Cut",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 22.67,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 108.13,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 15.64,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 13.33,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Char",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 16.49,
+    "where": "silence/1007 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "SUPDual OD",
+  "id": 40,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain 1",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 8.89,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone 1",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.82,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Gain 2",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 12.76,
+    "where": "silence/8063 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone 2",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.98,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 114.65,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "UK 45",
+  "id": 42,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 122.45,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 9.52,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 114.79,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.47,
+    "where": "silence/niveau",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 9.39,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 11.8,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "UK 45+",
+  "id": 43,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 110.58,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 9.88,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 114.42,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.61,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 19.31,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 9.69,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "UK 45JP",
+  "id": 44,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain 1",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 11.21,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 9.87,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 110.84,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 10.57,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 8.93,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 9.46,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Gain 2",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 71.11,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "UK 50",
+  "id": 45,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 68.83,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 3.78,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 113.99,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.29,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 8.32,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 8.95,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "UK 50+",
+  "id": 46,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 68.98,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 3.78,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 111.76,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.96,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 8.21,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 8.56,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "UK 50JP",
+  "id": 47,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain 1",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 14.71,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 3.78,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 111.24,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 11.64,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.89,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 8.08,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Gain 2",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 27.26,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "UK SLP",
+  "id": 48,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 75.77,
+    "where": "silence/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 5.07,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 119.73,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.7,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 12.41,
+    "where": "note/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 9.53,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "UK 800",
+  "id": 53,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 75.21,
+    "where": "silence/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 1.94,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 114.44,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.75,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 8.67,
+    "where": "note/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 9.46,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Mess2C+ 1",
+  "id": 57,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 71.29,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 7.74,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 108.33,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 16.11,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 8.22,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 25.89,
+    "where": "note/1269 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Mess2C+ 2",
+  "id": 58,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 69.37,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 7.75,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 107.37,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 20.38,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.88,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 17.14,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Mess2C+ 3",
+  "id": 59,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 69.45,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 7.75,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 110.24,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 29.19,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 3.99,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 16.78,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "BogSV OD",
+  "id": 61,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 114.98,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 5.15,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 110.84,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 11.28,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 11.95,
+    "where": "bruit/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 6.35,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Juice30 OD",
+  "id": 62,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 71.86,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 105.4,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 16.57,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 11.37,
+    "where": "silence/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 16.86,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Flagman 1",
+  "id": 64,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 99.73,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.47,
+    "where": "silence/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 88.45,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.7,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.79,
+    "where": "bruit/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 8.69,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Flagman 2",
+  "id": 65,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 97.19,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.47,
+    "where": "silence/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 88.28,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.75,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.79,
+    "where": "bruit/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 8.69,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Bog BlueV",
+  "id": 67,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 72.72,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 3.17,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 113.84,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 11.02,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 11.77,
+    "where": "bruit/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 5.93,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Bog BlueM",
+  "id": 68,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 73.09,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 3.17,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 112.46,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 11.01,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 11.77,
+    "where": "bruit/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 5.93,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Solo100 OD",
+  "id": 71,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 109.61,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 2.04,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 111.29,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.75,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.47,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 10.61,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Match OD",
+  "id": 72,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 4.23,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.42,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 121.53,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 12.85,
+    "where": "note/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 11.95,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 18.75,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Z38 OD",
+  "id": 73,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 119.46,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone Cut",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 21.47,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 122.92,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 12.82,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 6.99,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 17.76,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "L-Star OD",
+  "id": 74,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Input",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 62.14,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Gain",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 91.32,
+    "where": "silence/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 13.36,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 31.36,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 14.79,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 9.24,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 18.12,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Bad-KT OD",
+  "id": 75,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 107.98,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 12.24,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 109.99,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 14.73,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Edge",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 3.25,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 13.78,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "UK 900",
+  "id": 78,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 107.04,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.41,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 111.72,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.65,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 8.7,
+    "where": "note/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 9.5,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Juice R100",
+  "id": 83,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 110.28,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 114.89,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 6.86,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 6.47,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 9.99,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Mess4 LD",
+  "id": 85,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 112.78,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.76,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 113.29,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 24.99,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 8.4,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 27.47,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Mess4 LD 2",
+  "id": 86,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 109.9,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.79,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 111.59,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 14.18,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 10.97,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 20.11,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Mess4 LD 3",
+  "id": 87,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 111.28,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.78,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 110.08,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 14.73,
+    "where": "note/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 6.66,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 20.46,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Solo100 LD",
+  "id": 89,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 62.39,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 2.04,
+    "where": "bruit/8063 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 103.45,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.93,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.54,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 10.89,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "EV 51",
+  "id": 90,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 62.01,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 103.93,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 9.92,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.61,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 13.61,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 2.05,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Flagman+ 1",
+  "id": 93,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 93.02,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.47,
+    "where": "bruit/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 101.07,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.74,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.79,
+    "where": "bruit/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 8.69,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Flagman+ 2",
+  "id": 94,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 99.73,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.47,
+    "where": "silence/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 90.05,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.78,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.79,
+    "where": "bruit/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 8.69,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Eagle 120",
+  "id": 95,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 100.48,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 9.2,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 105.77,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.79,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 5.86,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 9.99,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Eagle 120+",
+  "id": 96,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 101.74,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 9.2,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 101.47,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.16,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.9,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 10.05,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Power LD",
+  "id": 99,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 112.34,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.4,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 115.89,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.44,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 4.13,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 16.7,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Dizz VH",
+  "id": 101,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 104.53,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 2.55,
+    "where": "silence/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 107.74,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.5,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 9.91,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 9.48,
+    "where": "silence/5079 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Dizz VH S",
+  "id": 102,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 67.74,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 2.55,
+    "where": "silence/6400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 103.64,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.79,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.42,
+    "where": "bruit/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 10.33,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Mess DualV",
+  "id": 104,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 101.68,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 6.35,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 103.51,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.11,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 10.33,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 10.23,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Mess DualM",
+  "id": 105,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 104.09,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 6.35,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 108.78,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 5.91,
+    "where": "silence/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.19,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 11.08,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Dizz VH+",
+  "id": 106,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 101.25,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 2.55,
+    "where": "silence/8063 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 101.16,
+    "where": "bruit/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.76,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.39,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 10.15,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Dizz VH+ S",
+  "id": 107,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 66.0,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 2.55,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 105.68,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.79,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.42,
+    "where": "bruit/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 10.32,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Bog RedV",
+  "id": 109,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 72.03,
+    "where": "silence/8063 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 3.17,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 108.36,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 10.91,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 11.77,
+    "where": "silence/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 5.93,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Bog RedM",
+  "id": 110,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 64.54,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Presence",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 3.17,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 111.12,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 10.93,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 11.77,
+    "where": "bruit/4031 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 5.93,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Classic Bass",
+  "id": 115,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 108.77,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 23.19,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 11.02,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Midrange",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.17,
+    "prst_ref_db": 2.06
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 20.23,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 104.65,
+    "where": "note/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Foxy Bass",
+  "id": 117,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Volume",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 107.46,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 11.14,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 18.2,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Mess Bass",
+  "id": 119,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 72.21,
+    "where": "bruit/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 90.29,
+    "where": "bruit/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 6.91,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.88,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 23.07,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Knights CL+",
+  "id": 123,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 116.15,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 98.09,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 12.26,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 10.45,
+    "where": "note/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 18.62,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Knights OD",
+  "id": 124,
+  "cat": 7,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 115.38,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 118.0,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 12.32,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 10.45,
+    "where": "note/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 18.57,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Mini Bass",
+  "id": 117,
+  "cat": 8,
+  "params": [
+   {
+    "param": "Volume",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 30.25,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 11.48,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 18.84,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "Bass Pre",
+  "id": 118,
+  "cat": 8,
+  "params": [
+   {
+    "param": "Volume",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 99.2,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bright",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 6.25,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 12.39,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.55,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 21.84,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "AC Pre",
+  "id": 122,
+  "cat": 8,
+  "params": [
+   {
+    "param": "Volume",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 116.7,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 8.33,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Balance",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 4.76,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "EQ Freq",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 11.66,
+    "prst_ref_db": 1.65
+   },
+   {
+    "param": "EQ Q",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.7,
+    "prst_ref_db": 1.82
+   },
+   {
+    "param": "EQ Gain",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 23.63,
+    "where": "bruit/200 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "AC Pre 2",
+  "id": 123,
+  "cat": 8,
+  "params": [
+   {
+    "param": "Volume",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 110.55,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 8.33,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Balance",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 4.76,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "EQ Freq",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 11.64,
+    "prst_ref_db": 2.02
+   },
+   {
+    "param": "EQ Q",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.92,
+    "prst_ref_db": 1.85
+   },
+   {
+    "param": "EQ Gain",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 23.88,
+    "where": "note/1600 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "CAB",
+  "model": "CAB IR",
+  "id": 0,
+  "cat": 10,
+  "params": [
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 103.19,
+    "where": "note/200 Hz",
+    "context": "default"
+   },
+   {
+    "param": "Low Cut",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 48.65,
+    "where": "bruit/100 Hz",
+    "context": "default"
+   },
+   {
+    "param": "High Cut",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 31.17,
+    "where": "bruit/10159 Hz",
+    "context": "default"
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Pure",
+  "id": 0,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 71.66,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 32.44,
+    "where": "silence/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 7.48,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "inaudible_with_test_signal"
+   },
+   {
+    "param": "Trail",
+    "slot": 4,
+    "status": "inaudible_with_test_signal"
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Analog",
+  "id": 1,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 33.6,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 25.9,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 7.96,
+    "where": "silence/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 0.77,
+    "where": "bruit/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.3,
+    "prst_ref_db": 1.18
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Tape",
+  "id": 2,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 30.17,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 24.39,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 4.8,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 6.12,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 5.31,
+    "where": "note/100 Hz",
+    "context": "default"
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Dual Echo",
+  "id": 3,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix A",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 4.9,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time A",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 9.73,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback A",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 7.27,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mix B",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 11.3,
+    "where": "silence/6400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time B",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 9.54,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback B",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 3.76,
+    "where": "silence/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync A",
+    "slot": 6,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.42,
+    "prst_ref_db": 1.6
+   },
+   {
+    "param": "Sync B",
+    "slot": 7,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.23,
+    "prst_ref_db": 1.55
+   },
+   {
+    "param": "Trail",
+    "slot": 8,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.7,
+    "prst_ref_db": 4.26
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Ping Pong",
+  "id": 4,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 26.42,
+    "where": "silence/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 22.86,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 7.15,
+    "where": "silence/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 4.86,
+    "prst_ref_db": 1.65
+   },
+   {
+    "param": "Trail",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.52,
+    "prst_ref_db": 2.44
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Slapback",
+  "id": 5,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 42.48,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 33.01,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 17.97,
+    "where": "silence/2015 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.97,
+    "prst_ref_db": 1.66
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Sweep Echo",
+  "id": 6,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 14.85,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 21.45,
+    "where": "note/8063 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.67,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sweep Depth",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.73,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sweep Rate",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 17.38,
+    "where": "silence/503 Hz",
+    "context": "default"
+   },
+   {
+    "param": "Sweep Sync",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 17.64,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time Sync",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 12.27,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 7,
+    "status": "ok_live",
+    "diff_db": 1.22,
+    "where": "bruit/1269 Hz",
+    "context": "default"
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Ring Echo",
+  "id": 9,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Dly Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 72.95,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 26.42,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 4.05,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Ring Mix",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 12.06,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Freq",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 11.95,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 36.68,
+    "where": "note/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 2.47,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 7,
+    "status": "ok_live",
+    "diff_db": 2.86,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Tube",
+  "id": 11,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 28.57,
+    "where": "silence/2015 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 26.68,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 7.13,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "not_verified"
+   },
+   {
+    "param": "Trail",
+    "slot": 4,
+    "status": "not_verified"
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "M-Echo",
+  "id": 12,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 33.57,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 19.79,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 5.22,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.16,
+    "where": "silence/2015 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mode",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 30.04,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 5,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.62,
+    "prst_ref_db": 1.13
+   },
+   {
+    "param": "Trail",
+    "slot": 6,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.76,
+    "prst_ref_db": 1.97
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Sweet Echo",
+  "id": 13,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 33.24,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 32.5,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 1.09,
+    "where": "bruit/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.28,
+    "prst_ref_db": 1.55
+   },
+   {
+    "param": "Trail",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.52,
+    "prst_ref_db": 2.38
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "999 Echo",
+  "id": 18,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 26.95,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 26.67,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 4.52,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 3,
+    "status": "inaudible_with_test_signal"
+   },
+   {
+    "param": "Trail",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.74,
+    "prst_ref_db": 1.76
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Vintage Rack",
+  "id": 20,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 68.89,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 29.02,
+    "where": "silence/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 7.19,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mod",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 4.19,
+    "where": "silence/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 25.74,
+    "where": "note/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 5,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 3.93,
+    "prst_ref_db": 0.97
+   },
+   {
+    "param": "Trail",
+    "slot": 6,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.97,
+    "prst_ref_db": 1.95
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "BBD Delay S",
+  "id": 29,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 39.7,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 28.11,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 5.73,
+    "where": "note/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time R%",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.41,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Spread",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.54,
+    "prst_ref_db": 7.37
+   },
+   {
+    "param": "Level",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 107.74,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 6,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.39,
+    "prst_ref_db": 1.59
+   },
+   {
+    "param": "Trail",
+    "slot": 7,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.44,
+    "prst_ref_db": 2.46
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Digital Delay S",
+  "id": 31,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 32.94,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 21.3,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 5.39,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time R%",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.61,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Spread",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.15,
+    "prst_ref_db": 1.21
+   },
+   {
+    "param": "Level",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 103.99,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 6,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.59,
+    "prst_ref_db": 4.23
+   },
+   {
+    "param": "Trail",
+    "slot": 7,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.62,
+    "prst_ref_db": 1.12
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Tape Delay S",
+  "id": 33,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 35.23,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 23.5,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 2.07,
+    "where": "silence/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time R%",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.77,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Spread",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.81,
+    "prst_ref_db": 1.59
+   },
+   {
+    "param": "Wow &",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 1.58,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Age",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 1.98,
+    "where": "silence/8063 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Scrape",
+    "slot": 7,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.72,
+    "prst_ref_db": 2.43
+   },
+   {
+    "param": "Drive",
+    "slot": 8,
+    "status": "ok_live",
+    "diff_db": 7.66,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Level",
+    "slot": 9,
+    "status": "ok_live",
+    "diff_db": 107.52,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 10,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.38,
+    "prst_ref_db": 1.47
+   },
+   {
+    "param": "Trail",
+    "slot": 11,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.84,
+    "prst_ref_db": 4.09
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Lofi Echo",
+  "id": 38,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 32.99,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 31.69,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 7.9,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Crush",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.08,
+    "where": "silence/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bit",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.53,
+    "prst_ref_db": 1.05
+   },
+   {
+    "param": "Sync",
+    "slot": 6,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.54,
+    "prst_ref_db": 1.45
+   },
+   {
+    "param": "Trail",
+    "slot": 7,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.0,
+    "prst_ref_db": 1.79
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Rev Echo",
+  "id": 40,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 45.35,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 38.09,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 24.88,
+    "where": "note/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Level",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 103.94,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.83,
+    "prst_ref_db": 2.05
+   },
+   {
+    "param": "Trail",
+    "slot": 5,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 3.06,
+    "prst_ref_db": 2.3
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Ambience 1",
+  "id": 42,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 32.23,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 25.78,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 9.54,
+    "where": "note/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Level",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 96.12,
+    "where": "note/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mod",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 2.6,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 2.78,
+    "where": "silence/8063 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 1.65,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 7,
+    "status": "ok_live",
+    "diff_db": 1.1,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Ambience 2",
+  "id": 46,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 30.01,
+    "where": "silence/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 23.01,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 3.92,
+    "where": "silence/1269 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Level",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 98.41,
+    "where": "bruit/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mod",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 2.33,
+    "where": "silence/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 2.36,
+    "where": "silence/8063 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 1.75,
+    "where": "note/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 7,
+    "status": "ok_live",
+    "diff_db": 3.02,
+    "where": "note/251 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Broken Delay",
+  "id": 50,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 58.48,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 27.44,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 32.86,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Latch",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 5.37,
+    "where": "bruit/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Cut",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 2.14,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 5,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 3.07,
+    "prst_ref_db": 2.18
+   },
+   {
+    "param": "Trail",
+    "slot": 6,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.73,
+    "prst_ref_db": 4.42
+   }
+  ]
+ },
+ {
+  "module": "DLY",
+  "model": "Ice Delay",
+  "id": 51,
+  "cat": 11,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 28.78,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Time",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 28.59,
+    "where": "silence/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Feedback",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 5.21,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.97,
+    "where": "silence/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mod",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 5.17,
+    "where": "silence/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pitch",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 9.81,
+    "where": "silence/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Slice",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 4.52,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Direction",
+    "slot": 7,
+    "status": "ok_live",
+    "diff_db": 3.32,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Blend",
+    "slot": 8,
+    "status": "ok_live",
+    "diff_db": 13.81,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Smooth",
+    "slot": 9,
+    "status": "ok_live",
+    "diff_db": 2.7,
+    "where": "silence/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Level",
+    "slot": 10,
+    "status": "ok_live",
+    "diff_db": 103.72,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Sync",
+    "slot": 11,
+    "status": "ok_live",
+    "diff_db": 3.0,
+    "where": "note/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 12,
+    "status": "ok_live",
+    "diff_db": 2.45,
+    "where": "note/400 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Room",
+  "id": 0,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 23.59,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 7.07,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 15.34,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.1,
+    "prst_ref_db": 2.01
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Hall",
+  "id": 1,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 30.66,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 6.93,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 12.92,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.13,
+    "prst_ref_db": 2.24
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Church",
+  "id": 2,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 34.04,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 7.63,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 13.69,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.47,
+    "prst_ref_db": 1.0
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Plate",
+  "id": 3,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 30.77,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 15.59,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "High Damp",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 6.12,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.56,
+    "prst_ref_db": 2.1
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Spring",
+  "id": 4,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 24.91,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 18.11,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Tone",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 3.36,
+    "where": "note/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 1.85,
+    "prst_ref_db": 2.01
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "N-Star",
+  "id": 6,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 21.95,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 13.82,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 2,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.6,
+    "prst_ref_db": 1.27
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Deepsea",
+  "id": 7,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 27.51,
+    "where": "silence/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 13.56,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 2,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.61,
+    "prst_ref_db": 2.0
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Sweet Space",
+  "id": 8,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 21.45,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 6.61,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 16.67,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Lo End",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 4.26,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Hi End",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 0.96,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 5,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.1,
+    "prst_ref_db": 1.98
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Shimmer",
+  "id": 9,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 23.27,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 3.68,
+    "where": "silence/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 11.52,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Lo End",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 4.49,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Hi End",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 2.63,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 1.04,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Studio",
+  "id": 11,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 15.61,
+    "where": "silence/634 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 8.04,
+    "where": "silence/2015 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 7.27,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Low Damp",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 2.82,
+    "where": "silence/125 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Hi Damp",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 16.01,
+    "where": "note/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mod",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 2.41,
+    "where": "silence/503 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 2.06,
+    "where": "bruit/503 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Club",
+  "id": 12,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 26.06,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 7.89,
+    "where": "silence/2015 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 6.09,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Low Damp",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 8.87,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Hi Damp",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 15.4,
+    "where": "note/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mod",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 2.44,
+    "where": "silence/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 3.43,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Concert",
+  "id": 13,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 17.46,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 7.0,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 7.65,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Low Damp",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 12.84,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Hi Damp",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 11.1,
+    "where": "silence/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mod",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 4.74,
+    "where": "silence/400 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 1.0,
+    "where": "silence/2539 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Arena",
+  "id": 14,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 27.19,
+    "where": "silence/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 3.46,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 12.27,
+    "where": "silence/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Low Damp",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 9.19,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Hi Damp",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 11.43,
+    "where": "silence/5079 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mod",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 4.09,
+    "where": "note/317 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 1.3,
+    "where": "silence/317 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Amp Spring",
+  "id": 17,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 28.43,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 5.62,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 11.24,
+    "where": "silence/1007 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Low Damp",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 7.52,
+    "where": "silence/158 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Hi Damp",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 4.0,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mod",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 5.32,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 2.3,
+    "where": "silence/1007 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "RVB",
+  "model": "Tube Spring",
+  "id": 18,
+  "cat": 12,
+  "params": [
+   {
+    "param": "Mix",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 27.0,
+    "where": "silence/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Pre Delay",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 5.2,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Decay",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 17.3,
+    "where": "silence/1600 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Low Damp",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 10.97,
+    "where": "silence/251 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Hi Damp",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 7.69,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Mod",
+    "slot": 5,
+    "status": "ok_live",
+    "diff_db": 5.04,
+    "where": "silence/800 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Trail",
+    "slot": 6,
+    "status": "ok_live",
+    "diff_db": 3.12,
+    "where": "silence/1600 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "SnapTone 1",
+  "id": 0,
+  "cat": 15,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 18.56,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 112.61,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 3.51,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 28.96,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 10.84,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "SnapTone 2",
+  "id": 1,
+  "cat": 15,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 18.56,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 110.82,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 3.5,
+    "where": "bruit/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 28.96,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 10.85,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "SnapTone 3",
+  "id": 2,
+  "cat": 15,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 18.57,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 113.82,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 3.51,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 28.95,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 10.85,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "SnapTone 4",
+  "id": 3,
+  "cat": 15,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 18.57,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 112.69,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 3.51,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 28.95,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 10.84,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "DST",
+  "model": "SnapTone 5",
+  "id": 4,
+  "cat": 15,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 18.57,
+    "where": "silence/3200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 113.8,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 3.52,
+    "where": "silence/100 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_live",
+    "diff_db": 28.95,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_live",
+    "diff_db": 10.85,
+    "where": "note/1007 Hz",
+    "context": "exact"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "SnapTone 6",
+  "id": 5,
+  "cat": 15,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 115.22,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 8.34,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 4.76,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 11.71,
+    "prst_ref_db": 1.43
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "ok_after_preset_load",
+    "live_after_load_db": 2.33,
+    "prst_ref_db": 2.06
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "SnapTone 7",
+  "id": 6,
+  "cat": 15,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 114.43,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 8.34,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 4.76,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "not_verified"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "not_verified"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "SnapTone 8",
+  "id": 7,
+  "cat": 15,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 113.02,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 8.34,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 4.76,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "not_verified"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "not_verified"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "SnapTone 9",
+  "id": 8,
+  "cat": 15,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 111.65,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 9.27,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 4.76,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "not_verified"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "not_verified"
+   }
+  ]
+ },
+ {
+  "module": "AMP",
+  "model": "SnapTone 10",
+  "id": 9,
+  "cat": 15,
+  "params": [
+   {
+    "param": "Gain",
+    "slot": 0,
+    "status": "ok_live",
+    "diff_db": 110.99,
+    "where": "note/200 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Volume",
+    "slot": 1,
+    "status": "ok_live",
+    "diff_db": 8.34,
+    "where": "silence/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Bass",
+    "slot": 2,
+    "status": "ok_live",
+    "diff_db": 4.76,
+    "where": "bruit/10159 Hz",
+    "context": "exact"
+   },
+   {
+    "param": "Middle",
+    "slot": 3,
+    "status": "not_verified"
+   },
+   {
+    "param": "Treble",
+    "slot": 4,
+    "status": "not_verified"
+   }
+  ]
+ }
+]
