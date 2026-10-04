@@ -31,7 +31,7 @@
       h_anthropic: "Crée une clé sur console.anthropic.com (un compte avec des crédits est nécessaire), puis colle-la dans le champ ci-dessous.",
       get_key: 'Obtenir une clé', or_login: 'Se connecter avec OpenRouter', or_https: "La connexion en 1 clic ne fonctionne que sur la version en ligne (https). Colle ta clé à la main, ou ouvre la page depuis son adresse web.",
       or_wait: 'Échange du code avec OpenRouter…', or_ok: 'Connecté à OpenRouter : la clé est enregistrée.', or_ko: 'La connexion OpenRouter a échoué : %s',
-      key_hint_bad: "Cette clé ne ressemble pas à une clé %s (elle devrait commencer par « %s »). Vérifie que tu as copié la bonne.",
+      key_hint_bad: "Cette clé ressemble à une clé %s, mais le fournisseur choisi est %s. Change de fournisseur ou vérifie que tu as copié la bonne clé.",
       sound_ph: 'Master of Puppets - Metallica, son rythmique album',
       examples: 'Exemples', structure: 'Structure', auto: 'Détection automatique',
       structure_auto: "L'IA détermine la structure : 1 son = 3 presets, 2 sons = 6, 3 sons = 9.",
@@ -40,6 +40,7 @@
       pickup: 'Micros de ta guitare', pk_auto: 'Non précisé (l\'IA décide)', pk_humbucker: 'Humbucker (double bobinage)', pk_single: 'Simple bobinage', pk_p90: 'P90', pk_active: 'Actif (EMG, etc.)',
       web: 'Recherche web (identifier le vrai rig)', web_na: "Indisponible avec ce fournisseur.",
       go: 'Générer les presets', stop: 'Annuler', need_text: 'Écris d\'abord ce que tu veux comme son.', need_key: 'Il faut d\'abord coller une clé API (étape 1).',
+      setup_skip: 'Continuer sans IA', setup_skip_help: "Pas de clé ? Tu peux quand même ouvrir un preset, l'envoyer à la pédale et harmoniser les volumes (bouton Volume) : seules la génération et l'affinage par IA demandent une clé. Tu pourras en ajouter une plus tard avec « Connecter une IA », en haut.",
       st_wait: 'Appel à l\'IA en cours, compte une à deux minutes…', st_attempt: 'Tentative %d : l\'IA répond…', st_fix: 'L\'IA corrige ses erreurs (relance automatique)…', st_cancel: 'Génération annulée.',
       rack: 'Rack', rack_empty: 'Chaîne vide : décris un son pour remplir le rack.', rack_busy: 'Le rack se prépare…',
       presets_ready: '%d presets prêts', empty_slot: 'vide', bypass: 'bypass', active: 'actif',
@@ -154,7 +155,7 @@
       listen_chk: "Écouter la pédale : ce qui change dessus (patch, modules) se met à jour ici. Garde le port MIDI ouvert : à décocher pour utiliser l'éditeur Valeton.",
       listen_on: 'GP-200 sur %s', listen_other: "GP-200 sur %s, mais le preset affiché est dans %s : les réglages en direct sont suspendus pour ne pas modifier un autre patch.",
       listen_reloaded: "La pédale a rechargé %s depuis sa mémoire : les réglages faits depuis l'injection ne sont plus dessus.",
-      listen_panel: "Un réglage a été tourné sur la pédale (le GP-200 ne dit pas lequel) : l'écran peut différer de la pédale.",
+      listen_panel: "Un réglage tourné sur la pédale n'a pas pu être appliqué ici : l'écran peut différer de la pédale.",
       listen_resend: 'Renvoyer le preset', listen_patch: 'patch %s', listen_byp_on: '%s activé sur la pédale', listen_byp_off: '%s coupé sur la pédale', listen_vol: 'volume du patch %d', listen_knob: 'réglage tourné (%s)',
       listen_log: 'Ce que dit la pédale', listen_log_sub: 'Derniers messages reçus de la pédale. Utile pour décoder de nouveaux messages : copie ce journal et envoie-le.', listen_log_empty: "Rien reçu pour l'instant : change de patch ou tourne un bouton sur la pédale.", listen_copy: 'Copier le journal', listen_off: "L'écoute de la pédale est désactivée (case du panneau 📍).",
       inj_prog: 'Injection en %s… %d %%', inj_done: '✅ Injecté et sélectionné sur la pédale en %s.', inj_fail: "❌ Injection en %s impossible : %s",
@@ -218,7 +219,7 @@
       h_anthropic: 'Create a key at console.anthropic.com (an account with credits is required), then paste it in the field below.',
       get_key: 'Get a key', or_login: 'Sign in with OpenRouter', or_https: 'One-click login only works on the online version (https). Paste your key by hand, or open the page from its web address.',
       or_wait: 'Exchanging the code with OpenRouter…', or_ok: 'Connected to OpenRouter: the key is saved.', or_ko: 'OpenRouter login failed: %s',
-      key_hint_bad: 'This does not look like a %s key (it should start with “%s”). Check that you copied the right one.',
+      key_hint_bad: 'This key looks like it belongs to %s, but the provider selected is %s. Switch provider, or check that you copied the right key.',
       sound_ph: 'Master of Puppets - Metallica, album rhythm tone',
       examples: 'Examples', structure: 'Structure', auto: 'Auto-detect',
       structure_auto: 'The AI decides the structure: 1 sound = 3 presets, 2 = 6, 3 = 9.',
@@ -227,6 +228,7 @@
       pickup: 'Your guitar pickups', pk_auto: 'Unspecified (the AI decides)', pk_humbucker: 'Humbucker', pk_single: 'Single-coil', pk_p90: 'P90', pk_active: 'Active (EMG, etc.)',
       web: 'Web search (identify the real rig)', web_na: 'Not available with this provider.',
       go: 'Generate presets', stop: 'Cancel', need_text: 'First write the sound you are after.', need_key: 'Paste an API key first (step 1).',
+      setup_skip: 'Continue without AI', setup_skip_help: 'No key? You can still open a preset, send it to the pedal and level the volumes (Volume button): only AI generation and refining need a key. You can add one later with "Connect an AI" at the top.',
       st_wait: 'Calling the AI, allow a minute or two…', st_attempt: 'Attempt %d: waiting for the AI…', st_fix: 'The AI is fixing its errors (automatic retry)…', st_cancel: 'Generation cancelled.',
       rack: 'Rack', rack_empty: 'Empty chain: describe a sound to fill the rack.', rack_busy: 'The rack is getting ready…',
       presets_ready: '%d presets ready', empty_slot: 'empty', bypass: 'bypassed', active: 'on',
@@ -341,7 +343,7 @@
       listen_chk: 'Listen to the pedal: what changes on it (patch, modules) is mirrored here. Keeps the MIDI port open: untick to use the Valeton editor.',
       listen_on: 'GP-200 on %s', listen_other: 'GP-200 is on %s, but the displayed preset lives in %s: live changes are paused so another patch is not modified.',
       listen_reloaded: 'The pedal reloaded %s from its memory: changes made since the injection are no longer on it.',
-      listen_panel: 'A setting was turned on the pedal (the GP-200 does not say which one): the screen may differ from the pedal.',
+      listen_panel: 'A setting turned on the pedal could not be applied here: the screen may differ from the pedal.',
       listen_resend: 'Send the preset again', listen_patch: 'patch %s', listen_byp_on: '%s turned on at the pedal', listen_byp_off: '%s bypassed at the pedal', listen_vol: 'patch volume %d', listen_knob: 'setting turned (%s)',
       listen_log: 'What the pedal says', listen_log_sub: 'Latest messages received from the pedal. Handy to decode new messages: copy this log and send it over.', listen_log_empty: 'Nothing received yet: change patch or turn a knob on the pedal.', listen_copy: 'Copy the log', listen_off: 'Listening to the pedal is off (checkbox in the 📍 panel).',
       inj_prog: 'Injecting into %s… %d %%', inj_done: '✅ Injected and selected on the pedal in %s.', inj_fail: '❌ Could not inject into %s: %s',
@@ -394,21 +396,27 @@
     fr: { PRE: 'Pré / Comp', WAH: 'Wah', DST: 'Drive', AMP: 'Ampli', NR: 'Noise Gate', CAB: 'Baffle / IR', EQ: 'Égaliseur', MOD: 'Modulation', DLY: 'Delay', RVB: 'Reverbe', VOL: 'Volume' },
     en: { PRE: 'Pre / Comp', WAH: 'Wah', DST: 'Drive', AMP: 'Amp', NR: 'Noise Gate', CAB: 'Cab / IR', EQ: 'Equalizer', MOD: 'Modulation', DLY: 'Delay', RVB: 'Reverb', VOL: 'Volume' },
   };
+  // Prefixes connus, utilises UNIQUEMENT pour reperer une cle collee chez le mauvais fournisseur. Jamais pour dire qu'une cle est « fausse » :
+  // les formats evoluent (Google emet aussi des cles qui ne commencent pas par AIza), seul le fournisseur sait si une cle est valide.
   const KEY_PREFIX = { gemini: 'AIza', anthropic: 'sk-ant-', openrouter: 'sk-or-' };
+  function foreignKeyOwner(p, v) {
+    for (const q of Object.keys(KEY_PREFIX)) if (q !== p && v.indexOf(KEY_PREFIX[q]) === 0) return q;
+    return null;
+  }
   const PROV_NAME = { gemini: 'Gemini', anthropic: 'Anthropic', openrouter: 'OpenRouter' };
 
   // -------------------------------------------------------------------- etat
   const s = {
     lang: /^fr/i.test(navigator.language || '') ? 'fr' : 'en',
     provider: 'gemini', models: {}, keys: {}, remember: true, pickup: 'auto', web: false,
-    roles: [], demande: '', setupOpen: null,
+    roles: [], demande: '', setupOpen: null, noAi: false,   // noAi = « continuer sans IA » choisi (la fenetre de connexion ne s'ouvre plus d'elle-meme)
     modelList: {}, modelMsg: '',
     run: null,          // {running, status, log:[], error, controller}
     res: null, sel: { si: 0, vi: 0, slot: 'AMP' }, fresh: false, notice: null,
     usb: { link: null, state: (USB && USB.MidiLink.supported()) ? 'idle' : 'unsupported', outId: null, ports: [], bank: 1, letter: 'A',
            confirm: null, sending: null, result: null, flags: {}, error: '' },
     mode: 'new', tab: 'module', lib: [], ref: { instr: '' },
-    ed: { live: false, want: true, busy: false, opening: null, msg: '', err: '', last: 0, timer: null, idle: null, pending: null, sync: { file: null, set: new Set() }, pm: new Map(), tails: new Map(), noConf: [], bsent: new Map() },
+    ed: { live: false, want: true, busy: false, opening: null, msg: '', err: '', last: 0, timer: null, idle: null, pending: null, sync: { file: null, set: new Set() }, pm: new Map(), tails: new Map(), noConf: [], bsent: new Map(), psent: new Map() },
     // injection = ecrire le preset affiche dans un slot choisi puis le selectionner (comme « Injecter » de la version Windows) ; set = slot confirme par l'utilisateur
     inj: { bank: 1, letter: 'A', auto: true, set: false, open: false, asked: false, busy: false, queued: null, t: null, msg: '', err: '', warn: '' },
     // ecoute de la pedale (sens pedale -> page) : pc = patch courant de la pedale (null = inconnu), desync = elle a recharge le patch sans nos reglages
@@ -423,6 +431,7 @@
       if (o.models && typeof o.models === 'object') s.models = o.models;
       if (o.keys && typeof o.keys === 'object') s.keys = o.keys;
       if (typeof o.remember === 'boolean') s.remember = o.remember;
+      if (typeof o.noAi === 'boolean') s.noAi = o.noAi;
       if (o.pickup) s.pickup = o.pickup;
       if (typeof o.liveWant === 'boolean') s.ed.want = o.liveWant;
       if (typeof o.listen === 'boolean') s.listen.want = o.listen;
@@ -435,7 +444,7 @@
   function save() {
     try {
       localStorage.setItem(STORE, JSON.stringify({
-        lang: s.lang, provider: s.provider, models: s.models, remember: s.remember, pickup: s.pickup, liveWant: s.ed.want, listen: s.listen.want, usb: { bank: s.usb.bank, letter: s.usb.letter }, inj: { bank: s.inj.bank, letter: s.inj.letter, auto: s.inj.auto, set: s.inj.set },
+        lang: s.lang, provider: s.provider, models: s.models, remember: s.remember, noAi: s.noAi, pickup: s.pickup, liveWant: s.ed.want, listen: s.listen.want, usb: { bank: s.usb.bank, letter: s.usb.letter }, inj: { bank: s.inj.bank, letter: s.inj.letter, auto: s.inj.auto, set: s.inj.set },
         keys: s.remember ? s.keys : {},
       }));
     } catch (e) { /* idem */ }
@@ -761,7 +770,7 @@
     const all = (sel, fn) => document.querySelectorAll(sel).forEach(el => set(el, typeof fn === 'string' ? U(fn) : fn(el)));
     const ids = { 'mode-new': 'mode_new', 'mode-refine': 'mode_refine', 'open-prst': 'open_prst', demande: 'demande', instr: 'instr', go: 'go', 'go-refine': 'go_refine',
       'dl-all': 'dl_all', 'dl-one': 'dl_one', 'pop-close': 'pop_close', 'slot-close': 'pop_close', 'setup-close': 'setup_close', provider: 'provider', model: 'model', apikey: 'apikey',
-      'setup-ok': 'setup_ok', 'ed-model': 'ed_model', 'ed-send': 'ed_send', 'ed-save': 'ed_save', 'ctrl-send': 'ctrl_send', 'pedal-connect': 'pedal_connect', 'pedal-port': 'pedal_port',
+      'setup-ok': 'setup_ok', 'setup-skip': 'setup_skip', 'ed-model': 'ed_model', 'ed-send': 'ed_send', 'ed-save': 'ed_save', 'ctrl-send': 'ctrl_send', 'pedal-connect': 'pedal_connect', 'pedal-port': 'pedal_port',
       'pedal-bank': 'pedal_bank', 'pedal-letter': 'pedal_letter', 'pedal-one': 'pedal_one', 'pedal-three': 'pedal_three', 'pedal-yes': 'pedal_yes', 'pd-log-copy': 'pd_log_copy',
       'pd-resend': 'pd_resend', 'inj-bank': 'inj_bank', 'inj-letter': 'inj_letter', 'inj-auto': 'inj_auto', 'listen-chk': 'listen_chk', 'inj-ok': 'inj_ok', 'tune-open': 'tune_open',
       'tune-pedal': 'tune_pedal', 'tune-audio': 'tune_audio', 'tune-audio-sel': 'tune_audio_sel', 'tune-audio-refresh': 'tune_audio_refresh', 'tune-bank': 'tune_bank',
@@ -1406,7 +1415,7 @@
 
   // ------------------------------------------- ecoute de la pedale (sens pedale -> page)
   // La pedale annonce (SysEx 12/08) les modules qu'on bascule au pied, ses changements de patch et le volume du patch ; un reglage tourne en facade
-  // (12/10) donne sa valeur mais pas le module ni le parametre. Le contenu d'un patch charge n'est jamais envoye : on ne peut que suivre ces annonces.
+  // (12/10 : module, slot, valeur) est applique au preset affiche. Le contenu d'un patch charge n'est jamais envoye : on ne peut que suivre ces annonces.
   const hexOf = m => Array.from(m, x => (x < 16 ? '0' : '') + x.toString(16)).join(' ');
   const injPc = () => (s.inj.set ? USB.slotToPc(s.inj.bank, s.inj.letter) : null);
   const patchMismatch = () => { const p = injPc(), L = s.listen; return p !== null && L.pc !== null && L.pc !== p; };
@@ -1440,7 +1449,7 @@
     s.ed.pm = new Map(slots.map(sl => [G.MODULES.indexOf(sl), modKey(file.decoded.modules[sl])]));
   }
   const viewIsOnPedal = () => !patchMismatch();
-  function onPedalEvent(e) {
+  function onPedalEvent(e, raw) {
     if (tuneActive() || !s.listen.want) return;
     const L = s.listen;
     if (e.kind === 'patch') {
@@ -1471,9 +1480,41 @@
       }
       listenRender();
     } else if (e.kind === 'panel') {
-      listenLog('panel', 'reglage en facade : ctrl ' + e.ctrl + ', valeur ' + (Math.round(e.value * 1000) / 1000));
-      if (e.ctrl !== 0x0A) { L.touched = true; L.last = T('listen_knob', String(Math.round(e.value * 100) / 100)); listenRender(); }
+      onPanelParam(e, raw);
     }
+  }
+  /** Reglage tourne en facade (12/10 : module, slot, valeur) : applique au preset affiche, sans rien renvoyer a la pedale.
+   *  On applique toujours la derniere valeur recue (la pedale saute des valeurs intermediaires quand on tourne vite). */
+  function onPanelParam(e, raw) {
+    const L = s.listen, slot = G.MODULES[e.module];
+    const sent = s.ed.psent.get(e.module * 16 + e.param);
+    if (sent && Date.now() - sent < 500) return;                       // echo eventuel de notre propre envoi
+    const file = curFile(), m = file && slot ? file.decoded.modules[slot] : null;
+    const p = m && m.model ? tb.paramsOf(m.model_id, m.category).find(q => q.slot === e.param && q.slot < G.N_SLOTS) : null;
+    const v = Math.round(e.value * 1000) / 1000;
+    const name = slot ? slot + ' / ' + (p ? p.name : 'slot ' + e.param) : '?';
+    const skewed = patchMismatch() || L.desync;                         // deja signale par un bandeau plus precis
+    const busy = s.inj.busy || !!s.usb.sending;
+    if (!file || !m || !m.model || !p || skewed || busy) {
+      listenLog('panel', name + ' = ' + v + ' (non appliqué)', raw);
+      if (!skewed) { L.touched = true; L.last = T('listen_knob', name + ' = ' + v); listenRender(); }
+      return;
+    }
+    const cur = m.params ? Number(m.params[p.name]) : NaN;
+    const eps = 1e-4;
+    if (!(e.value >= p.min - eps && e.value <= p.max + eps)) {          // hors plage : on n'ecrit rien dans le preset
+      listenLog('panel', name + ' = ' + v + ' (hors plage ' + p.min + '..' + p.max + ')', raw);
+      L.touched = true; L.last = T('listen_knob', name + ' = ' + v); listenRender();
+      return;
+    }
+    listenLog('panel', name + ' = ' + v);
+    L.last = T('listen_knob', name + ' = ' + v);
+    if (cur === e.value) { listenRender(); return; }
+    G.patchParam(file.raw, e.module, p.slot, e.value);
+    if (m.params) m.params[p.name] = e.value;
+    const sm = file.spec && file.spec.modules && file.spec.modules[slot];
+    if (sm && sm.params) sm.params[p.name] = e.value;
+    listenRender();
   }
   /** La pedale vient de changer de patch (au pied, ou apres notre selection). */
   function pedalPatchChanged(pc) {
@@ -1497,7 +1538,8 @@
   function onPedalRaw(m) {
     // journal : on garde ce que le decodage ne sait pas lire (hors 12/0C : confirmations d'effets, tres frequentes)
     if (!s.listen.want || m.length < 10 || m[8] !== 0x12 || m[9] === 0x0C) return;
-    if (m[9] === 0x08 || m[9] === 0x10) return;                    // deja journalises par onPedalEvent
+    if (m[9] === 0x08) return;                                     // deja journalise par onPedalEvent
+    if (m[9] === 0x10 && USB.parsePanelParam(m)) return;           // idem ; un 12/10 que le decodage refuse reste dans le journal (variante de trame ?)
     listenLog('autre', '12/' + (m[9] < 16 ? '0' : '') + m[9].toString(16) + ' (' + m.length + ' o)', m);
   }
   function listenLines(file) {
@@ -1603,9 +1645,9 @@
         B.build ? h('span', { class: 'ver', id: 'build-version', title: B.build.iso, text: T('ver', B.build.version, buildDate()) }) : null));
   }
   function setupModal() {
-    const open = s.setupOpen === null ? !curKey() : s.setupOpen;
+    const open = s.setupOpen === null ? (!curKey() && !s.noAi) : s.setupOpen;
     if (!open) return null;
-    return h('div', { class: 'modal-veil', id: 'setup-modal', onclick: e => { if (e.target === e.currentTarget && curKey()) { s.setupOpen = false; render(); } } },
+    return h('div', { class: 'modal-veil', id: 'setup-modal', onclick: e => { if (e.target === e.currentTarget && (curKey() || s.noAi)) { s.setupOpen = false; render(); } } },
       h('div', { class: 'modal', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'h-setup' }, setupPanel(), h('p', { class: 'help', style: 'padding:0 18px 14px', text: T('foot_a') + ' ' + T('foot_b') })));
   }
 
@@ -1616,19 +1658,18 @@
     panel.appendChild(h('header', null,
       h('span', { class: 'num' + (hasKey ? ' done' : '') }, hasKey ? '✓' : '1'),
       h('h2', { id: 'h-setup', text: hasKey ? T('s1_done') : T('s1') }),
-      hasKey ? h('button', { type: 'button', class: 'btn small ghost x-close', id: 'setup-close', 'aria-label': 'OK', onclick: () => { s.setupOpen = false; render(); } }, '✕') : null));
+      (hasKey || s.noAi) ? h('button', { type: 'button', class: 'btn small ghost x-close', id: 'setup-close', 'aria-label': 'OK', onclick: () => { s.setupOpen = false; render(); } }, '✕') : null));
 
     const list = s.modelList[p] || info.models;
     const models = list.indexOf(curModel()) >= 0 ? list : [curModel()].concat(list);
     const keyInput = h('input', { id: 'apikey', type: 'password', autocomplete: 'off', spellcheck: 'false', value: s.keys[p] || '', 'aria-label': T('key'),
-      oninput: e => { s.keys[p] = e.target.value.trim(); save(); checkKeyHint(); const ok = document.getElementById('setup-ok'); if (ok) ok.disabled = !curKey(); } });
+      oninput: e => { s.keys[p] = e.target.value.trim(); if (curKey()) s.noAi = false; save(); checkKeyHint(); const ok = document.getElementById('setup-ok'); if (ok) ok.disabled = !curKey(); } });
     const toggle = h('button', { type: 'button', class: 'btn small ghost', onclick: e => {
       const hide = keyInput.type === 'password'; keyInput.type = hide ? 'text' : 'password'; e.target.textContent = hide ? T('hide') : T('show'); } }, T('show'));
     const hint = h('p', { class: 'note', id: 'key-hint', hidden: true });
     function checkKeyHint() {
-      const v = (s.keys[p] || '').trim(), pre = KEY_PREFIX[p];
-      const bad = v.length > 8 && v.indexOf(pre) !== 0;
-      hint.hidden = !bad; hint.textContent = bad ? T('key_hint_bad', PROV_NAME[p], pre) : '';
+      const v = (s.keys[p] || '').trim(), other = v.length > 8 ? foreignKeyOwner(p, v) : null;
+      hint.hidden = !other; hint.textContent = other ? T('key_hint_bad', PROV_NAME[other], PROV_NAME[p]) : '';
     }
     const steps = p === 'gemini'
       ? h('ol', null, D[s.lang].h_gemini.map((x, i) => h('li', null, i === 0
@@ -1655,7 +1696,10 @@
       hint,
       h('label', { class: 'check' }, h('input', { type: 'checkbox', checked: s.remember, onchange: e => { s.remember = e.target.checked; save(); } }), T('remember')),
       h('p', { class: 'help', text: T('privacy') }),
-      h('div', null, h('button', { type: 'button', class: 'btn go', id: 'setup-ok', disabled: !hasKey, onclick: () => { s.setupOpen = false; render(); } }, 'OK'))));
+      h('div', { class: 'row', style: 'align-items:center;flex-wrap:wrap;gap:10px' },
+        h('button', { type: 'button', class: 'btn go', id: 'setup-ok', disabled: !hasKey, onclick: () => { s.setupOpen = false; render(); } }, 'OK'),
+        hasKey ? null : h('button', { type: 'button', class: 'btn', id: 'setup-skip', onclick: () => { s.noAi = true; s.setupOpen = false; s.notice = null; save(); render(); } }, T('setup_skip'))),
+      hasKey ? null : h('p', { class: 'help', id: 'setup-skip-help', text: T('setup_skip_help') })));
     setTimeout(checkKeyHint, 0);
     return panel;
   }
@@ -1684,6 +1728,8 @@
       const link = new USB.MidiLink({ log: kind => { if (kind === 'no_ack') u.flags.noAck = true; if (kind === 'input_blind') u.flags.blind = true; } });
       link.attach(access);
       link.onnotify = onPedalEvent; link.onrx = onPedalRaw;
+      const sendParam0 = link.sendParam.bind(link);
+      link.sendParam = (mod, par, val, prst) => { s.ed.psent.set(mod * 16 + par, Date.now()); return sendParam0(mod, par, val, prst); };   // garde anti-echo des reglages tournes en facade
       link.onchange = () => { const had = !!u.outId; pedalRefresh(); if (!had && u.outId) scheduleInject(); if (s.ed.live && !u.outId) { liveStop(); s.ed.err = T('ed_live_ko', T('e_pedal_gone')); } if (!u.sending) render(); };
       u.link = link; u.state = 'ready'; pedalRefresh(); scheduleInject();
     } catch (e) {
@@ -2148,7 +2194,7 @@
     window.addEventListener('drop', ev => { if (!hasFiles(ev)) return; ev.preventDefault(); depth = 0; document.body.classList.remove('dragging'); openFiles(ev.dataTransfer.files); });
     window.addEventListener('keydown', ev => {
       if (ev.key !== 'Escape') return;
-      if (document.getElementById('setup-modal')) { if (curKey()) { s.setupOpen = false; render(); } return; }
+      if (document.getElementById('setup-modal')) { if (curKey() || s.noAi) { s.setupOpen = false; render(); } return; }
       if (document.getElementById('slot-modal')) { s.inj.open = false; render(); return; }
       if (document.getElementById('pop')) { s.tab = 'module'; render(); }
     });

@@ -272,7 +272,9 @@ def model_of(cfg):
 def compact_catalog(tb, light=False):
     """Catalogue condense pour le prompt (~20 Ko au lieu de 222 Ko).
 
-    Les `slot` sont volontairement omis : le modele n'en a pas besoin.
+    Les `slot` sont omis, SAUF pour les categories partagees par plusieurs slots (0, 1, 3, 4) :
+    le modele porte alors "slots=..." (= ce que le menu de la pedale propose, cf. gp200lib.in_menu),
+    sinon l'IA place p. ex. un EQ en PRE. SnapTone (cat 15) n'est pas propose a l'IA.
 
     Chaque modele porte sa description OFFICIELLE (1re phrase de
     description_en.xml, le texte que l'editeur Valeton affiche lui-meme). Elle
@@ -287,6 +289,9 @@ def compact_catalog(tb, light=False):
            (1, "EQ / PITCH / FILTRES"), (5, "WAH"), (4, "MODULATIONS"),
            (11, "DELAYS"), (12, "REVERBS"), (6, "VOLUME")]
     out = []
+    # categories partagees par plusieurs slots : le modele porte alors ses slots (= menu reel de la pedale)
+    shared = {cat for cat, _lbl in fam
+              if sum(1 for sl, cats in SLOT_ACCEPTS.items() if cat in cats) > 1}
     for cat, label in fam:
         rows = []
         keep_desc = (not light) or (cat in (7, 8, 3, 1))
@@ -301,9 +306,12 @@ def compact_catalog(tb, light=False):
                 if c:
                     cabhint = " cab_def=%s" % c["name"]
             d = tb.description(m["id"], cat) if keep_desc else ""
-            rows.append("%s (cat%d, %s)%s : %s%s"
+            tag = ""
+            if cat in shared and m.get("slots"):
+                tag = " slots=" + ",".join(sl for sl in MODULES if sl in m["slots"])
+            rows.append("%s (cat%d, %s)%s%s : %s%s"
                         % (m["name"], cat, m["category_label"] or "-",
-                           cabhint, ps, ("\n    -> " + d) if d else ""))
+                           tag, cabhint, ps, ("\n    -> " + d) if d else ""))
         out.append("### %s (cat %d) — %d\n%s" % (label, cat, len(rows),
                                                  "\n".join(rows)))
     cabrows = []
@@ -358,9 +366,11 @@ REGLES ABSOLUES
    proche disponible et dis-le dans "notes".
 2. Respecte les plages [min-max] indiquees pour chaque parametre.
 3. Le nom d'un preset fait 16 CARACTERES MAXIMUM (ASCII).
-4. Chaque slot n'accepte que certaines familles :
-   PRE: cat 0,1,3,4 | WAH: cat 5,1 | DST: cat 3,0 | AMP: cat 7,8 | NR: cat 0,4
-   CAB: cabs | EQ: cat 1 | MOD: cat 4,1 | DLY: cat 11 | RVB: cat 12 | VOL: cat 6
+4. Chaque slot n'accepte que les modeles que le MENU de la pedale y propose. Les familles du
+   catalogue sont des categories ; quand une categorie sert a plusieurs slots (cat 0, 1, 3, 4),
+   chaque modele porte "slots=..." et ne peut aller QUE dans ces slots (ex. un modele
+   "slots=EQ" ne va pas dans PRE). Categories a un seul slot : cat 5 -> WAH | cat 7,8 -> AMP |
+   cat 11 -> DLY | cat 12 -> RVB | cat 6 -> VOL | CAB : liste des cabs.
 5. chain_order = permutation de 0..10 ou chain_order[i] = module en position i.
    Modules : 0=PRE 1=WAH 2=DST 3=AMP 4=NR 5=CAB 6=EQ 7=MOD 8=DLY 9=RVB 10=VOL
    Usuel : [4,0,1,2,3,5,6,7,8,9,10] (gate en tete). Defaut : [0,1,2,3,4,5,6,7,8,9,10].
@@ -973,8 +983,13 @@ def extract_json(txt):
 
 
 # ------------------------------------------------------------- validation
-def check_names(tb, spec):
+def check_names(tb, spec, keep=None):
     """Pre-valide noms de modeles ET noms de parametres, avec suggestions.
+
+    Un modele n'est accepte que dans un slot dont le MENU de la pedale le propose (`slots`),
+    pas seulement parce que sa categorie y est admise. `keep` (affinage) = modules du preset
+    d'origine {slot: {"model": ...}} : un modele deja present dans ce slot est conserve tel quel
+    (un ancien preset peut contenir un modele hors menu ; on ne le fait pas disparaitre).
 
     La validation des parametres DOIT se faire ici et pas seulement dans
     encode_prst : sinon un parametre hallucine leve une ValueError apres la
@@ -993,12 +1008,21 @@ def check_names(tb, spec):
             if slot == "CAB":
                 pool = [c["name"] for c in tb.cabs if not c["user_slot"]]
             else:
-                pool = [m2["name"] for m2 in tb.models
-                        if m2["cat"] in SLOT_ACCEPTS[slot]]
+                pool = [m2["name"] for m2, _c in tb.models_for_slot(slot)]
             near = difflib.get_close_matches(ms["model"], pool, n=4, cutoff=0.4)
             errs.append("slot %s : le modele %r N'EXISTE PAS. Proches : %s"
                         % (slot, ms["model"], near or pool[:8]))
             continue
+        if not tb.in_menu(slot, m):
+            kept = ((keep or {}).get(slot) or {}).get("model")
+            if not (kept and _norm_name(kept) == _norm_name(ms["model"])):
+                pool = [m2["name"] for m2, _c in tb.models_for_slot(slot)]
+                near = difflib.get_close_matches(ms["model"], pool, n=4, cutoff=0.4)
+                errs.append("slot %s : le modele %r n'est PAS propose dans ce slot par la "
+                            "pedale (il va dans : %s). Proches dans %s : %s"
+                            % (slot, m.get("name"), ", ".join(m.get("slots") or ["?"]),
+                               slot, near or pool[:8]))
+                continue
 
         mid = m["model_id"] if cat == 10 else m["id"]
         plist = tb.params_of(mid, cat)
@@ -1433,8 +1457,10 @@ REGLES ABSOLUES
 3. N'utilise QUE des noms de modeles du catalogue, orthographe EXACTE.
    N'invente JAMAIS un nom.
 4. Respecte les plages [min-max] de chaque parametre.
-5. Slots : PRE cat 0,1,3,4 | WAH cat 5,1 | DST cat 3,0 | AMP cat 7,8 | NR cat 0,4
-   CAB cabs | EQ cat 1 | MOD cat 4,1 | DLY cat 11 | RVB cat 12 | VOL cat 6
+5. Slots : un modele ne va que dans un slot que le MENU de la pedale propose. Categories
+   partagees (cat 0, 1, 3, 4) : chaque modele porte "slots=..." (seuls ces slots).
+   Un seul slot : cat 5 -> WAH | cat 7,8 -> AMP | cat 11 -> DLY | cat 12 -> RVB | cat 6 -> VOL |
+   CAB : cabs. Un modele DEJA present dans le preset reste tel quel, meme hors de cette regle.
 6. "il manque un flanger" -> mets un flanger dans le slot MOD (Jet, Flanger...).
    "pas assez de chorus" -> augmente Depth/Mix du chorus existant, ou ajoute un
    chorus dans MOD s'il n'y en a pas. Si le slot voulu est deja pris par autre
@@ -1601,7 +1627,7 @@ def refine(cfg, tb, prst_path, instruction, log=print):
                      "\n\nRenvoie UNIQUEMENT l'objet JSON demande, sans texte "
                      "ni balises."}]
             continue
-        errs = check_names(tb, payload.get("spec") or {})
+        errs = check_names(tb, payload.get("spec") or {}, keep=spec_in.get("modules"))
         if not errs:
             break
         log(T("log_errors_fix", len(errs)))
@@ -1675,7 +1701,7 @@ def refine_live(cfg, tb, prst_path, log=print):
                      "\n\nRenvoie UNIQUEMENT l'objet JSON demande, sans texte "
                      "ni balises."}]
             continue
-        errs = check_names(tb, payload.get("spec") or {})
+        errs = check_names(tb, payload.get("spec") or {}, keep=spec_in.get("modules"))
         if not errs:
             break
         log(T("log_errors_fix", len(errs)))

@@ -90,7 +90,12 @@
     if (!Number.isFinite(x)) return x < 0 ? '-inf' : 'inf';
     if (x === 0) return Object.is(x, -0) ? '-0' : '0';
     const neg = x < 0 ? '-' : '';
-    const ax = Math.abs(x);
+    let ax = Math.abs(x);
+    {
+      // printf arrondit un cas EXACTEMENT a mi-chemin vers le pair, toExponential/toFixed vers le haut : 999996.5 -> %g donne 999996 (JS : 999997)
+      const dg = ax.toExponential(P + 20).split('e')[0].replace('.', '');
+      if (dg[P] === '5' && /^0*$/.test(dg.slice(P + 1)) && (dg.charCodeAt(P - 1) - 48) % 2 === 0) ax *= 1 - Math.pow(2, -52);
+    }
     const ex = ax.toExponential(P - 1);
     const exp = Number(ex.split('e')[1]);
     let s;
@@ -260,6 +265,11 @@
       }
       return hits[0];
     }
+
+    /** Le menu de la pedale propose-t-il ce modele dans ce slot ? (= Tables.in_menu ; plus strict que la categorie, qui n'est qu'un
+     *  pre-filtre : 165 couples categorie-compatibles que la pedale ne propose pas). CAB : oui ; sans champ `slots` : oui.
+     *  Sert a VALIDER ce que l'IA propose ; le decodage d'un .prst existant reste tolerant. */
+    inMenu(slot, m) { return slot === 'CAB' || !m.slots || m.slots.indexOf(slot) >= 0; }
 
     /** Modeles valides pour un slot : [[model, cat], ...] (= Tables.models_for_slot). */
     modelsForSlot(slot) {
@@ -555,7 +565,7 @@
 
   // --------------------------------------------------------- validation (agent)
   /** Pre-valide noms de modeles ET de parametres, avec suggestions. */
-  function checkNames(tb, spec) {
+  function checkNames(tb, spec, keep) {
     const errs = [];
     const mods = spec.modules || {};
     for (const slot of Object.keys(mods)) {
@@ -576,13 +586,24 @@
       } catch (e) {
         let pool;
         if (slot === 'CAB') pool = tb.cabs.filter(c => !c.user_slot).map(c => c.name);
-        else pool = tb.models.filter(m2 => SLOT_ACCEPTS[slot].indexOf(m2.cat) >= 0).map(m2 => m2.name);
+        else pool = tb.modelsForSlot(slot).map(x => x[0].name);
         const near = closeMatches(String(ms.model), pool, 4, 0.4);
         errs.push('slot ' + slot + ' : le modele ' + pyRepr(ms.model) + " N'EXISTE PAS. Proches : " +
           pyRepr(near.length ? near : pool.slice(0, 8)));
         continue;
       }
       const m = found[0], cat = found[1];
+      if (!tb.inMenu(slot, m)) {
+        // affinage : un modele deja present dans ce slot du preset d'origine est conserve tel quel (ancien preset hors menu)
+        const kept = keep && keep[slot] && keep[slot].model;
+        if (!(kept && norm(kept) === norm(ms.model))) {
+          const pool = tb.modelsForSlot(slot).map(x => x[0].name);
+          const near = closeMatches(String(ms.model), pool, 4, 0.4);
+          errs.push('slot ' + slot + ' : le modele ' + pyRepr(m.name) + ' n\'est PAS propose dans ce slot par la pedale (il va dans : ' +
+            (m.slots && m.slots.length ? m.slots.join(', ') : '?') + '). Proches dans ' + slot + ' : ' + pyRepr(near.length ? near : pool.slice(0, 8)));
+          continue;
+        }
+      }
       const mid = cat === 10 ? m.model_id : m.id;
       const plist = tb.paramsOf(mid, cat);
       const known = new Map();
@@ -1000,7 +1021,7 @@
         continue;
       }
       if (payload === null || typeof payload !== 'object' || Array.isArray(payload)) throw new Error('reponse inattendue : ' + pyRepr(payload));
-      const errs = checkNames(tb, payload.spec || {});
+      const errs = checkNames(tb, payload.spec || {}, specIn.modules);
       if (!errs.length) { ok = true; break; }
       log(t('log_errors_fix', errs.length));
       for (const e of errs) log(t('log_bullet', e));

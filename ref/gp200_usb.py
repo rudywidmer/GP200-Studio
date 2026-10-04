@@ -785,11 +785,15 @@ class GP200USB:
 #     = 01/00), emis a chaque appui FS, AVANT/AVEC le bypass du module cible.
 #     L'etat du CTRL n'est PAS l'etat du module (CTRL3=1 <-> PRE off observe).
 #   - 12/08 [13..15]=00 01 01, [25..26]=06 03 : FS3 appui long (Drum Play).
-#   - 12/10 (46 o) : parametre modifie en facade (bouton) ET, au chargement
-#     des patchs >= 04-D, un message [22]=0A (valeur 100.0).
-#     VALEUR = float32 en nibbles LE aux octets [37..44] (52.0, 53.0, 54.0 en
-#     tournant le gain d'un cran a la fois). L'identite du module/parametre
-#     n'est PAS dans ces messages (a decoder : octet [22] = controle ?).
+#   - 12/10 (46 o, GP-200 -> PC) : reglage tourne en facade. C'est un 12/18 ampute
+#     de 16 octets (confirme sur la pedale, 4/10/2026 : 112 trames, 16 series, 0 discordance) :
+#       [14]=05  [18]=0C  [22]=MODULE (0 PRE ... 10 VOL)  [23]=00
+#       [24]=SLOT du parametre (meme numerotation que le [40] du 12/18 et que gp200lib)
+#       [25..28]=residus de tampon, VARIABLES : ne rien verifier dessus
+#       [29..36]=00   [37..44]=VALEUR float32 LE en nibbles (hi d'abord), valeur de l'ecran
+#     Debit ~10 trames/s : des valeurs intermediaires sont sautees, seule la derniere compte.
+#     Au chargement d'un patch, un 12/10 VOL slot 0 = 100.0 arrive parfois (pas systematique).
+#     -> voir parse_panel_param().
 #   - 12/18 (62 o, PC -> GP-200, reglage d'un parametre) : AUCUN echo (0/16).
 
 import weakref as _weakref
@@ -808,9 +812,12 @@ def parse_notify(b):
     -> ("bypass", module_idx, actif, source)  source = "fs" | "panel"
     -> ("patch", pc)                          pc 0-255 (01-A = 0, 33-A = 128 ; > 199 non verifie)
     -> ("patchvol", v)                        volume du patch 0-100 (echo du PC ou molette)
+    -> ("param", module, slot, valeur)        reglage tourne en facade (12/10, 46 octets)
     -> None si message inconnu / non pertinent
     """
     b = bytes(b)
+    if len(b) == 46:
+        return parse_panel_param(b)
     if (len(b) != 30 or b[0] != 0xF0 or b[1:8] != SYSEX_NUX_ID
             or b[8:10] != b"\x12\x08" or b[18] != 0x04):
         return None
@@ -829,6 +836,30 @@ def parse_notify(b):
         if pc <= 255:
             return ("patch", pc)
     return None
+
+
+def parse_panel_param(b):
+    """Reglage tourne en facade (12/10, 46 octets) -> ("param", module, slot, valeur) ou None.
+
+    Memes regles que parsePanelParam (JS) : [14]=05, [18]=0C, module <= 10, slot <= 14,
+    8 nibbles [37..44] <= 0x0F, valeur finie. [25..28] et [29..36] ne sont JAMAIS verifies."""
+    import math
+    import struct
+    b = bytes(b)
+    if (len(b) != 46 or b[0] != 0xF0 or b[1:8] != SYSEX_NUX_ID
+            or b[8:10] != b"\x12\x10" or b[14] != 0x05 or b[18] != 0x0C
+            or b[22] > 10 or b[24] > 14):
+        return None
+    raw = bytearray(4)
+    for i in range(4):
+        hi, lo = b[37 + 2 * i], b[38 + 2 * i]
+        if hi > 0x0F or lo > 0x0F:
+            return None
+        raw[i] = (hi << 4) | lo
+    v = struct.unpack("<f", bytes(raw))[0]
+    if not math.isfinite(v):
+        return None
+    return ("param", b[22], b[24], v)
 
 
 def parse_bypass_notify(b):

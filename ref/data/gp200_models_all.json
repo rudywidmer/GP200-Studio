@@ -1246,8 +1246,7 @@
     "defcab": null,
     "fw_offset": 5737936,
     "slots": [
-      "MOD",
-      "PRE"
+      "MOD"
     ]
   },
   {
@@ -1317,8 +1316,7 @@
     "defcab": null,
     "fw_offset": 5741748,
     "slots": [
-      "MOD",
-      "PRE"
+      "MOD"
     ]
   },
   {
@@ -1517,8 +1515,7 @@
     "defcab": null,
     "fw_offset": 5631140,
     "slots": [
-      "EQ",
-      "PRE"
+      "EQ"
     ]
   },
   {
@@ -1599,8 +1596,7 @@
     "defcab": null,
     "fw_offset": 5635224,
     "slots": [
-      "EQ",
-      "PRE"
+      "EQ"
     ]
   },
   {
@@ -1681,8 +1677,7 @@
     "defcab": null,
     "fw_offset": 5643172,
     "slots": [
-      "EQ",
-      "PRE"
+      "EQ"
     ]
   },
   {
@@ -1763,8 +1758,7 @@
     "defcab": null,
     "fw_offset": 5647252,
     "slots": [
-      "EQ",
-      "PRE"
+      "EQ"
     ]
   },
   {
@@ -1834,8 +1828,7 @@
     "defcab": null,
     "fw_offset": 5651332,
     "slots": [
-      "EQ",
-      "PRE"
+      "EQ"
     ]
   },
   {
@@ -1971,8 +1964,7 @@
     "defcab": null,
     "fw_offset": 5656952,
     "slots": [
-      "EQ",
-      "PRE"
+      "EQ"
     ]
   },
   {
@@ -2279,7 +2271,8 @@
     "defcab": null,
     "fw_offset": 4245660,
     "slots": [
-      "DST"
+      "DST",
+      "PRE"
     ]
   },
   {
@@ -2316,7 +2309,8 @@
     "defcab": null,
     "fw_offset": 4251900,
     "slots": [
-      "DST"
+      "DST",
+      "PRE"
     ]
   },
   {
@@ -2412,7 +2406,8 @@
     "defcab": null,
     "fw_offset": 4266272,
     "slots": [
-      "DST"
+      "DST",
+      "PRE"
     ]
   },
   {
@@ -2530,7 +2525,8 @@
     "defcab": null,
     "fw_offset": 4273688,
     "slots": [
-      "DST"
+      "DST",
+      "PRE"
     ]
   },
   {
@@ -2873,7 +2869,8 @@
     "defcab": null,
     "fw_offset": 4256512,
     "slots": [
-      "DST"
+      "DST",
+      "PRE"
     ]
   },
   {
@@ -5418,7 +5415,8 @@
     "fw_offset": 4371060,
     "slots": [
       "MOD",
-      "NR"
+      "NR",
+      "PRE"
     ]
   },
   {
@@ -5455,7 +5453,8 @@
     "defcab": null,
     "fw_offset": 4372184,
     "slots": [
-      "MOD"
+      "MOD",
+      "PRE"
     ]
   },
   {
@@ -5514,7 +5513,8 @@
     "defcab": null,
     "fw_offset": 4374328,
     "slots": [
-      "MOD"
+      "MOD",
+      "PRE"
     ]
   },
   {
@@ -14553,7 +14553,7 @@
     "name_official": "SnapTone",
     "note": "Slot de capture NAM/SnapTone. Suffixe ajoute pour lever la collision de nom.",
     "slots": [
-      "DST"
+      "AMP"
     ]
   },
   {
@@ -14629,7 +14629,7 @@
     "name_official": "SnapTone",
     "note": "Slot de capture NAM/SnapTone. Suffixe ajoute pour lever la collision de nom.",
     "slots": [
-      "DST"
+      "AMP"
     ]
   },
   {
@@ -14705,7 +14705,7 @@
     "name_official": "SnapTone",
     "note": "Slot de capture NAM/SnapTone. Suffixe ajoute pour lever la collision de nom.",
     "slots": [
-      "DST"
+      "AMP"
     ]
   },
   {
@@ -14781,7 +14781,7 @@
     "name_official": "SnapTone",
     "note": "Slot de capture NAM/SnapTone. Suffixe ajoute pour lever la collision de nom.",
     "slots": [
-      "DST"
+      "AMP"
     ]
   },
   {
@@ -14857,7 +14857,7 @@
     "name_official": "SnapTone",
     "note": "Slot de capture NAM/SnapTone. Suffixe ajoute pour lever la collision de nom.",
     "slots": [
-      "DST"
+      "AMP"
     ]
   },
   {
@@ -14933,7 +14933,7 @@
     "name_official": "SnapTone",
     "note": "Slot de capture NAM/SnapTone. Suffixe ajoute pour lever la collision de nom.",
     "slots": [
-      "AMP"
+      "DST"
     ]
   },
   {
@@ -15009,7 +15009,7 @@
     "name_official": "SnapTone",
     "note": "Slot de capture NAM/SnapTone. Suffixe ajoute pour lever la collision de nom.",
     "slots": [
-      "AMP"
+      "DST"
     ]
   },
   {
@@ -15085,7 +15085,7 @@
     "name_official": "SnapTone",
     "note": "Slot de capture NAM/SnapTone. Suffixe ajoute pour lever la collision de nom.",
     "slots": [
-      "AMP"
+      "DST"
     ]
   },
   {
@@ -15161,7 +15161,7 @@
     "name_official": "SnapTone",
     "note": "Slot de capture NAM/SnapTone. Suffixe ajoute pour lever la collision de nom.",
     "slots": [
-      "AMP"
+      "DST"
     ]
   },
   {
@@ -15237,7 +15237,7 @@
     "name_official": "SnapTone",
     "note": "Slot de capture NAM/SnapTone. Suffixe ajoute pour lever la collision de nom.",
     "slots": [
-      "AMP"
+      "DST"
     ]
   }
 ]

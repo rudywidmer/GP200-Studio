@@ -252,6 +252,16 @@ class Tables:
                     result.append((m, cat))
         return result
 
+    def in_menu(self, slot, m):
+        """Le menu de la pedale propose-t-il ce modele dans ce slot ?
+
+        Plus strict que la categorie : SLOT_ACCEPTS n'est qu'un pre-filtre (165 couples
+        categorie-compatibles que la pedale ne propose pas, ex. Guitar EQ 1 en PRE).
+        CAB : toujours oui (liste a part). Sans champ 'slots' : on ne sait pas -> oui.
+        Sert a VALIDER ce que l'IA propose ; le decodage d'un .prst existant reste tolerant.
+        """
+        return slot == "CAB" or "slots" not in m or slot in m["slots"]
+
     def models_for_slot_by_cat(self, slot):
         """Meme chose mais retourne un dict {cat: [model_dict, ...]}."""
         from collections import defaultdict

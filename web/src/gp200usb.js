@@ -492,13 +492,19 @@
     return null;
   }
 
-  /** Parametre tourne en facade (12/10, 46 octets) : la valeur (float32 en nibbles LE, octets [37..44]) est lisible, mais ni le module ni le
-   *  parametre ne sont identifiables d'apres les captures (cf. gp200_usb.py). [22] = octet de controle (0x0A au chargement d'un patch : 100.0). */
+  /** Reglage tourne en facade (12/10, 46 octets, pedale -> PC) = un 12/18 ampute de 16 octets (confirme sur la pedale le 4/10/2026 :
+   *  112 trames, 16 series, 0 discordance). [14]=05, [18]=0C, [22]=module (0 PRE ... 10 VOL), [24]=slot du parametre (meme numerotation que
+   *  le [40] du 12/18), [37..44]=valeur (float32 LE en nibbles, hi d'abord ; valeur de l'ecran, sans conversion). [25..28] = residus de
+   *  tampon variables et [29..36] : jamais verifies. Debit ~10 trames/s : seule la derniere valeur compte.
+   *  -> {kind:'panel', module, param, value} | null (= parsePanelParam ; Python : parse_panel_param). */
   function parsePanelParam(b) {
-    if (!b || b.length !== 46 || b[0] !== 0xF0 || !_isNux(b) || b[8] !== 0x12 || b[9] !== 0x10) return null;
+    if (!b || b.length !== 46 || b[0] !== 0xF0 || !_isNux(b) || b[8] !== 0x12 || b[9] !== 0x10 || b[14] !== 0x05 || b[18] !== 0x0C) return null;
+    if (b[22] > 10 || b[24] > 14) return null;
     const dv = new DataView(new ArrayBuffer(4));
     for (let i = 0; i < 4; i++) { const hi = b[37 + 2 * i], lo = b[38 + 2 * i]; if (hi > 0x0F || lo > 0x0F) return null; dv.setUint8(i, (hi << 4) | lo); }
-    return { kind: 'panel', ctrl: b[22], value: dv.getFloat32(0, true) };
+    const value = dv.getFloat32(0, true);
+    if (!Number.isFinite(value)) return null;
+    return { kind: 'panel', module: b[22], param: b[24], value };
   }
 
   /** Bypass ON/OFF d'un slot (30 octets). */

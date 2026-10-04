@@ -263,7 +263,7 @@ def selftest():
                            ("DLY", "Ping Pong")):
             tb.find(slot, name)
         # Invariants catalogue firmware V1.8.0 (champ slots dans le JSON)
-        slot_counts = {"WAH": 6, "DST": 43, "AMP": 76, "NR": 4,
+        slot_counts = {"PRE": 31, "WAH": 6, "DST": 43, "AMP": 76, "NR": 4,
                        "EQ": 6, "MOD": 28, "DLY": 22, "RVB": 15, "VOL": 1}
         for _s, _exp in slot_counts.items():
             _got = len(tb.models_for_slot(_s))
