@@ -5,11 +5,14 @@
   const USB = self.GP200USB;
   const LUFS = self.GP200LUFS;
   const TUNE = self.GP200TUNE;
+  const SL = self.GP200SETLIST;
   const TIPS = self.GP200TIPS;
   const B = JSON.parse(document.getElementById('gp200-bundle').textContent);
   const tb = new G.Tables(B.tables);
   const template = Uint8Array.from(atob(B.template), c => c.charCodeAt(0));
   const STORE = 'gp200studio.web.v1', PKCE_KEY = 'gp200studio.web.pkce';
+  // [Android] Chrome Android + cable USB OTG : memes trames, rythme plus prudent, textes d'aide propres. Faux ailleurs = rien ne change.
+  const IS_ANDROID = /Android/i.test((typeof navigator !== 'undefined' && navigator.userAgent) || '');
   const PROVIDERS = ['gemini', 'openrouter', 'anthropic'];
   const FAMILY = { PRE: 'GEN', DST: 'GEN', AMP: 'GEN', NR: 'CAB', CAB: 'CAB', EQ: 'CAB', WAH: 'FX', MOD: 'FX', DLY: 'FX', RVB: 'FX', VOL: 'FX' };
 
@@ -68,7 +71,11 @@
       pedal_title: 'Envoyer sur la pédale', pedal_sub: "Écris le preset directement dans ton GP-200 par USB, sans éditeur.",
       pedal_unsupported: "Ce navigateur ne peut pas parler à la pédale en USB (c'est le cas de Safari et des iPhone/iPad). Ouvre cette page avec Chrome ou Edge sur ordinateur, ou télécharge les fichiers .prst ci-dessus.",
       pedal_steps: ['Branche le GP-200 en USB et allume-le.', "Ferme l'éditeur Valeton et GP-200 Studio s'ils sont ouverts : un seul programme peut utiliser la pédale à la fois.", "Clique sur « Connecter la pédale » et autorise l'accès MIDI quand le navigateur le demande."],
+      pedal_steps_android: ['Utilise Chrome pour Android (pas un autre navigateur) et un câble USB OTG : adaptateur OTG + câble USB-B de la pédale, ou câble USB-C vers USB-B.', "Branche le câble au téléphone, puis allume le GP-200. Si Android propose d'ouvrir la pédale avec une application, choisis « Annuler » ou « Aucune ».", "Ferme l'application Valeton (GP-2XX) et les autres applications MIDI : un seul programme peut utiliser la pédale à la fois.", "Clique sur « Connecter la pédale » et autorise l'accès MIDI quand Chrome le demande. Les envois sont un peu plus lents que sur ordinateur : c'est voulu."],
+      pedal_none_android: "Sur Android, vérifie aussi que le câble OTG transmet bien les données (certains câbles ne font que charger) et que Chrome n'est pas en mode « version pour ordinateur ». Si rien ne change, clique sur « Signaler un problème » en bas de page et copie le rapport.",
+      pedal_unsupported_android: "Ce navigateur Android ne peut pas parler à la pédale en USB. Ouvre cette page avec Chrome pour Android, ou télécharge les fichiers .prst ci-dessus.",
       pedal_connect: 'Connecter la pédale', pedal_asking: "Autorise l'accès MIDI dans la fenêtre du navigateur…",
+      pedal_denied_local: "Chrome refuse le MIDI parce que cette page est ouverte depuis un fichier (pièce jointe, Téléchargements…) et non depuis son adresse web. Ouvre-la depuis https://rudywidmer.github.io/GP200-Studio/ puis réessaie.",
       pedal_denied: "L'accès MIDI a été refusé. Clique sur le cadenas à gauche de l'adresse, autorise les appareils MIDI, puis réessaie.",
       pedal_found: 'GP-200 détectée : %s', pedal_none: "Aucune pédale GP-200 détectée. Vérifie le câble USB, que la pédale est allumée, et qu'aucun autre programme ne l'utilise.",
       pedal_port: 'Port MIDI', pedal_retry: 'Chercher à nouveau',
@@ -85,7 +92,24 @@
       ver: 'Version %s · %s',
       pop_close: 'Fermer', slot_tip: 'Un clic sélectionne le module ; un clic de plus l\'active ou le coupe.', slot_tip_on: 'Cliquer pour couper ce module.', slot_tip_off: 'Cliquer pour activer ce module.', tab_module: 'Module', tab_result: 'Résultat', tab_pedal: 'Pédale', tab_ctrl: 'CTRL', tab_tune: 'Volume', tab_log: 'Journal',
       lib_title: 'Mes presets', lib_empty: "Rien pour l'instant : génère un morceau, ou ouvre un fichier .prst (bouton en haut, ou glisse-le dans la page).",
-      lib_remove: 'Retirer de la liste', kind_gen: 'généré', kind_open: 'ouvert', kind_refine: 'affiné', kind_live: 'concert',
+      tab_setlist: 'Set list', sl_title: 'Set list : envoyer ta sélection dans la pédale',
+      sl_sub: "Écoute tes presets un par un, garde ceux qui te plaisent avec le ♥ de la liste de gauche, donne-leur un nom, puis envoie-les d'un coup dans les emplacements de ton choix.",
+      sl_keep: 'Garder dans la set list : %s', sl_unkeep: 'Retirer de la set list : %s',
+      sl_empty: "La set list est vide. Clique sur le ♥ à droite d'un preset de la liste de gauche pour le garder ici.",
+      sl_name: 'Nom sur la pédale (16 caractères au maximum)', sl_slot_bank: 'Banque (1 à 64)', sl_slot_letter: 'Lettre',
+      sl_fill_from: 'Emplacements consécutifs à partir de', sl_fill: 'Attribuer', sl_fill_title: 'Donne un emplacement à chaque preset de la liste, les uns après les autres, à partir de celui-ci.',
+      sl_fill_over: "Pas assez de place : %d preset(s) restent sans emplacement (la dernière banque est 64-D).",
+      sl_count: '%d preset(s) dans la set list.',
+      sl_e_many: "Plus de 256 presets : la pédale n'a que 256 emplacements.", sl_e_name: 'Ligne %d : le nom est vide.', sl_e_range: 'Ligne %d : emplacement invalide.',
+      sl_e_dup: 'Ligne %d : même emplacement que la ligne %d.', sl_e_missing: '%d preset(s) sans emplacement : choisis-les, ou utilise « Attribuer ».',
+      sl_w_changed: 'Ligne %d : le nom sera envoyé sous la forme « %s » (accents retirés).', sl_w_dup: 'Ligne %d : même nom que la ligne %d (difficile à distinguer sur la pédale).',
+      sl_w_work: "Ligne %d : %s est l'emplacement de travail de la page (celui où chaque preset sélectionné est envoyé pour être écouté) ; il sera réécrit dès que tu sélectionneras un autre preset.",
+      sl_need_pedal: 'Connecte la pédale pour envoyer la set list.',
+      sl_send: 'Envoyer %d preset(s) dans la pédale', sl_confirm: 'Ces emplacements de la pédale vont être ÉCRASÉS :', sl_confirm_go: 'Écraser et envoyer',
+      sl_zip: 'Télécharger la set list (ZIP)', sl_zip_hint: "La liste des presets n'est conservée que dans cet onglet du navigateur : télécharge la set list pour la garder.",
+      sl_done: 'Terminé : %d preset(s) écrit(s) (%s). La pédale est positionnée sur %s.',
+      sl_fail: 'Interrompu après %d preset(s) sur %d (écrits : %s). %s',
+      lib_remove: 'Retirer de la liste', kind_gen: 'généré', kind_open: 'ouvert', kind_refine: 'affiné', kind_live: 'concert', kind_pedal: 'pédale',
       open_prst: '📂 Ouvrir un .prst', batch_btn: '🎚️ Harmoniser par batch', batch_btn_tip: 'Mettre plusieurs presets au même volume, sans en charger un d\'abord', drop_here: 'Dépose ton ou tes fichiers .prst ici', opts_title: 'Options de génération',
       ref_target: 'Preset à affiner : %s', ref_target_none: "Aucun preset sélectionné : choisis-en un dans la liste, ou ouvre un fichier .prst.",
       ref_opened: '%d preset(s) ouvert(s).',
@@ -100,6 +124,7 @@
       mod_offline: 'Hors ligne : les réglages modifient le preset affiché. Connecte la pédale (pastille en haut) pour les entendre en direct.',
       mod_match: "Pour que la pédale ait exactement le preset de l'écran, injecte-le (🔌) : il est écrit dans le slot d'injection puis sélectionné. Les réglages partent ensuite en direct sur ce patch, sans l'enregistrer. Si le patch de la pédale n'est pas celui de l'écran, le premier réglage d'un module lui envoie d'abord son modèle et ses valeurs.",
       mod_send: '↻ Envoyer ce module à la pédale', mod_save: '💾 Enregistrer sur la pédale…',
+      pv_title: 'Volume du patch',
       ctrl_auto: "Chaque case est appliquée tout de suite au preset affiché. Envoie ensuite le preset à la pédale pour qu'elle en tienne compte.", ctrl_send: 'Envoyer le preset à la pédale…',
       res_open: 'Preset ouvert', res_author: 'Auteur', res_desc: 'Description', res_chain: 'Chaîne du signal', res_vol: 'Volume du patch', res_ctrl: 'CTRL', res_chk: 'Intégrité', res_chk_ok: 'valide', res_chk_ko: 'invalide',
       res_from: 'Affiné à partir de : %s',
@@ -162,7 +187,7 @@
       live_noconf: "⚠ La pédale n'a pas confirmé le chargement de : %s. Vérifie l'effet (ou relance « Envoyer ce module »).",
       pflag_tip: "Ce réglage ne s'entend pas en direct : la pédale ne le prend en compte qu'au chargement du preset (enregistre-le ou envoie-le depuis l'onglet Pédale).",
       lvl_line: 'Niveau mesuré (réglages par défaut) : %s dBFS, soit %s dB par rapport à la médiane (%s dBFS).',
-      render_err: "Erreur d'affichage.", reload: 'Recharger la page', tune_audio_refresh: 'Actualiser la liste', tune_audio_pick: "Entrée audio", tune_audio_found: "Entrée « GP-200 » détectée et sélectionnée.",
+      render_err: "Erreur d'affichage.", reload: 'Recharger la page', diag_link: 'Signaler un problème', diag_link_tip: "Prépare un rapport de diagnostic que tu peux copier (rien n'est envoyé automatiquement).", diag_title: 'Un problème est survenu', diag_sub: "Rien n'est envoyé automatiquement. Copie le rapport (sans clé API) et colle-le dans un message ou une « issue » GitHub.", diag_copy: 'Copier le rapport', diag_copied: 'Copié ✓', diag_copy_ko: 'Copie impossible : sélectionne le texte ci-dessous.', diag_details: 'Détails', diag_hide: 'Masquer', diag_close: 'Fermer', pr_read: 'Lire le patch en cours', pr_read_tip: "Lit sur la pédale le patch actuellement chargé et l'affiche dans le rack (rien n'est écrit sur la pédale).", pr_read_help: "Au branchement, la page lit déjà le patch en cours. Ce bouton le relit si tu veux repartir de l'état actuel de la pédale.", pr_busy: 'Lecture de la pédale…', pr_done: 'Patch lu sur la pédale : %s (%s).', pr_fail: 'Lecture de la pédale impossible : %s', pr_timeout: "la pédale n'a pas répondu.", pr_noread: "pas d'entrée MIDI (lecture impossible).", tune_audio_refresh: 'Actualiser la liste', tune_audio_pick: "Entrée audio", tune_audio_found: "Entrée « GP-200 » détectée et sélectionnée.",
       tune_audio_guess: "Aucune entrée nommée « GP-200 » : choisis celle de la pédale dans la liste (la pédale apparaît comme une carte son USB).",
       tune_audio_denied: "L'accès à l'entrée audio a été refusé. Clique sur le cadenas à gauche de l'adresse, autorise le micro, puis réessaie.",
       tune_audio_none: "Aucune entrée audio trouvée. Vérifie que la pédale est branchée et allumée.",
@@ -256,7 +281,11 @@
       pedal_title: 'Send to the pedal', pedal_sub: 'Write the preset straight into your GP-200 over USB, no editor needed.',
       pedal_unsupported: 'This browser cannot talk to the pedal over USB (Safari and iPhone/iPad cannot). Open this page with Chrome or Edge on a computer, or download the .prst files above.',
       pedal_steps: ['Plug the GP-200 in over USB and switch it on.', 'Close the Valeton editor and GP-200 Studio if they are open: only one program can use the pedal at a time.', 'Click “Connect the pedal” and allow MIDI access when the browser asks.'],
+      pedal_steps_android: ['Use Chrome for Android (not another browser) and a USB OTG cable: OTG adapter + the pedal\'s USB-B cable, or a USB-C to USB-B cable.', 'Plug the cable into the phone, then switch the GP-200 on. If Android offers to open the pedal with an app, choose “Cancel” or “None”.', 'Close the Valeton app (GP-2XX) and any other MIDI app: only one program can use the pedal at a time.', 'Click “Connect the pedal” and allow MIDI access when Chrome asks. Transfers are a little slower than on a computer: this is intended.'],
+      pedal_none_android: 'On Android, also check that the OTG cable carries data (some cables only charge) and that Chrome is not in “desktop site” mode. If nothing changes, click “Report a problem” at the bottom of the page and copy the report.',
+      pedal_unsupported_android: 'This Android browser cannot talk to the pedal over USB. Open this page with Chrome for Android, or download the .prst files above.',
       pedal_connect: 'Connect the pedal', pedal_asking: 'Allow MIDI access in the browser prompt…',
+      pedal_denied_local: 'Chrome refuses MIDI because this page was opened from a file (attachment, Downloads…) instead of its web address. Open it from https://rudywidmer.github.io/GP200-Studio/ and try again.',
       pedal_denied: 'MIDI access was refused. Click the padlock left of the address, allow MIDI devices, then try again.',
       pedal_found: 'GP-200 found: %s', pedal_none: 'No GP-200 found. Check the USB cable, that the pedal is on, and that no other program is using it.',
       pedal_port: 'MIDI port', pedal_retry: 'Search again',
@@ -273,7 +302,24 @@
       ver: 'Version %s · %s',
       pop_close: 'Close', slot_tip: 'One click selects the module; another click turns it on or off.', slot_tip_on: 'Click to bypass this module.', slot_tip_off: 'Click to turn this module on.', tab_module: 'Module', tab_result: 'Result', tab_pedal: 'Pedal', tab_ctrl: 'CTRL', tab_tune: 'Volume', tab_log: 'Log',
       lib_title: 'My presets', lib_empty: 'Nothing yet: generate a song, or open a .prst file (button above, or drop it on the page).',
-      lib_remove: 'Remove from the list', kind_gen: 'generated', kind_open: 'opened', kind_refine: 'refined', kind_live: 'live',
+      tab_setlist: 'Set list', sl_title: 'Set list: send your selection to the pedal',
+      sl_sub: 'Audition your presets one by one, keep the ones you like with the ♥ in the left-hand list, give them a name, then send them all at once to the slots you choose.',
+      sl_keep: 'Keep in the set list: %s', sl_unkeep: 'Remove from the set list: %s',
+      sl_empty: 'The set list is empty. Click the ♥ to the right of a preset in the left-hand list to keep it here.',
+      sl_name: 'Name on the pedal (16 characters at most)', sl_slot_bank: 'Bank (1 to 64)', sl_slot_letter: 'Letter',
+      sl_fill_from: 'Consecutive slots starting at', sl_fill: 'Assign', sl_fill_title: 'Gives each preset in the list a slot, one after the other, starting with this one.',
+      sl_fill_over: 'Not enough room: %d preset(s) are left without a slot (the last bank is 64-D).',
+      sl_count: '%d preset(s) in the set list.',
+      sl_e_many: 'More than 256 presets: the pedal only has 256 slots.', sl_e_name: 'Line %d: the name is empty.', sl_e_range: 'Line %d: invalid slot.',
+      sl_e_dup: 'Line %d: same slot as line %d.', sl_e_missing: '%d preset(s) without a slot: pick one for each, or use "Assign".',
+      sl_w_changed: 'Line %d: the name will be sent as "%s" (accents removed).', sl_w_dup: 'Line %d: same name as line %d (hard to tell apart on the pedal).',
+      sl_w_work: "Line %d: %s is the page's working slot (where each selected preset is sent so you can hear it); it will be rewritten as soon as you select another preset.",
+      sl_need_pedal: 'Connect the pedal to send the set list.',
+      sl_send: 'Send %d preset(s) to the pedal', sl_confirm: 'These pedal slots will be OVERWRITTEN:', sl_confirm_go: 'Overwrite and send',
+      sl_zip: 'Download the set list (ZIP)', sl_zip_hint: 'The list of presets is only kept in this browser tab: download the set list to keep it.',
+      sl_done: 'Done: %d preset(s) written (%s). The pedal is now on %s.',
+      sl_fail: 'Stopped after %d of %d preset(s) (written: %s). %s',
+      lib_remove: 'Remove from the list', kind_gen: 'generated', kind_open: 'opened', kind_refine: 'refined', kind_live: 'live', kind_pedal: 'pedal',
       open_prst: '📂 Open a .prst', batch_btn: '🎚️ Match volumes (batch)', batch_btn_tip: 'Bring several presets to the same volume, no need to load one first', drop_here: 'Drop your .prst file(s) here', opts_title: 'Generation options',
       ref_target: 'Preset to refine: %s', ref_target_none: 'No preset selected: pick one in the list, or open a .prst file.',
       ref_opened: '%d preset(s) opened.',
@@ -288,6 +334,7 @@
       mod_offline: 'Offline: adjustments change the displayed preset. Connect the pedal (pill at the top) to hear them live.',
       mod_match: "To get exactly the displayed preset on the pedal, inject it (🔌): it is written to the injection slot and selected. Adjustments then go live to that patch without saving it. If the pedal is on another patch, the first adjustment of a module sends its model and values first.",
       mod_send: '↻ Send this module to the pedal', mod_save: '💾 Save on the pedal…',
+      pv_title: 'Patch volume',
       ctrl_auto: 'Each box is applied to the displayed preset right away. Then send the preset to the pedal so it takes effect.', ctrl_send: 'Send the preset to the pedal…',
       res_open: 'Opened preset', res_author: 'Author', res_desc: 'Description', res_chain: 'Signal chain', res_vol: 'Patch volume', res_ctrl: 'CTRL', res_chk: 'Integrity', res_chk_ok: 'valid', res_chk_ko: 'invalid',
       res_from: 'Refined from: %s',
@@ -350,7 +397,7 @@
       live_noconf: '⚠ The pedal did not confirm loading: %s. Check the effect (or run « Send this module » again).',
       pflag_tip: 'This setting is not audible live: the pedal only applies it when the preset is loaded (save it or send it from the Pedal tab).',
       lvl_line: 'Measured level (default settings): %s dBFS, %s dB versus the median (%s dBFS).',
-      render_err: 'Display error.', reload: 'Reload the page', tune_audio_refresh: 'Refresh the list', tune_audio_pick: 'Audio input', tune_audio_found: 'A “GP-200” input was found and selected.',
+      render_err: 'Display error.', reload: 'Reload the page', diag_link: 'Report a problem', diag_link_tip: 'Prepares a diagnostic report you can copy (nothing is sent automatically).', diag_title: 'Something went wrong', diag_sub: 'Nothing is sent automatically. Copy the report (no API key in it) and paste it in a message or a GitHub issue.', diag_copy: 'Copy the report', diag_copied: 'Copied ✓', diag_copy_ko: 'Copy failed: select the text below.', diag_details: 'Details', diag_hide: 'Hide', diag_close: 'Close', pr_read: 'Read the current patch', pr_read_tip: 'Reads the patch currently loaded on the pedal and shows it in the rack (nothing is written to the pedal).', pr_read_help: "The page already reads the current patch when the pedal is connected. This button reads it again if you want to start from the pedal's current state.", pr_busy: 'Reading the pedal…', pr_done: 'Patch read from the pedal: %s (%s).', pr_fail: 'Could not read the pedal: %s', pr_timeout: 'the pedal did not answer.', pr_noread: 'no MIDI input (reading is not possible).', tune_audio_refresh: 'Refresh the list', tune_audio_pick: 'Audio input', tune_audio_found: 'A “GP-200” input was found and selected.',
       tune_audio_guess: 'No input named “GP-200”: pick the pedal in the list (it shows up as a USB sound card).',
       tune_audio_denied: 'Audio input access was refused. Click the padlock left of the address, allow the microphone, then try again.',
       tune_audio_none: 'No audio input found. Check that the pedal is plugged in and on.',
@@ -416,11 +463,14 @@
     usb: { link: null, state: (USB && USB.MidiLink.supported()) ? 'idle' : 'unsupported', outId: null, ports: [], bank: 1, letter: 'A',
            confirm: null, sending: null, result: null, flags: {}, error: '' },
     mode: 'new', tab: 'module', lib: [], ref: { instr: '' },
-    ed: { live: false, want: true, busy: false, opening: null, msg: '', err: '', last: 0, timer: null, idle: null, pending: null, sync: { file: null, set: new Set() }, pm: new Map(), tails: new Map(), noConf: [], bsent: new Map(), psent: new Map() },
+    ed: { live: false, want: true, busy: false, opening: null, msg: '', err: '', last: 0, timer: null, idle: null, pending: null, sync: { file: null, set: new Set() }, pm: new Map(), tails: new Map(), noConf: [], bsent: new Map(), psent: new Map(), vsent: 0 },
     // injection = ecrire le preset affiche dans un slot choisi puis le selectionner (comme « Injecter » de la version Windows) ; set = slot confirme par l'utilisateur
     inj: { bank: 1, letter: 'A', auto: true, set: false, open: false, asked: false, busy: false, queued: null, t: null, msg: '', err: '', warn: '' },
     // ecoute de la pedale (sens pedale -> page) : pc = patch courant de la pedale (null = inconnu), desync = elle a recharge le patch sans nos reglages
     listen: { want: true, pc: null, desync: false, touched: false, last: '', log: [], rt: null },
+    sl: { items: [], start: { bank: 1, letter: 'A' }, confirm: false, result: null, fillMsg: '' },     // set list : [{ f (fichier de la bibliotheque), name, bank, letter }]
+    // lecture du patch charge sur la pedale (voir pedalFetch) : busy = lecture en cours, auto = lecture au branchement, t/rt = minuteries
+    pr: { busy: false, auto: true, t: null, rt: null, last: null },
     tune: { open: false, audio: { state: 'idle', devs: [], id: '', guessed: false, err: '' }, sel: null, bank: null, letter: null, confirm: false, run: null, msg: null },
   };
   function load() {
@@ -455,6 +505,138 @@
     let i = 0;
     return str.replace(/%[sd]/g, () => (i < a.length ? a[i++] : ''));
   };
+  // ------------------------------------------------------------ diagnostic (v0.25)
+  // Journal d'evenements en memoire + rapport copiable a la main. Rien n'est jamais envoye automatiquement ; aucune cle API dans le rapport.
+  const DIAG = { ev: [], last: null, seen: new Map(), el: null, show: false, details: false, copied: '', manual: false };
+  function redact(x) {
+    let t = String(x === undefined || x === null ? '' : x);
+    try { for (const k of Object.keys(s.keys || {})) { const v = String(s.keys[k] || '').trim(); if (v.length >= 6) t = t.split(v).join('[key hidden]'); } } catch (e) { /* rien */ }
+    return t
+      .replace(/AIza[0-9A-Za-z_\-]{20,}/g, '[key hidden]')
+      .replace(/\bsk-[A-Za-z0-9_\-]{12,}/g, '[key hidden]')
+      .replace(/\b(Bearer|Basic)\s+[A-Za-z0-9._\-+\/=]{8,}/gi, '$1 [key hidden]')
+      .replace(/((?:api[_-]?key|x-api-key|x-goog-api-key|authorization|access_token|code_verifier|token)["']?\s*[:=]\s*["']?)[^\s"'&,}]{6,}/gi, '$1[hidden]');
+  }
+  function dg(kind, txt) {
+    try { DIAG.ev.push({ t: Date.now(), kind, txt: redact(txt).slice(0, 400) }); if (DIAG.ev.length > 80) DIAG.ev.shift(); } catch (e) { /* rien */ }
+  }
+  /** Note une erreur dans le journal et, si elle n'est pas une simple erreur d'utilisateur, ouvre le panneau (une seule fois par erreur distincte). */
+  function diagErr(e, where) {
+    try {
+      if (e === null || e === undefined || e.message === 'aborted' || (typeof e === 'object' && e.__dg)) return;
+      if (typeof e === 'object') { try { e.__dg = true; } catch (_) { /* fige */ } }
+      const msg = String((e && e.message) || e);
+      const sig = where + '|' + msg.slice(0, 120);
+      const prev = DIAG.seen.get(sig);
+      if (prev) { prev.n++; return; }
+      DIAG.seen.set(sig, { n: 1, where, msg: redact(msg).slice(0, 160) });
+      const code = e && e.code, st = e && e.status;
+      DIAG.last = { t: Date.now(), where, name: (e && e.name) || typeof e, status: st, kind: e && e.kind, code, message: redact(msg).slice(0, 600), url: e && e.url, raw: e && e.raw };
+      dg('error:' + where, [DIAG.last.name, st, DIAG.last.kind, code, msg].filter(x => x !== undefined && x !== '').join(' | '));
+      const userSide = (e && e.kind === 'nokey') || st === 401 || st === 403 || code === 'busy' || code === 'gone' || /denied|not allowed|permission/i.test(msg);
+      if (!userSide) diagShow(false);
+    } catch (x) { /* le diagnostic ne doit jamais faire planter l'appli */ }
+  }
+  function diagPorts(kind) {
+    try {
+      const u = s.usb, p = u.link ? u.link.ports() : { outputs: [], inputs: [] };
+      const f = a => a.map(x => (x.name || x.id) + (x.state && x.state !== 'connected' ? ' [' + x.state + ']' : '')).join(' ; ') || '-';
+      dg('midi', kind + ': out=' + f(p.outputs) + ' | in=' + f(p.inputs) + ' | picked=' + ((u.ports.find(x => x.id === u.outId) || {}).name || '-'));
+    } catch (e) { /* rien */ }
+  }
+  function diagReport() {
+    const L = [], add = x => L.push(x);
+    const p2 = (n, k) => String(n).padStart(k || 2, '0');
+    const hms = t => { const d = new Date(t); return p2(d.getHours()) + ':' + p2(d.getMinutes()) + ':' + p2(d.getSeconds()) + '.' + p2(d.getMilliseconds(), 3); };
+    const sec = (t, fn) => { add(''); add('## ' + t); try { fn(); } catch (e) { add('(unavailable: ' + ((e && e.message) || e) + ')'); } };
+    const u = s.usb, nv = navigator;
+    add('# GP-200 Studio Web - diagnostic report');
+    sec('App', () => {
+      add('Version: ' + (B.build ? B.build.version + ' (build ' + B.build.iso + ')' : '?'));
+      add('Report date: ' + new Date().toISOString());
+      add('Page: ' + (/^https?:$/.test(location.protocol) ? location.origin + location.pathname : location.protocol + ' (local page, address hidden)'));
+      add('UI language: ' + s.lang + ' (browser: ' + nv.language + ')');
+    });
+    sec('Browser', () => {
+      add('User agent: ' + nv.userAgent);
+      add('Platform: ' + (nv.platform || '?') + ' | touch points: ' + (nv.maxTouchPoints || 0) + ' | viewport: ' + window.innerWidth + 'x' + window.innerHeight);
+      add('Android mode: ' + (IS_ANDROID ? 'yes' : 'no'));
+    });
+    sec('AI', () => {
+      add('Provider: ' + s.provider + ' | model: ' + curModel() + ' | web search: ' + (s.web ? 'on' : 'off'));
+      add('API key set: ' + (curKey() ? 'yes' : 'no') + ' | no-AI mode: ' + (s.noAi ? 'yes' : 'no'));
+    });
+    sec('Pedal / Web MIDI', () => {
+      add('Web MIDI supported: ' + (USB && USB.MidiLink.supported() ? 'yes' : 'no'));
+      add('State: ' + u.state + ' | port in use: ' + (((u.ports || []).find(x => x.id === u.outId) || {}).name || '-'));
+      if (u.link) { const p = u.link.ports(), f = a => a.map(x => (x.name || x.id) + (x.state ? ' [' + x.state + ']' : '')).join(' ; ') || '-'; add('Outputs: ' + f(p.outputs)); add('Inputs: ' + f(p.inputs)); }
+      add('Live sync open: ' + (s.ed.live ? 'yes' : 'no') + ' | listening: ' + (s.listen.want ? 'on' : 'off') + ' | pedal patch: ' + (s.listen.pc === null ? '?' : s.listen.pc));
+    });
+    if (DIAG.last) sec('Last error', () => {
+      const e = DIAG.last;
+      add('When: ' + hms(e.t) + ' | where: ' + e.where);
+      add('Type: ' + e.name + (e.status !== undefined ? ' | HTTP status: ' + e.status : '') + (e.kind ? ' | kind: ' + e.kind : '') + (e.code ? ' | code: ' + e.code : ''));
+      add('Message: ' + e.message);
+      if (e.url) add('URL: ' + String(e.url).replace(/[?#].*$/, ''));
+      if (e.raw) { add('Raw response:'); add(String(e.raw).slice(0, 1500)); }
+    });
+    if (DIAG.seen.size) sec('Distinct errors (count)', () => { DIAG.seen.forEach(v => add(v.n + ' x [' + v.where + '] ' + v.msg)); });
+    sec('Recent events (' + DIAG.ev.length + ')', () => { if (!DIAG.ev.length) add('-'); DIAG.ev.forEach(x => add('[' + hms(x.t) + '] ' + x.kind + ' ' + x.txt)); });
+    sec('Last pedal messages', () => {
+      const l = (s.listen.log || []).slice(-15);
+      if (!l.length) add('-');
+      l.forEach(x => add('[' + hms(x.t) + '] ' + x.kind + ' ' + (x.txt || '') + (x.hex ? ' | ' + x.hex : '')));
+    });
+    return redact(L.join('\n'));
+  }
+  function diagShow(manual) {
+    DIAG.show = true; DIAG.manual = !!manual; DIAG.copied = '';
+    if (!manual) DIAG.details = false;
+    diagPaint();
+  }
+  function diagClose() { DIAG.show = false; diagPaint(); }
+  async function diagCopy() {
+    const txt = diagReport();
+    let ok = false;
+    try { await navigator.clipboard.writeText(txt); ok = true; }
+    catch (e) {
+      try { const ta = h('textarea', { value: txt, 'aria-hidden': 'true', style: 'position:fixed;left:-9999px;top:0' }); document.body.appendChild(ta); ta.select(); ok = document.execCommand('copy'); ta.remove(); } catch (e2) { ok = false; }
+    }
+    DIAG.copied = ok ? 'ok' : 'ko';
+    if (!ok) DIAG.details = true;
+    diagPaint();
+  }
+  function diagPaint() {
+    let el = DIAG.el;
+    if (!DIAG.show) { if (el) el.remove(); DIAG.el = null; return; }
+    if (!el) { el = h('div', { id: 'diag-panel' }); document.body.appendChild(el); DIAG.el = el; }
+    const err = !DIAG.manual && !!DIAG.last;
+    el.className = 'diag' + (err ? ' err' : '');
+    el.setAttribute('role', err ? 'alert' : 'status');
+    el.style.bottom = document.getElementById('render-error') ? '72px' : '';
+    el.textContent = '';
+    el.appendChild(h('header', null, h('b', { text: T(err ? 'diag_title' : 'diag_link') }),
+      h('button', { type: 'button', class: 'x', id: 'diag-close', 'aria-label': T('diag_close'), title: T('diag_close'), onclick: diagClose }, '×')));
+    el.appendChild(h('p', { class: 'help', text: T('diag_sub') }));
+    const gh = (B.repo || '').replace(/\/$/, '');
+    el.appendChild(h('div', { class: 'drow' },
+      h('button', { type: 'button', class: 'btn small', id: 'diag-copy', onclick: diagCopy }, T('diag_copy')),
+      h('button', { type: 'button', class: 'btn small ghost', id: 'diag-details', 'aria-expanded': String(DIAG.details), onclick: () => { DIAG.details = !DIAG.details; diagPaint(); } }, T(DIAG.details ? 'diag_hide' : 'diag_details')),
+      gh ? h('a', { class: 'btn small ghost', id: 'diag-gh', href: gh + '/issues', target: '_blank', rel: 'noopener noreferrer' }, 'GitHub') : null,
+      DIAG.copied ? h('span', { class: DIAG.copied === 'ok' ? 'dok' : 'dko', role: 'status', text: T(DIAG.copied === 'ok' ? 'diag_copied' : 'diag_copy_ko') }) : null));
+    if (DIAG.details) el.appendChild(h('textarea', { class: 'dtext', id: 'diag-text', readonly: true, rows: '10', spellcheck: 'false', 'aria-label': T('diag_details'), value: diagReport() }));
+  }
+  function diagInit() {
+    window.addEventListener('error', ev => {
+      if (!ev || (!ev.error && !ev.message)) return;                                   // erreur de chargement d'une ressource : sans interet
+      if (/ResizeObserver/i.test(String(ev.message || ''))) return;                    // bruit connu des navigateurs
+      diagErr(ev.error || new Error(String(ev.message) + (ev.lineno ? ' @' + ev.lineno + ':' + ev.colno : '')), 'js');
+    });
+    window.addEventListener('unhandledrejection', ev => { if (ev) diagErr(ev.reason === undefined ? new Error('unhandled rejection') : ev.reason, 'promise'); });
+    window.addEventListener('keydown', ev => { if (ev.key === 'Escape' && DIAG.show && DIAG.el && DIAG.el.contains(document.activeElement)) diagClose(); });
+    dg('app', 'start v' + (B.build ? B.build.version : '?'));
+  }
+
   const provInfo = p => B.providers[p];
   const curModel = () => s.models[s.provider] || provInfo(s.provider).default_model;
   const curKey = () => String(s.keys[s.provider] || '').trim();
@@ -486,6 +668,7 @@
 
   // --------------------------------------------------------- erreurs lisibles
   function friendly(e) {
+    diagErr(e, 'api');
     if (e && e.message === 'aborted') return T('st_cancel');
     const m = String((e && e.message) || e);
     if (/^err_gen_failed/.test(m)) return T('e_gen_failed', m.split(':')[1] || '?');
@@ -502,6 +685,7 @@
 
   // -------------------------------------------------------------- generation
   function logLine(line) {
+    dg('gen', line);
     if (!s.run) return;
     s.run.log.push(line);
     const el = document.getElementById('logbox');
@@ -527,6 +711,7 @@
       provider: s.provider, apiKey: curKey(), model: curModel(), webSearch: !!s.web && s.provider !== 'openrouter',
       maxRetries: 2, pickup: s.pickup, lang: s.lang, maxTokens: 16000,
     };
+    dg('ai', 'request: provider=' + cfg.provider + ' model=' + cfg.model + ' web=' + cfg.webSearch + ' key=' + (cfg.apiKey ? 'set' : 'none'));
     const ctx = {
       signal: controller.signal, timeout: 240000,
       log: (kind, a, b) => {
@@ -752,6 +937,7 @@
     const fallback = provInfo(s.provider).models;
     const list = await G.listModels({ provider: s.provider, apiKey: curKey(), maxTokens: 16000 }, fallback, { timeout: 20000 });
     const ok = list !== fallback && list.length;
+    dg('models', s.provider + ': ' + (ok ? list.length + ' models' : 'list unavailable, built-in list used'));
     s.modelList[s.provider] = ok ? list : fallback;
     s.modelMsg = ok ? T('models_ok', list.length) : T('models_ko');
     render();
@@ -759,7 +945,7 @@
   function paintModelMsg() { const e = document.getElementById('model-msg'); if (e) e.textContent = s.modelMsg; }
 
   // ------------------------------------------------------------------ rendu
-  const TABS = ['module', 'result', 'pedal', 'ctrl', 'tune', 'log'];
+  const TABS = ['module', 'result', 'pedal', 'ctrl', 'tune', 'setlist', 'log'];
 
   // ------------------------------------------------------------ info-bulles
   /** Pose un title sur tout controle ou indicateur qui n'en a pas encore (les title deja ecrits ne sont jamais remplaces). Textes : gp200tips.js. */
@@ -776,7 +962,7 @@
       'tune-pedal': 'tune_pedal', 'tune-audio': 'tune_audio', 'tune-audio-sel': 'tune_audio_sel', 'tune-audio-refresh': 'tune_audio_refresh', 'tune-bank': 'tune_bank',
       'tune-letter': 'tune_letter', 'tune-open-files': 'tune_open_files', 'tune-add-all': 'tune_add_all', 'tune-clear': 'tune_clear', 'tune-start': 'tune_start', 'tune-yes': 'tune_yes',
       'tune-zip': 'tune_zip', 't-pause': 't_pause', 't-resend': 't_resend', 't-prev': 't_prev', 't-next': 't_next', 't-keep': 't_keep', 't-stop': 't_stop', 't-gauge': 't_gauge',
-      pickup: 'pickup', 'ref-loaded': 'ref_loaded', 't-cur': 'tune_row', 'tabbtn-result': 'tab_result', 'tabbtn-pedal': 'tab_pedal', 'tabbtn-ctrl': 'tab_ctrl', 'tabbtn-tune': 'tab_tune',
+      pickup: 'pickup', 'ref-loaded': 'ref_loaded', 't-cur': 'tune_row', 'tabbtn-result': 'tab_result', 'tabbtn-pedal': 'tab_pedal', 'tabbtn-ctrl': 'tab_ctrl', 'tabbtn-tune': 'tab_tune', 'tabbtn-setlist': 'tab_setlist',
       'tabbtn-log': 'tab_log' };
     for (const id in ids) set(document.getElementById(id), U(ids[id]));
     // pastille de la pedale (connectee : le titre existant donne le nom du port)
@@ -789,7 +975,7 @@
     all('.ask-zone .btn.stop', 'stop');
     all('.side-h .count', 'lib_count');
     all('.vfile', 'vfile'); all('.badge.warn', 'badge_warn');
-    all('.lib-h .badge', el => { const t = el.textContent.trim(); const k = ['gen', 'open', 'refine', 'live'].find(x => T('kind_' + x) === t); return k ? U('kind_' + k) : ''; });
+    all('.lib-h .badge', el => { const t = el.textContent.trim(); const k = ['gen', 'open', 'refine', 'live', 'pedal'].find(x => T('kind_' + x) === t); return k ? U('kind_' + k) : ''; });
     all('.lib-row', el => { const vl = el.querySelector('.vl'); return vl ? fmt(U('lib_row_variant'), vl.textContent.trim()) : U('lib_row'); });
     // options de generation
     all('.opts > summary', 'opts');
@@ -853,6 +1039,7 @@
   }
 
   function renderFail(e) {
+    diagErr(e, 'render');
     const old = document.getElementById('render-error'); if (old) old.remove();
     const box = h('div', { id: 'render-error', role: 'alert', class: 'render-error' },
       h('b', { text: T('render_err') }), ' ' + String((e && e.message) || e).slice(0, 200), ' ',
@@ -933,7 +1120,7 @@
   }
 
   // ------------------------------------------------------- colonne de gauche
-  const KIND_BADGE = { gen: 'kind_gen', open: 'kind_open', refine: 'kind_refine', live: 'kind_live' };
+  const KIND_BADGE = { gen: 'kind_gen', open: 'kind_open', refine: 'kind_refine', live: 'kind_live', pedal: 'kind_pedal' };
   function presetList() {
     if (!s.lib.length) return h('p', { class: 'help', id: 'lib-empty', text: T('lib_empty') });
     return h('div', { class: 'lib' }, s.lib.map(res => {
@@ -943,10 +1130,14 @@
         if (!res.single && g.length) rows.push(h('div', { class: 'lib-sec', text: (si + 1) + '. ' + ((res.payload.sections[si] || {}).nom || '?') + ((res.payload.sections[si] || {}).role ? ' · ' + res.payload.sections[si].role : '') }));
         g.forEach((f, vi) => {
           const on = cur && s.sel.si === si && s.sel.vi === vi;
-          rows.push(h('button', { type: 'button', class: 'lib-row' + (on ? ' on' : ''), 'aria-pressed': String(on), 'data-file': f.filename, onclick: () => selectFile(res, si, vi) },
-            res.single ? null : h('span', { class: 'vl', text: f.variant.label || 'ABC'[vi] }),
-            h('span', { class: 'ln', text: f.spec.name || f.filename }),
-            f.tuned ? h('span', { class: 'badge ok', title: T('tuned_badge', f.tuned.lufs.toFixed(1), f.tuned.patch, f.tuned.amp === null ? '–' : Math.round(f.tuned.amp)), text: '✓' }) : null));
+          const kept = slKept(f), kname = f.spec.name || f.filename;
+          rows.push(h('div', { class: 'lib-line' },
+            h('button', { type: 'button', class: 'lib-row' + (on ? ' on' : ''), 'aria-pressed': String(on), 'data-file': f.filename, onclick: () => selectFile(res, si, vi) },
+              res.single ? null : h('span', { class: 'vl', text: f.variant.label || 'ABC'[vi] }),
+              h('span', { class: 'ln', text: f.spec.name || f.filename }),
+              f.tuned ? h('span', { class: 'badge ok', title: T('tuned_badge', f.tuned.lufs.toFixed(1), f.tuned.patch, f.tuned.amp === null ? '–' : Math.round(f.tuned.amp)), text: '✓' }) : null),
+            h('button', { type: 'button', class: 'keep' + (kept ? ' on' : ''), 'aria-pressed': String(kept), 'data-file': f.filename, title: T(kept ? 'sl_unkeep' : 'sl_keep', kname),
+              'aria-label': T(kept ? 'sl_unkeep' : 'sl_keep', kname), onclick: () => slToggle(f) }, kept ? '♥' : '♡')));
         });
       });
       return h('div', { class: 'lib-entry' + (cur ? ' cur' : '') },
@@ -997,6 +1188,7 @@
         file ? h('button', { type: 'button', class: 'btn small', id: 'dl-one', onclick: () => download(file.filename, file.raw) }, T('download')) : null)));
     const ij = file && pedalFound() ? injectPanel(file) : null;
     if (ij) zone.appendChild(ij);
+    if (file) zone.appendChild(patchVolBlock(file));
     const rack = h('ol', { class: 'rack' + (running ? ' scan' : '') + (s.fresh && res ? ' lit' : '') });
     order.forEach((mi, pos) => {
       const slot = G.MODULES[mi], e = dec ? dec.modules[slot] : null;
@@ -1035,7 +1227,7 @@
     const running = !!(s.run && s.run.running), tuning = tuneActive();
     const names = TABS.filter(t => t !== 'module' && (t !== 'log' || hasLog));
     const bar = h('div', { class: 'tabbar', role: 'toolbar' }, names.map(t => h('button', { type: 'button', class: 'tab', id: 'tabbtn-' + t, 'aria-haspopup': 'dialog', 'aria-expanded': String(s.tab === t),
-      onclick: () => { s.tab = t; if (t === 'tune' && !s.lib.length && !tuneActive()) tuneOpenForm(); render(); } }, T('tab_' + t), (t === 'log' && running) || (t === 'tune' && tuning) ? h('span', { class: 'sdot on run' }) : null)));
+      onclick: () => { s.tab = t; if (t === 'tune' && !s.lib.length && !tuneActive()) tuneOpenForm(); render(); } }, T('tab_' + t) + (t === 'setlist' && slItems().length ? ' (' + slItems().length + ')' : ''), (t === 'log' && running) || (t === 'tune' && tuning) ? h('span', { class: 'sdot on run' }) : null)));
     const body = h('div', { class: 'tabbody', id: 'tab-module' });
     body.appendChild(file ? moduleTab(file) : welcome());
     return h('section', { class: 'tabs-zone zone', 'aria-label': 'Détails' }, bar, body);
@@ -1051,6 +1243,7 @@
     if (tab === 'log') body.appendChild(h('div', { class: 'logbox', id: 'logbox' }));
     else if (tab === 'pedal') body.appendChild(pedalBlock(s.res ? (groupsOf(s.res)[s.sel.si] || []) : []));
     else if (tab === 'tune') body.appendChild(tunePanel());
+    else if (tab === 'setlist') body.appendChild(setlistPanel());
     else if (!file) body.appendChild(welcome());
     else if (tab === 'result') body.appendChild(resultTab(file));
     else if (tab === 'ctrl') body.appendChild(ctrlTab(file));
@@ -1160,7 +1353,7 @@
     if (!linkReady()) return false;
     if (ed.opening) return ed.opening;
     ed.opening = (async () => {
-      try { u.link.select(u.outId); await u.link.open(); ed.live = true; ed.err = ''; await sleep(300); return true; }   // 300 ms : le temps que le port soit pret avant la 1re trame
+      try { u.link.select(u.outId); await u.link.open(); ed.live = true; ed.err = ''; await sleep(IS_ANDROID ? 700 : 300); return true; }   // 300 ms : le temps que le port soit pret avant la 1re trame
       catch (e) { ed.err = T('ed_live_ko', usbErr(e)); render(); return false; }
       finally { ed.opening = null; }
     })();
@@ -1184,7 +1377,7 @@
   function markSynced(file, slot) { const sy = s.ed.sync; if (sy.file !== file) { sy.file = file; sy.set = new Set(); } sy.set.add(slot); }
   function unsync(file, slot) { const sy = s.ed.sync; if (sy.file === file) sy.set.delete(slot); }
   const modKey = e => e.model_id + ',' + e.category;     // modele que la pedale est censee avoir dans un module (connu seulement apres un de nos envois)
-  const PGAP = 30;                                       // ms entre deux trames de parametres (la pedale en avale en dessous de ~19 ms)
+  const PGAP = IS_ANDROID ? 45 : 30;                                       // ms entre deux trames de parametres (la pedale en avale en dessous de ~19 ms)
   function dropPending(file, slot) {
     const ed = s.ed;
     if (!ed.pending) return;
@@ -1206,7 +1399,7 @@
       const first = ed.pending.keys().next().value, it = ed.pending.get(first);
       ed.pending.delete(first);
       ed.last = Date.now();
-      if (it.meta && !isSynced(it.meta.file, it.meta.slot)) {
+      if (it.meta && !it.meta.vol && !isSynced(it.meta.file, it.meta.slot)) {
         // premier reglage de ce module : on envoie le module entier (les valeurs a jour, dont ce reglage, y sont deja)
         dropPending(it.meta.file, it.meta.slot);
         await liveSendModule(it.meta.file, it.meta.slot, false, true);
@@ -1225,12 +1418,12 @@
    *  d'un delay, qui realloue sa ligne a retard) et la derniere valeur est la seule qui compte. Sans effet si le module a change entre-temps. */
   function tailArm(key, it) {
     const ed = s.ed;
-    if (!it.meta || !it.meta.mk) return;
+    if (!it.meta || (!it.meta.mk && !it.meta.vol)) return;
     clearTimeout(ed.tails.get(key));
     ed.tails.set(key, setTimeout(function fire() {
       ed.tails.delete(key);
-      const m = it.meta, e = m.file.decoded.modules[m.slot];
-      if (!ed.live || ed.busy || (ed.pending && ed.pending.has(key)) || !e || modKey(e) !== m.mk || !isSynced(m.file, m.slot)) return;
+      const m = it.meta, e = m.vol ? null : m.file.decoded.modules[m.slot];
+      if (!ed.live || ed.busy || (ed.pending && ed.pending.has(key)) || (!m.vol && (!e || modKey(e) !== m.mk || !isSynced(m.file, m.slot)))) return;
       if (Date.now() - ed.last < 25) { ed.tails.set(key, setTimeout(fire, 40)); return; }
       ed.last = Date.now();
       try { it.fn(); liveTouch(); } catch (err) { /* liaison deja fermee : rien a renvoyer */ }
@@ -1245,6 +1438,13 @@
     const sm = file.spec && file.spec.modules && file.spec.modules[slot];
     if (sm && sm.params) sm.params[p.name] = v;
     liveQueue(slot + '/' + p.name, () => s.usb.link.sendParam(k, p.slot, v, file.raw), { file, slot, mk: m && m.model ? modKey(m) : '' });
+  }
+  /** Volume du patch (0-100) : ecrit dans le fichier affiche (octet 0x38 + checksum, sur place) puis envoye en direct (12/10), derniere valeur renvoyee apres 180 ms. */
+  function edPatchVol(file, v) {
+    v = Math.round(clampN(Number(v), 0, 100));
+    if (file.raw[G.OFF_PATCH_VOL] !== v) file.raw.set(G.applyPatchVol(file.raw, v)[0]);
+    file.decoded.patch_vol = v;
+    liveQueue('patchvol', () => { s.ed.vsent = Date.now(); s.usb.link.sendPatchVol(v); }, { file, vol: true });
   }
   async function edOn(file, slot, active) {
     const k = G.MODULES.indexOf(slot);
@@ -1359,7 +1559,8 @@
     const j = s.inj, u = s.usb, lines = [];
     if (!j.set && !j.open) lines.push(h('p', { class: 'note', id: 'inj-need', text: T('inj_need') }));
     listenLines(file).forEach(x => lines.push(x));
-    if (j.msg || j.err || j.warn) lines.push(h('p', { class: 'note ' + (j.err ? 'err' : 'ok'), id: 'inj-state', role: j.err ? 'alert' : 'status', text: j.err || (j.msg + (j.warn ? ' ' + j.warn : '')) }));
+    // « Injecte et selectionne... » (tout va bien) va dans la barre d'etat ; une erreur ou un avertissement reste ici, sous les yeux
+    if (j.err || j.warn) lines.push(h('p', { class: 'note ' + (j.err ? 'err' : 'ok'), id: 'inj-state', role: j.err ? 'alert' : 'status', text: j.err || (j.msg + (j.warn ? ' ' + j.warn : '')) }));
     return lines.length ? h('div', { class: 'injbox' }, lines) : null;
   }
   function paintInject(txt) {
@@ -1410,7 +1611,7 @@
   function scheduleInject() {
     const j = s.inj;
     clearTimeout(j.t);
-    j.t = setTimeout(() => { j.t = null; const f = curFile(); if (f && j.auto && j.set && pedalFound() && !tuneActive()) injectSlot(f, { auto: true }); }, 500);
+    j.t = setTimeout(() => { j.t = null; const f = curFile(); if (f && j.auto && j.set && pedalFound() && !tuneActive() && !fromPedal()) injectSlot(f, { auto: true }); }, 500);
   }
 
   // ------------------------------------------- ecoute de la pedale (sens pedale -> page)
@@ -1418,7 +1619,8 @@
   // (12/10 : module, slot, valeur) est applique au preset affiche. Le contenu d'un patch charge n'est jamais envoye : on ne peut que suivre ces annonces.
   const hexOf = m => Array.from(m, x => (x < 16 ? '0' : '') + x.toString(16)).join(' ');
   const injPc = () => (s.inj.set ? USB.slotToPc(s.inj.bank, s.inj.letter) : null);
-  const patchMismatch = () => { const p = injPc(), L = s.listen; return p !== null && L.pc !== null && L.pc !== p; };
+  const fromPedal = () => !!(s.res && s.res.kind === 'pedal');            // le preset affiche vient d'etre lu sur la pedale (voir pedalFetch)
+  const patchMismatch = () => { const p = injPc(), L = s.listen; return p !== null && L.pc !== null && L.pc !== p && !fromPedal(); };
   const bytesEq = (a, b) => { if (!a || !b || a.length !== b.length) return false; for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false; return true; };
   function listenLog(kind, txt, raw) {
     const L = s.listen;
@@ -1471,6 +1673,7 @@
       if (sm) sm.on = e.on;
       listenRender();
     } else if (e.kind === 'patchvol') {
+      if (Date.now() - s.ed.vsent < 500) return;                   // echo de notre propre envoi (curseur « Volume du patch »)
       L.last = T('listen_vol', e.v);
       listenLog('patchvol', 'volume du patch ' + e.v);
       const file = curFile();
@@ -1520,6 +1723,7 @@
   function pedalPatchChanged(pc) {
     const L = s.listen, j = s.inj, file = curFile(), want = injPc();
     L.touched = false;
+    if (fromPedal()) { L.desync = false; forgetPedalState(); pedalRefetchSoon(pc); listenRender(); return; }      // le rack montre la pedale : on relit le nouveau patch
     if (want === null) { forgetPedalState(); L.desync = false; }
     else if (pc === want) {
       const inj = j.injected;
@@ -1529,6 +1733,90 @@
     if (L.desync || patchMismatch()) j.msg = '';          // « injecte ... » ne decrit plus ce que la pedale a charge
     listenRender();
   }
+  // ------------------------------------------- lecture du patch charge sur la pedale (sens pedale -> page, LECTURE SEULE)
+  // Au branchement, ou quand la pedale annonce un changement de patch alors que le rack montre la pedale, on lui demande le patch charge (requetes de
+  // l'editeur Valeton) et on l'affiche. Rien n'est ecrit sur la pedale : un preset lu n'est ni injecte ni envoye tant qu'on ne le demande pas.
+  const readFailText = e => {
+    const c = e && e.code;
+    return c === 'timeout' ? T('pr_timeout') : c === 'noread' ? T('pr_noread') : c === 'busy' ? T('e_pedal_busy') : c === 'gone' ? T('e_pedal_gone') : String((e && e.message) || e).slice(0, 200);
+  };
+  /** opt : pc (numero connu), initial (lecture au branchement : n'affiche que si rien n'est affiche), replace (remplace le preset affiche s'il vient de la pedale),
+   *  show (affiche le resultat), manual (bouton : ouvre le port si besoin, dit pourquoi en cas d'echec). */
+  async function pedalFetch(opt) {
+    opt = opt || {};
+    const pr = s.pr, u = s.usb, ed = s.ed;
+    if (pr.busy || !pedalFound() || !u.link || tuneActive() || u.sending || s.inj.busy || (s.run && s.run.running)) return false;
+    pr.busy = true;
+    if (opt.manual) { s.notice = null; render(); }
+    let tmp = false, changed = false, retry = 0;
+    try {
+      for (let i = 0; i < 30 && (ed.busy || ed.opening); i++) await sleep(100);       // un reglage en cours d'envoi passe d'abord
+      if (ed.busy) throw new USB.UsbError('busy', 'envoi en cours');
+      if (!ed.live) {
+        if (linkReady()) { if (!(await liveEnsure())) throw new USB.UsbError('noport', 'port MIDI non ouvert'); }
+        else if (opt.manual) { u.link.select(u.outId); await u.link.open(); tmp = true; await sleep(IS_ANDROID ? 700 : 300); }
+        else return false;
+      }
+      const link = u.link;
+      const r = await link.readCurrentPatch({ pc: opt.pc, timeoutMs: IS_ANDROID ? 3000 : 1500 });
+      if (!pedalFound() || u.link !== link) return false;
+      const raw = G.prstFromDeviceRead(r.data, template), dec = G.decodePrst(raw, tb);
+      const slot = USB.pcToSlotName(r.pc), name = String(dec.name || '').trim();
+      const res = singleRes(slot + '_' + G.safeFilename(name || 'patch') + '.prst', raw, dec, null, [], 'preset', name || slot);
+      const label = slot + ' · ' + (name || '?'), file = res.files[0];
+      const cur = s.res, i = cur && cur.kind === 'pedal' ? s.lib.indexOf(cur) : -1;
+      if (opt.replace && i >= 0) {
+        res.id = cur.id; res.kind = 'pedal'; res.label = label; s.lib[i] = res;
+        s.res = res; s.sel = { si: 0, vi: 0, slot: s.sel.slot || 'AMP' }; s.fresh = true; s.armed = null;
+      } else {
+        addRes(res, 'pedal', label, true);                                              // true = sans injection ; n'affiche que si rien n'est affiche
+        if (opt.show && s.res !== res) { s.res = res; s.sel = { si: 0, vi: 0, slot: s.sel.slot || 'AMP' }; s.fresh = true; s.armed = null; }
+      }
+      if (s.res === res) {
+        markPedalHasFile(file);                                                         // la pedale a exactement ce patch : rien a renvoyer avant le 1er reglage
+        const L = s.listen; L.pc = r.pc; L.desync = false; L.touched = false; L.last = '';
+        if ((opt.initial || opt.manual) && !s.notice) s.notice = { kind: 'ok', text: T('pr_done', name || '?', slot) };
+      }
+      pr.last = { pc: r.pc, t: Date.now() };
+      dg('read', 'ok ' + slot + ' via=' + r.via + ' name=' + name);
+      changed = true;
+    } catch (e) {
+      dg('read', 'echec ' + ((e && e.code) || '') + ' ' + String((e && e.message) || e).slice(0, 160));
+      if (opt.manual) { s.notice = { kind: 'err', text: T('pr_fail', readFailText(e)) }; changed = true; }
+      else if (!opt.retried && e && (e.code === 'timeout' || (e.code === 'badread' && opt.pc !== undefined))) retry = e.code === 'timeout' ? 2500 : 300;
+    } finally {
+      if (tmp) { try { await u.link.close(); } catch (e) { /* rien */ } }
+      else if (ed.live) liveTouch();
+      pr.busy = false;
+      if (changed || opt.manual) render();
+    }
+    if (retry) {
+      clearTimeout(pr.t);
+      pr.t = setTimeout(() => { pr.t = null; if (opt.initial ? (!s.res && pedalFound() && pr.auto) : (fromPedal() && pedalFound())) pedalFetch(Object.assign({}, opt, { retried: true })); }, retry);
+    }
+    return changed;
+  }
+  /** Lecture au branchement (0,7 s apres, le temps que la pedale soit prete) : seulement si rien n'est affiche. */
+  function scheduleFetch() {
+    const pr = s.pr;
+    clearTimeout(pr.t);
+    pr.t = setTimeout(() => { pr.t = null; if (!s.res && pedalFound() && pr.auto) pedalFetch({ initial: true }); }, 700);
+  }
+  /** La pedale a change de patch alors que le rack montre la pedale : relit le nouveau (0,25 s de calme ; reessaie tant qu'un envoi ou une lecture est en cours). */
+  function pedalRefetchSoon(pc) {
+    const pr = s.pr;
+    clearTimeout(pr.rt);
+    if (pr.last && pr.last.pc === pc && Date.now() - pr.last.t < 2000) { pr.rt = null; return; }      // ce patch vient d'etre lu : l'annonce est son echo
+    let tries = 0;
+    const go = () => {
+      pr.rt = null;
+      if (!fromPedal() || !pedalFound()) return;
+      if ((pr.busy || s.inj.busy || s.usb.sending || s.ed.busy) && ++tries < 20) { pr.rt = setTimeout(go, 300); return; }
+      pedalFetch({ pc, replace: true });
+    };
+    pr.rt = setTimeout(go, 250);
+  }
+
   /** Tient le port ouvert pour entendre la pedale (sinon il se referme apres 15 s d'inactivite) et le rouvre apres une injection. */
   function listenTick() {
     const ed = s.ed, L = s.listen;
@@ -1542,13 +1830,31 @@
     if (m[9] === 0x10 && USB.parsePanelParam(m)) return;           // idem ; un 12/10 que le decodage refuse reste dans le journal (variante de trame ?)
     listenLog('autre', '12/' + (m[9] < 16 ? '0' : '') + m[9].toString(16) + ' (' + m.length + ' o)', m);
   }
+  /** « GP-200 sur 64-D · volume du patch 57 » : information seule, affichee discretement dans la barre d'etat. */
+  function listenOn() {
+    const L = s.listen;
+    if (!L.want || L.pc === null || patchMismatch() || L.desync) return null;
+    return h('span', { class: 'pinfo', id: 'pd-on', role: 'status' }, T('listen_on', USB.pcToSlotName(L.pc)) + (L.last && L.last !== T('listen_patch', USB.pcToSlotName(L.pc)) ? ' · ' + L.last : ''));
+  }
+  /** Ce qui est dit en bas de l'application quand un preset est affiche et la pedale branchee : tout va bien, rien a faire. */
+  function statusInfo() {
+    const j = s.inj, ed = s.ed, out = [];
+    if (!curFile() || (s.run && s.run.running)) return out;
+    if (pedalFound()) {
+      const on = listenOn();
+      if (on) out.push(on);
+      if (j.msg && !j.err && !j.warn) out.push(h('span', { class: 'pinfo', id: 'inj-state', role: 'status', text: j.msg }));
+    }
+    if (ed.msg) out.push(h('span', { class: 'pinfo', id: 'ed-msg', role: 'status', text: ed.msg }));       // « X applique sur la pedale (pas encore enregistre) » : l'erreur, elle, reste dans la fiche du module
+    return out;
+  }
+  /** Seulement ce qui demande un geste ou signale un ecart avec la pedale (l'information « sur 64-D » est dans la barre d'etat). */
   function listenLines(file) {
     const L = s.listen, j = s.inj, out = [];
     if (!L.want || L.pc === null) return out;
     const resend = () => (j.set ? h('button', { type: 'button', class: 'btn small go', id: 'pd-resend', disabled: j.busy || !!s.usb.sending, onclick: () => { L.desync = false; L.touched = false; injectSlot(file, {}); } }, T('listen_resend')) : null);
     if (patchMismatch()) out.push(h('p', { class: 'note', id: 'pd-other', role: 'status' }, T('listen_other', USB.pcToSlotName(L.pc), injName()), ' ', resend()));
     else if (L.desync) out.push(h('p', { class: 'note', id: 'pd-reloaded', role: 'status' }, T('listen_reloaded', injName()), ' ', resend()));
-    else out.push(h('p', { class: 'note ok', id: 'pd-on', role: 'status' }, T('listen_on', USB.pcToSlotName(L.pc)) + (L.last && L.last !== T('listen_patch', USB.pcToSlotName(L.pc)) ? ' · ' + L.last : '')));
     if (L.touched && !L.desync) out.push(h('p', { class: 'note', id: 'pd-knob', role: 'status' }, T('listen_panel'), ' ', resend()));
     return out;
   }
@@ -1568,6 +1874,23 @@
   function paintLiveNote(txt) { const el = document.getElementById('live-note'); if (el) el.textContent = txt; }
 
   function numStr(v) { return String(Math.round(Number(v) * 1e4) / 1e4); }
+  /** Valeur lue dans le fichier, pour l'affichage seul : 37.6244 -> 37.62 (au moins 2 decimales, plus si le pas du reglage en demande) ; le fichier garde sa precision. */
+  function numShow(v, step) {
+    const dec = String(step).indexOf('.') >= 0 ? String(step).split('.')[1].length : 0, d = Math.min(4, Math.max(2, dec)), k = Math.pow(10, d);
+    return String(Math.round(Number(v) * k) / k);
+  }
+
+  /** Volume du patch : un reglage du preset (pas d'un module), donc au-dessus de la chaine du signal, quel que soit le module choisi. */
+  function patchVolBlock(file) {
+    const v = clampN(Math.round(Number(file.decoded.patch_vol)) || 0, 0, 100), tip = TIPS.ui[s.lang].patch_vol;
+    let range = null;
+    const num = h('input', { type: 'number', class: 'num', id: 'pv-num', min: '0', max: '100', step: '1', value: String(v), 'aria-label': T('pv_title') + ' (valeur)', title: tip + '\n' + TIPS.ui[s.lang].param_num,
+      oninput: ev => { const x = Number(ev.target.value); if (ev.target.value === '' || isNaN(x)) return; const c = Math.round(clampN(x, 0, 100)); range.value = String(c); edPatchVol(file, c); },
+      onchange: ev => { const c = Math.round(clampN(Number(ev.target.value) || 0, 0, 100)); ev.target.value = String(c); range.value = String(c); edPatchVol(file, c); } });
+    range = h('input', { type: 'range', id: 'pv-range', min: '0', max: '100', step: '1', value: String(v), 'aria-label': T('pv_title'), title: tip,
+      oninput: ev => { const c = Number(ev.target.value); num.value = String(c); edPatchVol(file, c); } });
+    return h('div', { class: 'pvol', id: 'pvol', title: tip }, h('span', { class: 'pn', text: T('pv_title') }), range, num);
+  }
 
   function moduleTab(file) {
     const ed = s.ed;
@@ -1606,7 +1929,7 @@
       const lo = Math.min(p.min, p.max), hi = Math.max(p.min, p.max), step = p.step > 0 ? p.step : 1;
       let range = null;
       const ptip = TIPS.paramTip(p, s.lang);
-      const num = h('input', { type: 'number', class: 'num', min: String(lo), max: String(hi), step: String(step), value: numStr(val), 'aria-label': p.name + ' (valeur)', 'data-num': p.name, title: ptip + '\n' + TIPS.ui[s.lang].param_num,
+      const num = h('input', { type: 'number', class: 'num', min: String(lo), max: String(hi), step: String(step), value: numShow(val, step), 'aria-label': p.name + ' (valeur)', 'data-num': p.name, title: ptip + '\n' + TIPS.ui[s.lang].param_num,
         oninput: ev => { const v = Number(ev.target.value); if (ev.target.value === '' || isNaN(v)) return; const c = clampN(v, lo, hi); range.value = String(c); edParam(file, slot, p, c); },
         onchange: ev => { const v = clampN(Number(ev.target.value) || 0, lo, hi); ev.target.value = numStr(v); range.value = String(v); } });
       range = h('input', { type: 'range', min: String(lo), max: String(hi), step: String(step), value: String(clampN(val, lo, hi)), 'aria-label': p.name, 'data-param': p.name, title: ptip,
@@ -1623,7 +1946,6 @@
       found ? h('button', { type: 'button', class: 'btn small', id: 'ed-send', disabled: ed.busy || !ed.want, onclick: () => liveSendModule(file, slot, false) }, T('mod_send')) : null,
       h('button', { type: 'button', class: 'btn small ghost', id: 'ed-save', onclick: () => { s.tab = 'pedal'; render(); } }, T('mod_save'))));
     if (found && ed.want) box.appendChild(h('p', { class: 'help', text: T('mod_match') }));
-    if (ed.msg) box.appendChild(h('p', { class: 'note ok', role: 'status', id: 'ed-msg', text: ed.msg }));
     if (ed.err) box.appendChild(h('p', { class: 'note err', role: 'alert', id: 'ed-err', text: ed.err }));
     return box;
   }
@@ -1639,9 +1961,11 @@
     return h('footer', { class: 'statusbar' },
       h('span', { class: 'sdot' + (running ? ' on run' : '') }),
       h('span', { id: 'status-text', class: 'st-text', role: 'status', 'aria-live': 'polite', text: running ? s.run.status : '' }),
+      statusInfo(),
       n && !running ? h('p', { class: 'note ' + (n.kind === 'err' ? 'err' : n.kind === 'ok' ? 'ok' : ''), id: 'status-note', role: n.kind === 'err' ? 'alert' : 'status', style: 'white-space:pre-line' },
         n.text, h('button', { type: 'button', class: 'x', 'aria-label': 'OK', onclick: () => { s.notice = null; render(); } }, '×')) : null,
       h('span', { class: 'st-right' },
+        h('button', { type: 'button', class: 'linkbtn', id: 'diag-link', title: T('diag_link_tip'), onclick: () => diagShow(true) }, T('diag_link')),
         B.build ? h('span', { class: 'ver', id: 'build-version', title: B.build.iso, text: T('ver', B.build.version, buildDate()) }) : null));
   }
   function setupModal() {
@@ -1708,10 +2032,11 @@
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const slotName2 = (bank, letter) => USB.pcToSlotName(USB.slotToPc(bank, letter));
   function usbErr(e) {
+    diagErr(e, 'usb');
     const m = String((e && e.name) + ' ' + (e && e.message));
     if (e && e.code === 'busy') return T('e_pedal_busy');
     if (e && e.code === 'gone') return T('e_pedal_gone');
-    if (/denied|security|not allowed|permission/i.test(m)) return T('pedal_denied');
+    if (/denied|security|not allowed|permission/i.test(m)) return T(/^https?:$/.test(location.protocol) ? 'pedal_denied' : 'pedal_denied_local');
     return T('e_pedal_generic', String((e && e.message) || e).slice(0, 300));
   }
   function pedalRefresh() {
@@ -1725,13 +2050,13 @@
     u.state = 'asking'; u.result = null; u.error = ''; render();
     try {
       const access = await USB.MidiLink.request();
-      const link = new USB.MidiLink({ log: kind => { if (kind === 'no_ack') u.flags.noAck = true; if (kind === 'input_blind') u.flags.blind = true; } });
+      const link = new USB.MidiLink({ loose: IS_ANDROID, chunkDelay: IS_ANDROID ? 60 : undefined, log: (kind, ...a) => { dg('midi', 'link ' + kind + ' ' + a.join(' ')); if (kind === 'no_ack') u.flags.noAck = true; if (kind === 'input_blind') u.flags.blind = true; } });
       link.attach(access);
       link.onnotify = onPedalEvent; link.onrx = onPedalRaw;
       const sendParam0 = link.sendParam.bind(link);
       link.sendParam = (mod, par, val, prst) => { s.ed.psent.set(mod * 16 + par, Date.now()); return sendParam0(mod, par, val, prst); };   // garde anti-echo des reglages tournes en facade
-      link.onchange = () => { const had = !!u.outId; pedalRefresh(); if (!had && u.outId) scheduleInject(); if (s.ed.live && !u.outId) { liveStop(); s.ed.err = T('ed_live_ko', T('e_pedal_gone')); } if (!u.sending) render(); };
-      u.link = link; u.state = 'ready'; pedalRefresh(); scheduleInject();
+      link.onchange = () => { const had = !!u.outId; pedalRefresh(); diagPorts('change'); if (!had && u.outId) { scheduleInject(); scheduleFetch(); } if (s.ed.live && !u.outId) { liveStop(); s.ed.err = T('ed_live_ko', T('e_pedal_gone')); } if (!u.sending) render(); };
+      u.link = link; u.state = 'ready'; pedalRefresh(); diagPorts('connect'); scheduleInject(); scheduleFetch();
     } catch (e) {
       u.state = /denied|security|not allowed|permission/i.test(String((e && e.name) + ' ' + (e && e.message))) ? 'denied' : 'error';
       u.error = usbErr(e);
@@ -1776,10 +2101,10 @@
     const u = s.usb;
     const box = h('section', { class: 'pedal', 'aria-labelledby': 'h-pedal' },
       h('h3', { id: 'h-pedal', text: T('pedal_title') }), h('p', { class: 'help', text: T('pedal_sub') }));
-    if (u.state === 'unsupported') { box.appendChild(h('p', { class: 'note', text: T('pedal_unsupported') })); return box; }
+    if (u.state === 'unsupported') { box.appendChild(h('p', { class: 'note', text: T(IS_ANDROID ? 'pedal_unsupported_android' : 'pedal_unsupported') })); return box; }
     if (tuneActive()) { box.appendChild(h('p', { class: 'note', text: T('tune_pedal_busy') })); return box; }
     if (u.state !== 'ready') {
-      box.appendChild(h('ol', { class: 'help' }, D[s.lang].pedal_steps.map(x => h('li', { text: x }))));
+      box.appendChild(h('ol', { class: 'help' }, (IS_ANDROID ? D[s.lang].pedal_steps_android : D[s.lang].pedal_steps).map(x => h('li', { text: x }))));
       if (u.state === 'denied' || u.state === 'error') box.appendChild(h('p', { class: 'note err', role: 'alert', text: u.error }));
       box.appendChild(h('div', null, h('button', { type: 'button', class: 'btn', id: 'pedal-connect', disabled: u.state === 'asking', onclick: pedalConnect },
         u.state === 'asking' ? T('pedal_asking') : T('pedal_connect'))));
@@ -1788,12 +2113,15 @@
     const busy = !!u.sending, found = !!u.outId;
     const cur = u.ports.find(p => p.id === u.outId);
     box.appendChild(h('p', { class: 'pstate' + (found ? ' ok' : ''), role: 'status' }, h('span', { class: 'pled' }),
-      found ? T('pedal_found', cur ? cur.name : '') : T('pedal_none')));
+      found ? T('pedal_found', cur ? cur.name : '') : T('pedal_none') + (IS_ANDROID ? ' ' + T('pedal_none_android') : '')));
     if ((!found && u.ports.length) || u.ports.filter(p => /gp-200/i.test(p.name)).length > 1) {
       box.appendChild(h('label', { class: 'f', style: 'max-width:340px' }, T('pedal_port'),
         h('select', { id: 'pedal-port', disabled: busy, onchange: e => { u.outId = e.target.value || null; render(); } },
           h('option', { value: '' }, '–'), u.ports.map(p => h('option', { value: p.id, selected: p.id === u.outId }, p.name || p.id)))));
     }
+    if (found) box.appendChild(h('div', null,
+      h('button', { type: 'button', class: 'btn small', id: 'pedal-read', title: T('pr_read_tip'), disabled: busy || s.pr.busy, onclick: () => pedalFetch({ manual: true, show: true, replace: true }) }, s.pr.busy ? T('pr_busy') : T('pr_read')),
+      h('p', { class: 'help', text: T('pr_read_help') })));
     if (!found) box.appendChild(h('div', null, h('button', { type: 'button', class: 'btn small', onclick: () => { pedalRefresh(); render(); } }, T('pedal_retry'))));
     if (found && !gr.length) box.appendChild(h('p', { class: 'help', text: T('pedal_nofile') }));
     if (found && gr.length) {
@@ -1824,6 +2152,165 @@
       if (u.result.kind === 'ok' && u.flags.blind) box.appendChild(h('p', { class: 'note', text: T('pedal_blind') }));
     }
     if (u.state === 'ready') box.appendChild(listenLogBlock());
+    return box;
+  }
+
+  // ------------------------------------------------------------------- set list
+  // Module a part : une selection de presets de la bibliotheque (♥), un nom et un emplacement pour chacun, puis une ecriture en masse dans la pedale.
+  // Les fichiers de la bibliotheque ne sont jamais modifies : le nom choisi n'existe que dans la copie envoyee (SL.renameRaw).
+  const slInLib = f => s.lib.some(r => r.files.indexOf(f) >= 0);
+  function slItems() {
+    const sl = s.sl;
+    if (sl.items.some(it => !slInLib(it.f))) sl.items = sl.items.filter(it => slInLib(it.f));      // un preset retire de la liste sort aussi de la set list
+    return sl.items;
+  }
+  const slKept = f => slItems().some(it => it.f === f);
+  function slToggle(f) {
+    const sl = s.sl, i = slItems().findIndex(it => it.f === f);
+    if (i >= 0) sl.items.splice(i, 1); else sl.items.push({ f, name: SL.defaultName(f), bank: '', letter: '' });
+    sl.confirm = false; sl.result = null; sl.fillMsg = '';
+    render();
+  }
+  const slPlan = () => SL.plan(slItems().map(it => ({ name: it.name, bank: it.bank, letter: it.letter })), { work: s.inj.set ? [{ bank: s.inj.bank, letter: s.inj.letter, why: 'inj' }] : [] });
+  function slEdit(fn) { const sl = s.sl; fn(slItems()); sl.confirm = false; sl.result = null; render(); }
+  function setSlProgress(pct, label) {
+    const b = document.getElementById('sl-bar'), l = document.getElementById('sl-label');
+    if (b) b.style.width = Math.max(0, Math.min(100, pct)).toFixed(0) + '%';
+    if (l) l.textContent = label;
+  }
+  function slRepaintFoot() { const f = document.getElementById('sl-foot'); if (f) f.replaceWith(slFoot()); }
+
+  async function slSend() {
+    const sl = s.sl, u = s.usb, items = slItems(), pl = slPlan();
+    if (!pl.ok || !pedalFound() || tuneActive() || u.sending || s.inj.busy) return;
+    const jobs = pl.jobs.map(j => ({ ...j, raw: SL.renameRaw(items[j.i].f.raw, j.name) }));
+    clearTimeout(s.inj.t); s.inj.t = null;
+    await liveStop();
+    sl.confirm = false; sl.result = null; u.flags = {}; u.result = null; u.sending = { label: T('pedal_hs') };
+    render();
+    const done = [];
+    try {
+      u.link.select(u.outId);
+      await u.link.open();
+      for (let k = 0; k < jobs.length; k++) {
+        const j = jobs[k], suffix = T('pedal_job', k + 1, jobs.length);
+        await u.link.pushPreset(j.bank, j.letter, j.raw, {
+          onProgress: (step, total) => setSlProgress(((k * (total + 2) + step) / (jobs.length * (total + 2))) * 100,
+            j.label + ' · ' + j.name + ' · ' + (step === 0 ? T('pedal_hs') : step <= total ? T('pedal_chunk', step, total) : T('pedal_hs').replace(/…$/, '') + ' ✓') + suffix),
+        });
+        done.push(j.label);
+      }
+      await sleep(350);
+      u.link.selectPreset(jobs[0].bank, jobs[0].letter);
+      sl.result = { kind: 'ok', text: T('sl_done', jobs.length, done.join(', '), jobs[0].label) };
+    } catch (e) {
+      sl.result = { kind: 'err', text: T('sl_fail', done.length, jobs.length, done.join(', ') || '–', usbErr(e)) };
+    } finally {
+      try { await u.link.close(); } catch (e) { /* rien */ }
+      u.sending = null;
+      forgetPedalState();                       // la pedale est maintenant sur un autre patch que celui affiche : plus rien n'est « deja envoye »
+      render();
+    }
+  }
+  function slZip() {
+    const items = slItems();
+    if (!items.length || items.some(it => !SL.cleanName(it.name))) return;
+    const d = new Date(), p2 = n => (n < 10 ? '0' : '') + n;
+    const zi = items.map(it => {
+      const name = SL.cleanName(it.name), lab = SL.slotLabel(it.bank, it.letter);
+      const fname = ((lab !== '?' ? lab + '_' : '') + name).replace(/[^A-Za-z0-9 _.()+-]/g, '_') + '.prst';
+      return { f: { filename: fname, folder: '', raw: SL.renameRaw(it.f.raw, name), spec: { ...it.f.spec, name } }, res: null };
+    });
+    zipFiles(zi, 'setlist_' + d.getFullYear() + p2(d.getMonth() + 1) + p2(d.getDate()) + '_' + p2(d.getHours()) + p2(d.getMinutes()));
+  }
+
+  function slMessages(pl, items) {
+    const out = [], miss = pl.errors.filter(e => e.code === 'slot_missing').length;
+    pl.errors.forEach(e => {
+      if (e.code === 'slot_missing' || e.code === 'empty_list') return;
+      const n = e.i + 1;
+      out.push(h('li', { class: 'err', text: e.code === 'too_many' ? T('sl_e_many') : e.code === 'name_empty' ? T('sl_e_name', n) : e.code === 'slot_range' ? T('sl_e_range', n) : T('sl_e_dup', n, e.with + 1) }));
+    });
+    if (miss) out.push(h('li', { class: 'err', text: T('sl_e_missing', miss) }));
+    pl.warnings.forEach(w => {
+      const n = w.i + 1, it = items[w.i];
+      out.push(h('li', { class: 'warn', text: w.code === 'name_changed' ? T('sl_w_changed', n, SL.cleanName(it.name)) : w.code === 'name_dup' ? T('sl_w_dup', n, w.with + 1) : T('sl_w_work', n, SL.slotLabel(it.bank, it.letter)) }));
+    });
+    return out;
+  }
+  function slFoot() {
+    const sl = s.sl, u = s.usb, items = slItems(), pl = slPlan(), foot = h('div', { class: 'sl-foot', id: 'sl-foot' });
+    const msgs = slMessages(pl, items);
+    if (msgs.length) foot.appendChild(h('ul', { class: 'sl-msgs', id: 'sl-msgs' }, msgs));
+    const found = pedalFound(), busy = !!u.sending, can = pl.ok && found && !busy && !s.inj.busy;
+    if (!can) sl.confirm = false;
+    if (sl.confirm) {
+      foot.appendChild(h('div', { class: 'note', role: 'alertdialog', id: 'sl-confirm' }, h('p', { text: T('sl_confirm') }),
+        h('ul', { class: 'sl-ow', id: 'sl-ow' }, pl.jobs.map(j => h('li', { text: j.label + '  ←  ' + j.name }))),
+        h('div', { class: 'actions', style: 'margin-top:10px' },
+          h('button', { type: 'button', class: 'btn go small', id: 'sl-yes', title: T('sl_confirm_go'), onclick: slSend }, T('sl_confirm_go')),
+          h('button', { type: 'button', class: 'btn small', id: 'sl-no', title: T('cancel'), onclick: () => { sl.confirm = false; render(); } }, T('cancel')))));
+    } else {
+      foot.appendChild(h('div', { class: 'actions' },
+        h('button', { type: 'button', class: 'btn go', id: 'sl-send', disabled: !can, title: T('sl_send', items.length), onclick: () => { sl.confirm = true; sl.result = null; render(); } }, T('sl_send', items.length)),
+        h('button', { type: 'button', class: 'btn', id: 'sl-zip', disabled: !items.length || items.some(it => !SL.cleanName(it.name)), title: T('sl_zip_hint'), onclick: slZip }, T('sl_zip'))));
+    }
+    return foot;
+  }
+  function setlistPanel() {
+    const sl = s.sl, u = s.usb, items = slItems();
+    const box = h('section', { class: 'setlist panel', id: 'setlist-panel', 'aria-labelledby': 'h-setlist' });
+    box.appendChild(h('header', null, h('div', null, h('h2', { id: 'h-setlist', text: T('sl_title') }), h('p', { class: 'sub', text: T('sl_sub') }))));
+    const body = h('div', { class: 'body' });
+    box.appendChild(body);
+    if (tuneActive()) { body.appendChild(h('p', { class: 'note', text: T('tune_pedal_busy') })); return box; }
+    const busy = !!u.sending;
+    if (sl.result) body.appendChild(h('p', { class: 'note ' + (sl.result.kind === 'ok' ? 'ok' : 'err'), id: 'sl-result', role: sl.result.kind === 'ok' ? 'status' : 'alert', text: sl.result.text }));
+    if (!items.length) { body.appendChild(h('p', { class: 'note', id: 'sl-empty', text: T('sl_empty') })); return box; }
+
+    const bankSel = (val, onch, id, lab, noBlank) => h('select', { id, 'aria-label': lab, title: lab, disabled: busy, onchange: onch },
+      noBlank ? null : h('option', { value: '' }, '–'), Array.from({ length: USB.SLOT_MAX }, (_, i) => h('option', { value: String(i + 1), selected: String(val) === String(i + 1) }, String(i + 1))));
+    const letSel = (val, onch, id, lab, noBlank) => h('select', { id, 'aria-label': lab, title: lab, disabled: busy, onchange: onch },
+      noBlank ? null : h('option', { value: '' }, '–'), SL.LETTERS.map(l => h('option', { value: l, selected: val === l }, l)));
+    const ib = (id, label, txt, fn, dis) => h('button', { type: 'button', class: 'btn small ghost', id, 'aria-label': label, title: label, disabled: !!dis || busy, onclick: fn }, txt);
+
+    body.appendChild(h('div', { class: 'stepbox' },
+      h('div', { class: 'sl-fillrow' },
+        h('span', { class: 'help', style: 'margin:0 0 6px', text: T('sl_fill_from') }),
+        h('label', { class: 'f' }, T('sl_slot_bank'), bankSel(sl.start.bank, e => { sl.start.bank = +e.target.value || 1; }, 'sl-fill-bank', T('sl_slot_bank'), true)),
+        h('label', { class: 'f' }, T('sl_slot_letter'), letSel(sl.start.letter, e => { sl.start.letter = e.target.value || 'A'; }, 'sl-fill-letter', T('sl_slot_letter'), true)),
+        h('button', { type: 'button', class: 'btn small', id: 'sl-fill', disabled: busy, title: T('sl_fill_title'), onclick: () => slEdit(a => {
+          const fl = SL.fill(sl.start.bank, sl.start.letter, a.length);
+          a.forEach((it, i) => { const sp = fl.slots[i]; it.bank = sp ? sp.bank : ''; it.letter = sp ? sp.letter : ''; });
+          sl.fillMsg = fl.overflow ? T('sl_fill_over', a.length - fl.slots.length) : '';
+        }) }, T('sl_fill'))),
+      sl.fillMsg ? h('p', { class: 'note', id: 'sl-fill-msg', text: sl.fillMsg }) : null));
+
+    body.appendChild(h('div', { class: 'stepbox', id: 'sl-batch' },
+      h('ul', { class: 'tlist sl-list', id: 'sl-list' }, items.map((it, i) => h('li', { 'data-i': String(i) },
+        h('span', { class: 'sl-num', text: String(i + 1) }),
+        h('input', { type: 'text', class: 'sl-name', id: 'sl-name-' + i, value: it.name, maxlength: String(SL.MAX_NAME), autocomplete: 'off', spellcheck: 'false', 'aria-label': T('sl_name'), title: T('sl_name'), disabled: busy,
+          oninput: e => { it.name = e.target.value; sl.confirm = false; sl.result = null; slRepaintFoot(); } }),
+        bankSel(it.bank, e => { it.bank = e.target.value === '' ? '' : +e.target.value; sl.confirm = false; sl.result = null; render(); }, 'sl-bank-' + i, T('sl_slot_bank')),
+        letSel(it.letter, e => { it.letter = e.target.value; sl.confirm = false; sl.result = null; render(); }, 'sl-letter-' + i, T('sl_slot_letter')),
+        h('span', { class: 'tmv' },
+          ib('sl-up-' + i, T('tune_up'), '↑', () => slEdit(a => { const x = a.splice(i, 1)[0]; a.splice(i - 1, 0, x); }), i === 0),
+          ib('sl-down-' + i, T('tune_down'), '↓', () => slEdit(a => { const x = a.splice(i, 1)[0]; a.splice(i + 1, 0, x); }), i === items.length - 1),
+          ib('sl-rm-' + i, T('sl_unkeep', it.f.spec.name || it.f.filename), '✕', () => slEdit(a => { a.splice(i, 1); }))),
+        h('span', { class: 'sl-src', text: tuneFileLabel(it.f, tuneResOf(it.f)) })))),
+      h('p', { class: 'help', id: 'sl-count', text: T('sl_count', items.length) })));
+
+    if (u.state !== 'ready') {
+      body.appendChild(h('div', { class: 'stepbox' }, h('p', { class: 'help', text: T('sl_need_pedal') }),
+        u.state === 'unsupported' ? h('p', { class: 'note', text: T('pedal_unsupported') })
+          : h('div', null, h('button', { type: 'button', class: 'btn', id: 'sl-pedal', disabled: u.state === 'asking', title: T('pedal_connect'), onclick: pedalConnect }, u.state === 'asking' ? T('pedal_asking') : T('pedal_connect'))),
+        u.state === 'denied' || u.state === 'error' ? h('p', { class: 'note err', role: 'alert', text: u.error }) : null));
+    } else if (!u.outId) {
+      body.appendChild(h('p', { class: 'note', id: 'sl-nopedal', text: T('pedal_none') }));
+    }
+    body.appendChild(slFoot());
+    if (busy) body.appendChild(h('div', { class: 'prog', role: 'progressbar' }, h('div', { class: 'bar' }, h('i', { id: 'sl-bar', style: 'width:2%' })), h('span', { id: 'sl-label', text: u.sending.label })));
+    body.appendChild(h('p', { class: 'help', text: T('sl_zip_hint') }));
     return box;
   }
 
@@ -2210,6 +2697,7 @@
 
   // ------------------------------------------------------------------ demarrage
   load();
+  diagInit();
   if (!PROVIDERS.every(p => B.providers[p])) throw new Error('providers manquants');
   setupGlobal();
   render();

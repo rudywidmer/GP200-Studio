@@ -84,6 +84,7 @@ python3 tests/make_expected_refine.py && node tests/run_refine_tests.js  # affin
 python3 tests/make_expected_cab.py && node tests/run_cab_tests.js  # baffle par défaut de l'ampli = fill_default_cab
 node tests/run_confirm_tests.js                                    # attente de la confirmation 12/0C, renvoi, sonde, modèles sans confirmation
 python3 tests/make_expected_notify.py && node tests/run_notify_tests.js   # décodage des notifications de la pédale (12/08, 12/10) contre parse_notify du Python
+node tests/run_read_tests.js                                          # lecture du patch en cours : requêtes = celles de l'éditeur Valeton (capture USB), réponses → .prst, fausse pédale
 node tests/run_tips_tests.js                                          # info-bulles : FR/EN identiques, tous les paramètres expliqués
 node tests/audit_tips.js --strict                                    # aucune info-bulle manquante dans l'interface (Chromium)
 node tests/e2e.js                                                  # Chromium, API simulées : génération, téléchargements, fournisseurs
@@ -152,3 +153,91 @@ Signalé par un utilisateur et reproduit avec une clé Gemini valide : la fenêt
 - **Cause** : un simple indice de saisie (`checkKeyHint`) exigeait le préfixe `AIza` pour Gemini (`sk-ant-` pour Anthropic, `sk-or-` pour OpenRouter). Il ne bloquait rien, mais la page affirmait à tort que la clé n'était pas bonne. Le chemin d'appel n'était pas en cause : la clé est transmise telle quelle (`x-goog-api-key`), sans contrôle de format.
 - **Correctif** : l'indice ne s'affiche plus que si la clé collée porte le préfixe **d'un autre fournisseur** (ex. `sk-ant-…` sous Gemini : « Cette clé ressemble à une clé Anthropic, mais le fournisseur choisi est Gemini »). Une clé de format inconnu ne déclenche plus rien ; l'indice ne bloque jamais le bouton OK. Si le fournisseur refuse vraiment la clé, le message « La clé API est refusée par le fournisseur » (401/403) s'affiche à la première génération, comme avant.
 - Tests : `node tests/e2e_refine.js`, groupe 8l (formats Gemini AIza / AQ. / hexadécimal / autres, mélanges de fournisseurs dans les trois sens, rechargement, anglais, absence de tout test « doit commencer par »).
+
+## v0.18 — volume du patch dans le réglage en direct
+
+Oubli de la fiche du module : le volume du patch (0 à 100, octet 0x38 du `.prst`, le bouton « patch volume » de la façade) n'était réglable que par l'harmonisation, jamais à la main.
+
+- **Curseur + champ « Volume du patch »** sous les réglages du module choisi (et aussi quand le module est vide) : le volume est un réglage du preset, pas d'un module. Écrit dans le fichier affiché (octet 0x38 + checksum, sur place) puis envoyé en direct (12/10, trame de 46 octets, la même que `send_patch_vol_update` de la version Python) avec la même file que les autres réglages : 1 trame / 40 ms, dernière valeur gagnante, renvoi de la dernière valeur 180 ms après le dernier mouvement. Il n'envoie aucune trame de module (pas de resynchronisation).
+- **Suivi du bouton en façade** : déjà décodé depuis la v0.9 (12/08) ; le curseur et le champ affichent maintenant la valeur reçue. Anti-écho : la pédale renvoie un 12/08 après notre envoi, il est ignoré pendant 500 ms (comme pour les bypass et les réglages).
+- **Hors ligne** : le curseur modifie le preset affiché ; le `.prst` téléchargé ou envoyé ensuite porte le nouveau volume.
+- Tests : `node tests/e2e_refine.js`, groupe 8m (trames comparées au Python, rafale, champ borné 0 à 100, écho, bouton en façade, module vide, hors ligne, anglais).
+
+## v0.19 — le volume du patch au-dessus de la chaîne du signal
+
+Retour de Rudy sur la v0.18 : le volume du patch concerne tout le preset, pas le module sélectionné ; sa place est dans la zone du rack, juste au-dessus de la chaîne, et non dans la fiche du module.
+
+- Une seule ligne « Volume du patch » (curseur + champ 0 à 100) entre l'en-tête du preset et les modules ; elle reste en place quand on change de module. Le long texte d'aide visible est remplacé par l'info-bulle.
+- Comportement inchangé (v0.18) : écriture dans le fichier + checksum, envoi en direct 12/10, dernière valeur renvoyée, anti-écho 500 ms, suivi du bouton en façade, hors ligne.
+- Tests : `node tests/e2e_refine.js` groupe 8m (position dans le DOM, changement de module sans envoi).
+
+## v0.20 — messages d'état discrets dans la barre du bas
+
+Retour de Rudy : les deux encadrés « GP-200 sur 64-D » et « Injecté et sélectionné sur la pédale en 64-D » prenaient beaucoup de place au-dessus de la chaîne du signal.
+
+- **En bas de l'application** (barre d'état, texte discret avec un petit point vert) : « GP-200 sur 64-D · volume du patch 57 » (`#pd-on`) et « Injecté et sélectionné… » (`#inj-state`). Rien à faire, donc rien dans la zone de travail.
+- **Reste près du rack**, parce que ça demande un geste ou signale un écart : choisir le slot d'injection (`#inj-need`), pédale sur un autre patch ou patch rechargé / réglage tourné en façade avec le bouton « Renvoyer le preset » (`#pd-other`, `#pd-reloaded`, `#pd-knob`), erreur ou avertissement d'injection. Quand tout va bien, l'encadré disparaît complètement.
+- Même condition d'affichage qu'avant (preset affiché + pédale branchée) ; masqué pendant une génération.
+- Tests : `node tests/e2e_refine.js`, groupe 8n.
+
+## v0.21 — réglages du module : 6 par ligne
+
+Demande de Rudy (écran un peu petit) : la fiche d'un module prenait trop de hauteur à 4 réglages par ligne.
+
+- La grille des curseurs passe à **6 colonnes au plus** (`repeat(auto-fill, minmax(max(140px, (100% − 90px) / 6), 1fr))`) : 6 dès ~1000 px de large pour la fiche (soit un écran de 1280 px), 5 ou moins en dessous, 1 colonne sur mobile (≤ 640 px) comme avant. Un ampli à 6 réglages tient sur une seule rangée.
+- Compactage : champ numérique 62 px (au lieu de 78), curseurs un peu moins hauts, interlignes réduits.
+- Affichage des valeurs lues dans le fichier arrondi à 2 décimales au moins (37.6244 → 37.62 ; plus si le pas du réglage l'exige) pour tenir dans le champ ; le fichier garde sa précision, et ce qui est tapé ou déplacé n'est pas arrondi.
+- Tests : `node tests/e2e_refine.js`, groupe 8o (1920 / 1600 / 1366 / 1280 px = 6 colonnes, 900 px, mobile, rien ne dépasse, une rangée pour 6 réglages).
+
+## v0.22 — boutons et champs compacts
+
+Retour de Rudy : la barre du haut est bien, mais la zone « Que veux-tu changer… » et le haut du rack prenaient trop de place ; revoir la taille de tous les boutons.
+
+- **Référence** : les boutons de la barre du haut (`.btn.small`, 32 px). Avec une souris ou un pavé tactile (`@media (pointer: fine)`) : boutons 32 px, bouton principal (Générer / Affiner) 34 px (au lieu de 48), listes déroulantes et champs 32 px (au lieu de 40), onglets Résultat / Pédale / CTRL / Volume 34 px (au lieu de 38), exemples 26 px (au lieu de 31), zone de saisie 58 px (au lieu de 64).
+- **Zone de demande** : 213 px de haut à 1600 px de large (250 avant) ; le rack commence 37 px plus haut. Le bouton « Optimiser pour concert » et son explication tiennent sur une ligne.
+- **Écran tactile** (`pointer: coarse`) : les grandes cibles sont conservées (bouton principal 48 px, etc.).
+- Aucun changement de comportement ni de texte.
+- Tests : `node tests/e2e_refine.js`, groupe 8p (hauteurs des boutons, onglets, listes, exemples, hauteur de la zone de demande, tactile).
+
+## v0.23 — fiche du module : aide pleine largeur, message d'état en bas
+
+- Le paragraphe « Pour que la pédale ait exactement le preset affiché… » n'est plus limité à 70 caractères de large (`.module > .help { max-width: none }`) : 4 lignes → 2 lignes à 1600 px. Même chose pour l'encadré « Choisis d'abord le slot d'injection… » (`.injbox .note`).
+- Le message « X appliqué sur la pédale (pas encore enregistré) » (`#ed-msg`) passe dans la barre d'état du bas, comme « GP-200 sur 64-D » (v0.20), en ligne comme hors ligne. Les **erreurs** de la liaison directe (`#ed-err`) restent dans la fiche du module : elles demandent d'être vues.
+- Tests : `node tests/e2e_refine.js`, groupe 8q.
+
+## v0.24 — Set list : garder, nommer, envoyer en masse
+
+Un module à part (`web/src/gp200setlist.js` pour la logique, section « set list » d'`app.js`, onglet **Set list**). Rien de l'existant n'est modifié, hors un coeur ajouté à chaque ligne de la bibliothèque (la ligne `.lib-row` est inchangée, elle est simplement enveloppée dans un `div.lib-line`).
+
+- **Garder** : un ♥ à droite de chaque preset de la liste de gauche ; l'onglet « Set list (n) » compte les presets gardés. Écouter un preset reste comme avant (sélection = injection dans le slot de travail).
+- **Fenêtre Set list** : un nom par preset (16 caractères, accents remplacés par la lettre de base — « Café » → « Cafe » —, le reste hors ASCII est retiré ; le nom réellement envoyé est annoncé), une banque (1–64) et une lettre (A–D), ↑ ↓ ✕, et « Attribuer » = emplacements consécutifs à partir d'un slot.
+- **Contrôles avant l'envoi** (bloquants) : nom vide, emplacement manquant / invalide, deux presets sur le même emplacement. **Avertissements** : nom modifié, deux noms identiques, emplacement = slot de travail de la page (il est réécrit à chaque sélection).
+- **Envoi** : confirmation listant chaque emplacement écrasé (« 10-B ← Cafe Rock »), puis écriture une à une (poignée de main + SysEx + sélection, comme l'envoi de la fenêtre Pédale), barre de progression, la pédale se positionne sur le premier preset. En cas d'interruption (câble débranché…), le message dit combien ont été écrits et lesquels.
+- **Les fichiers de la bibliothèque ne sont jamais modifiés** : le nom n'existe que dans la copie envoyée (`renameRaw` : 16 octets du nom + checksum recalculé, rien d'autre).
+- **ZIP** : « Télécharger la set list » (la liste n'est conservée que dans l'onglet du navigateur).
+- Non fait volontairement : mémoire des slots écrits (la pédale ne permet pas de relire ses slots), harmonisation de la sélection, conservation de la liste après rechargement.
+- Tests : `node tests/run_setlist_tests.js` (logique, comparée au Python : noms, checksums, 256 emplacements), `node tests/e2e_setlist.js` (♥, validation, envoi octet par octet comparé au Python, coupure, ZIP, EN, mobile).
+
+## v0.25 — « Signaler un problème » (diagnostic)
+
+- Un lien **Signaler un problème** en bas de page, et un panneau qui s'ouvre tout seul à la première erreur inattendue (erreur JS, promesse rejetée, erreur d'API hors clé invalide / quota). Rien n'est envoyé automatiquement : le rapport se copie à la main dans un message ou une « issue » GitHub.
+- Le rapport contient la version, le navigateur, le fournisseur d'IA et le modèle, l'état MIDI (ports vus, port choisi, patch de la pédale) et les 80 derniers événements. **Aucune clé API** : les clés (Google, Anthropic/OpenRouter `sk-…`, `Bearer`, `api_key=…`) sont masquées en `[key hidden]`.
+- Code : section « diagnostic » d'`app.js` (`dg()` note un événement, `diagErr()` une erreur, `diagReport()` fabrique le texte), styles `.diag` / `.linkbtn` dans `style.css`.
+
+## v0.26 — mode filaire Android (USB OTG)
+
+- Chrome pour Android + câble USB OTG (adaptateur OTG + câble USB-B de la pédale, ou câble USB-C → USB-B) : mêmes envois et même réglage en direct qu'avec un ordinateur.
+- Détecté par le `userAgent` (`IS_ANDROID` dans `app.js`). Hors Android, **rien ne change** (comparaison du DOM avant / après identique).
+- `MidiLink({ loose: true })` : reconnaissance plus tolérante du port (nom `GP200` / `Valeton…`, ou unique sortie présente), entrée appariée par nom ou unique, **réassemblage des SysEx livrés en plusieurs morceaux**. Rythme plus prudent (60 ms entre morceaux, 45 ms entre paramètres, 700 ms à l'ouverture du port). Textes d'aide propres (`pedal_steps_android`…).
+- La page doit être ouverte **depuis son adresse https** (GitHub Pages). Ouverte depuis une pièce jointe ou un fichier téléchargé (`content://`, `file://`), Chrome refuse le MIDI : v0.26.1 le dit clairement et masque l'adresse de la page locale dans le rapport.
+
+## v0.27 — lecture du patch chargé sur la pédale
+
+- **Au branchement**, si rien n'est affiché, la page lit le patch en cours et l'affiche (rack, réglages, volume). Il est rangé dans la liste avec le badge « pédale ».
+- **Quand la pédale change de patch** (au pied) alors que le rack montre un patch lu sur la pédale, il est relu et remplacé sur place (0,25 s de calme). L'annonce qui suit immédiatement une lecture du même patch est ignorée (écho).
+- **Bouton « Lire le patch en cours »** (onglet Pédale) : relit à la demande, même si un autre preset est affiché (il reste dans la liste) ou si le réglage en direct est coupé. En cas d'échec, il dit pourquoi.
+- **Lecture seule** : seules les requêtes `11/04` (bloc système : patch courant en octets 8–9) et `11/10` (patch) de l'éditeur Valeton sont envoyées, jamais une trame d'écriture. Un patch lu n'est jamais injecté automatiquement, même si un slot d'injection est choisi (`fromPedal()` neutralise `scheduleInject` et l'alerte « la pédale est sur un autre patch »).
+- Protocole (relevé sur une capture USBPcap du démarrage de l'éditeur Valeton) : réponse `12/4e/06` (bloc système, 846 octets) ou `12/18/09` (patch, 7 morceaux de 185 octets décodés, 1 176 octets en tout), quartets haut d'abord, décalage sur 14 bits (`b[11] | b[12] << 7`). Le `.prst` = en-tête et fin du modèle + ces 1 176 octets en 40…1215 + somme de contrôle recalculée (`prstFromDeviceRead`).
+- On demande d'abord le **tampon d'édition** (état actuel, réglages non enregistrés compris), puis, s'il manque ou désigne un autre patch, le patch enregistré. Si la pédale ne répond pas à la lecture simple, on refait l'ouverture de session de l'éditeur (`11/04 … 01 02`, `11/12`) puis on la referme (`02 02`) ; sinon, silence : rack vide et une ligne `read …` dans le rapport de diagnostic.
+- Vérifié sur la vraie pédale (patchs 64-A / 64-B, lecture ≈ 0,3 s après l'annonce).
+- Tests : `node tests/run_read_tests.js` (`tests/read_fixture.json` = extraits de la capture).

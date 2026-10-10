@@ -145,6 +145,11 @@
       this.waiters = [];       // attentes de confirmation 12/0C (voir changeEffect)
       // seen = confirmations reconnues, miss = changements d'effet sans confirmation, off = le format n'est pas reconnu : retour a l'attente fixe
       this.confirm = { seen: 0, miss: 0, off: false };
+      // [Android] o.loose : reconnaissance plus tolerante du port + reassemblage des SysEx fragmentes. Faux par defaut = comportement inchange.
+      this.loose = !!o.loose;
+      this._frag = null;
+      this._col = null;          // collecteur d'une lecture en cours (voir _ask) ; null = rien ne change dans la reception
+      this._reading = false;
     }
 
     static supported(nav) {
@@ -172,7 +177,11 @@
     findGp200() {
       const o = this.ports().outputs.filter(p => p.state !== 'disconnected');
       const hit = o.find(p => p.name.toLowerCase().indexOf(this.hint) >= 0);
-      return hit ? hit.id : null;
+      if (hit || !this.loose) return hit ? hit.id : null;
+      // [Android] le nom du port vient de la chaine produit USB : on accepte « GP200 », « Valeton… », ou l'unique sortie MIDI presente
+      const alt = o.find(p => /gp[\s_-]?200|valeton/i.test(p.name));
+      if (alt) return alt.id;
+      return o.length === 1 ? o[0].id : null;
     }
 
     select(outputId) {
@@ -185,6 +194,12 @@
       const name = (this.out.name || '').toLowerCase();
       ins.forEach(p => { if (!inp && p.state !== 'disconnected' && (p.name || '').toLowerCase() === name) inp = p; });
       if (!inp) ins.forEach(p => { if (!inp && p.state !== 'disconnected' && (p.name || '').toLowerCase().indexOf(this.hint) >= 0 && name.indexOf(this.hint) >= 0) inp = p; });
+      if (!inp && this.loose) {
+        // [Android] noms d'entree et de sortie parfois differents : une seule entree presente, ou une entree qui ressemble a la pedale
+        const live = []; ins.forEach(p => { if (p.state !== 'disconnected') live.push(p); });
+        inp = live.find(p => /gp[\s_-]?200|valeton/i.test(p.name || '')) || (live.length === 1 ? live[0] : null);
+      }
+      this._frag = null;
       this.inp = inp;
     }
 
@@ -212,8 +227,22 @@
     }
 
     _rxSysex(d) {
+      if (this.loose || this._col || this._frag) {
+        // [Android] Chrome peut livrer un SysEx en plusieurs morceaux : on recolle jusqu'au F7 final (un message entier passe tel quel)
+        if (!d || !d.length) return;
+        if (d[0] === 0xF0) { this._frag = null; if (d[d.length - 1] !== 0xF7) { this._frag = Array.from(d); return; } }
+        else if (this._frag) {
+          if (d[0] >= 0xF8) return;                                   // temps reel intercale : on l'ignore
+          if (d[0] >= 0x80 && d[0] !== 0xF7) { this._frag = null; return; }   // autre message : le SysEx est abandonne
+          for (let i = 0; i < d.length; i++) this._frag.push(d[i]);
+          if (this._frag.length > 4096) { this._frag = null; return; }
+          if (d[d.length - 1] !== 0xF7) return;
+          d = Uint8Array.from(this._frag); this._frag = null; this.log('rx_reassembled', d.length);
+        } else { this._orph = (this._orph || 0) + 1; if (this._orph <= 5) this.log('rx_orphan', d.length, d[0]); return; }
+      }
       if (!d || d[0] !== 0xF0) return;
       const m = Uint8Array.from(d);
+      if (this._col) { let eaten = false; try { eaten = this._col(m); } catch (e) { /* rien */ } if (eaten) return; }     // reponse a une lecture : ni journal ni notification
       this.rx.push(m);
       if (this.rx.length > 64) this.rx.splice(0, this.rx.length - 64);   // en direct personne ne vide rx : on ne garde que les derniers
       if (this.onrx) { try { this.onrx(m); } catch (e) { /* rien */ } }
@@ -270,6 +299,78 @@
         if (c.seen === 0 && c.miss >= 2) { c.off = true; this.log('confirm_off'); }   // jamais reconnue : on ne ralentit plus
       }
       return { confirmed: false, tries };
+    }
+
+    // ------------------------------------------------ lecture (pedale -> page) : LECTURE SEULE, aucune ecriture
+    /** Envoie `bytes`, collecte (sans les laisser au reste de l'application) les messages que `accept` reconnait, jusqu'a ce que `done(collectes)` soit vrai. */
+    _ask(bytes, accept, done, ms) {
+      return new Promise((resolve, reject) => {
+        const got = []; let fin = false;
+        const end = err => { if (fin) return; fin = true; if (this._col === col) this._col = null; if (err) reject(err); else resolve(got); };
+        const col = m => { if (fin || !accept(m)) return false; got.push(m); if (done(got)) end(); return true; };
+        this._col = col;
+        this.sleep(ms).then(() => { if (!fin) this.log('read_timeout', got.length, bytes[9]); end(new UsbError('timeout', "la pedale n'a pas repondu")); });
+        try { this._send(bytes); } catch (e) { end(e); }
+      });
+    }
+
+    async _readBlock(request, sub, third, size, ms) {
+      const parse = g => g.map(m => parseReadChunk(m, sub, third));
+      const got = await this._ask(request, m => !!parseReadChunk(m, sub, third), g => assembleReadChunks(parse(g), size).have >= size, ms);
+      const r = assembleReadChunks(parse(got), size);
+      if (!r.data) throw new UsbError('badread', 'lecture incomplete ou de taille inattendue (' + r.have + ' octets)');
+      return r.data;
+    }
+
+    /** Numero du patch charge (0..255), lu dans le bloc « systeme ». Si la pedale ne repond pas a la lecture seule, on refait ce que fait l'editeur Valeton
+     *  (ouverture de session, puis la meme lecture), puis on referme la session. */
+    async _readCurrentPc(ms) {
+      const sys = () => this._readBlock(buildSystemRead(), 0x4E, 0x06, SYSTEM_READ_SIZE, ms);
+      let d, opened = false;
+      try {
+        try { d = await sys(); }
+        catch (e) {
+          if (!e || e.code !== 'timeout') throw e;
+          this.log('read_session');
+          this._send(buildSessionMsg(0x01)); opened = true;
+          await this.sleep(150);
+          this._send(buildEditorOpen());
+          await this.sleep(150);
+          d = await sys();
+        }
+      } finally {
+        if (opened) { try { this._send(buildSessionMsg(0x02)); } catch (e) { /* rien */ } }
+      }
+      const pc = d[8] | (d[9] << 8);
+      if (d[9] !== 0 || pc > 255) throw new UsbError('badread', 'patch courant illisible');
+      return pc;
+    }
+
+    /** Lit le patch charge sur la pedale : { pc, data (1176 octets), via: 'edit' | 'stored' }.
+     *  o.pc : numero deja connu (annonce 12/08 de la pedale) ; sinon on le lit. On demande d'abord le tampon d'edition (reglages non enregistres compris),
+     *  puis, s'il manque ou designe un autre patch, le patch enregistre. Necessite les ports ouverts (open()) et une entree MIDI. */
+    async readCurrentPatch(o) {
+      o = o || {};
+      const ms = o.timeoutMs || 1500;
+      if (!this.out || this.out.state === 'disconnected') throw new UsbError('noport', 'aucune sortie ouverte');
+      if (!this.inp) throw new UsbError('noread', "pas d'entree MIDI : lecture impossible");
+      if (this._reading) throw new UsbError('busy', 'une lecture est deja en cours');
+      this._reading = true;
+      try {
+        const pc = (o.pc === undefined || o.pc === null) ? await this._readCurrentPc(ms) : o.pc;
+        if (!(pc >= 0 && pc <= 255)) throw new UsbError('badread', 'numero de patch invalide');
+        const same = d => !!d && (d[6] | (d[7] << 8)) === pc;
+        let data = null, via = 'edit';
+        try { data = await this._readBlock(buildPatchRead(pc, true), 0x18, 0x09, READ_SIZE, ms); }
+        catch (e) { if (!e || (e.code !== 'timeout' && e.code !== 'badread')) throw e; }
+        if (!same(data)) {
+          via = 'stored';
+          data = await this._readBlock(buildPatchRead(pc, false), 0x18, 0x09, READ_SIZE, ms);
+          if (!same(data)) throw new UsbError('badread', "le patch lu n'est pas celui demande");
+        }
+        this.log('read_ok', pc, via);
+        return { pc, data, via };
+      } finally { this._reading = false; }
     }
 
     async close() {
@@ -507,6 +608,45 @@
     return { kind: 'panel', module: b[22], param: b[24], value };
   }
 
+  // ---- lecture d'un patch (requetes de l'editeur Valeton, relevees sur une capture USB ; reponses 12/xx en nibbles, octet haut d'abord)
+  const READ_SIZE = 1176, SYSTEM_READ_SIZE = 846;
+  /** 11/04 ... 06 01 : bloc « systeme » (846 octets decodes, dont le numero du patch charge en [8..9], petit-boutiste). */
+  const buildSystemRead = () => Uint8Array.from([0xF0].concat(NUX_ID, [0x11, 0x04, 0, 0, 0, 0, 0x06, 0x01, 0, 0, 0, 0, 0, 0xF7]));
+  /** 11/04 ... kind 02 : kind 01 = ouverture de session de l'editeur, 02 = fermeture (utilises seulement si la pedale ne repond pas a la lecture seule). */
+  const buildSessionMsg = kind => Uint8Array.from([0xF0].concat(NUX_ID, [0x11, 0x04, 0, 0, 0, 0, kind & 0xFF, 0x02, 0, 0, 0, 0, 0, 0xF7]));
+  const buildEditorOpen = () => Uint8Array.from([0xF0].concat(NUX_ID, [0x11, 0x12, 0, 0, 0, 0xF7]));
+  /** 11/10 : patch `pc` (0..255) tel qu'enregistre, ou (edit = true) tampon d'edition du patch `pc` = etat actuel, reglages non enregistres compris. */
+  function buildPatchRead(pc, edit) {
+    const hi = (pc >> 4) & 0x0F, lo = pc & 0x0F, F = 0x0F;
+    return Uint8Array.from([0xF0].concat(NUX_ID, [0x11, 0x10, 0, 0, 0, 0, 0, 0, 0, 0, 0x04, 0, 0, 0, edit ? 0 : 1, 0, 0, hi, lo, 0, 0, 0, 0x01, 0, 0, 0,
+      0x04, 0, 0], edit ? [F, F, F, F] : [hi, lo, 0, 0], [hi, lo, 0, 0, 0xF7]));
+  }
+  /** Morceau d'une reponse 12/<sub>/<third> -> { off (octets decodes), data } ou null si ce n'est pas un morceau bien forme. Les 12/18 de 62 octets (3e octet 00) n'en sont pas. */
+  function parseReadChunk(b, sub, third) {
+    if (!b || b.length < 16 || b[0] !== 0xF0 || b[b.length - 1] !== 0xF7 || !_isNux(b) || b[8] !== 0x12 || b[9] !== sub || b[10] !== third) return null;
+    const n = b.length - 14;
+    if (n < 2 || (n & 1)) return null;
+    const data = new Uint8Array(n >> 1);
+    for (let i = 0; i < data.length; i++) {
+      const hi = b[13 + 2 * i], lo = b[14 + 2 * i];
+      if (hi > 0x0F || lo > 0x0F) return null;
+      data[i] = (hi << 4) | lo;
+    }
+    return { off: b[11] | (b[12] << 7), data };
+  }
+  /** Recolle des morceaux (dans n'importe quel ordre, doublons permis) : { data (taille exacte) | null, have (octets contigus depuis 0) }. */
+  function assembleReadChunks(chunks, size) {
+    const cs = chunks.filter(Boolean).sort((a, b) => a.off - b.off);
+    const out = new Uint8Array(Math.max(size, 0));
+    let have = 0, over = false;
+    for (const c of cs) {
+      if (c.off > have) break;
+      for (let i = 0; i < c.data.length; i++) { if (c.off + i < size) out[c.off + i] = c.data[i]; else over = true; }
+      have = Math.max(have, c.off + c.data.length);
+    }
+    return { data: have === size && !over ? out : null, have };
+  }
+
   /** Bypass ON/OFF d'un slot (30 octets). */
   function buildBypassMsg(moduleIdx, active) {
     return Uint8Array.from([
@@ -525,5 +665,6 @@
     UsbError, slotToPc, pcToSlotName, nibbleEncode, buildDeviceHeader, prstToDevicePayload, buildSysexChunks,
     buildHandshakeSysex, selectMessages, MidiLink,
     buildParamUpdateMsg, buildPatchVolMsg, nibbleEncodeFloat, buildEffectChangeMsg, buildBypassMsg, parseEffectConfirm, parseNotify, parsePanelParam,
+    READ_SIZE, SYSTEM_READ_SIZE, buildSystemRead, buildSessionMsg, buildEditorOpen, buildPatchRead, parseReadChunk, assembleReadChunks,
   };
 });

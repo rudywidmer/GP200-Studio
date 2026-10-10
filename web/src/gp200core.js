@@ -300,6 +300,18 @@
     return (s + CHECKSUM_MAGIC) & 0xFFFF;
   }
 
+  // Lecture d'un patch sur la pedale (11/10 -> 7 morceaux 12/18/09 = 1176 octets) : ce sont les octets 40..1215 d'un .prst. L'en-tete (40 octets) et la fin
+  // viennent du modele, la somme de controle est recalculee. Le tampon d'edition de la pedale porte un 0 la ou un patch enregistre porte 1 (octet 4) : on remet 1.
+  const DEVICE_READ_SIZE = 1176, DEVICE_READ_OFF = 40;
+  function prstFromDeviceRead(data, template) {
+    if (!data || data.length !== DEVICE_READ_SIZE) throw new ValueError('Lecture pedale inattendue : ' + (data ? data.length : 0) + ' octets au lieu de ' + DEVICE_READ_SIZE);
+    const out = new Uint8Array(template);
+    out.set(data, DEVICE_READ_OFF);
+    if (out[DEVICE_READ_OFF + 4] === 0) out[DEVICE_READ_OFF + 4] = 1;
+    setU16BE(out, out.length - 2, checksum(out));
+    return out;
+  }
+
   function findBytes(data, pat) {
     outer: for (let i = 0; i + pat.length <= data.length; i++) {
       for (let j = 0; j < pat.length; j++) if (data[i + j] !== pat[j]) continue outer;
@@ -1221,7 +1233,7 @@
         await sleep(wait, o.signal);
         continue;
       }
-      throw new ApiError(res.status, msg, { retryAfter, credit });
+      throw new ApiError(res.status, msg, { retryAfter, credit, raw: raw.slice(0, 2000), url });
     }
   }
 
@@ -1430,6 +1442,7 @@
     checkNames, checkSections, checkDivergence, normalizePayload, extractJson,
     safeFilename, safeDirname, forcedPrompt, applyPatchVol, fillDefaultCab, generate,
     PyFloat, pyJsonDumps, decodedToSpec, plainSpec, diffPresets, refine, carryOver,
+    prstFromDeviceRead, DEVICE_READ_SIZE,
     crc32, buildZip,
     httpJson, callApi, listModels, openrouterModels, makePkce, openrouterAuthUrl, openrouterExchange, b64url,
   };
