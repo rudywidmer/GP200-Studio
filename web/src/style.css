@@ -552,3 +552,27 @@ input.num { width: 78px; min-height: 30px; padding: 2px 6px; text-align: right; 
 .sl-fillrow { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 12px; }
 .sl-fillrow .f { width: 104px; }
 .sl-fillrow .f select { width: 100%; }
+
+/* memoire de la pedale (colonne a gauche de « Mes presets », seulement quand la pedale est connectee) */
+.mem { padding: 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.mem .help { margin: 0; font-size: 12.5px; }
+.mem .note { margin: 0; }
+.mem .side-h h2 { font-size: 15px; }
+.mem-st { display: flex; align-items: center; gap: 8px; }
+.mem-list { position: relative; display: grid; align-content: start; gap: 1px; overflow: auto; flex: 1 1 auto; min-height: 0; max-height: 360px; }
+.mem-row { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; border: 1px solid transparent; background: none; color: var(--ink-dim); padding: 3px 8px; border-radius: 6px; font: inherit; font-size: 13.5px; cursor: pointer; }
+.mem-row:hover:not(:disabled) { background: var(--bg-hi); color: var(--ink); }
+.mem-row:disabled { cursor: default; opacity: .6; }
+.mem-row.on { background: var(--acc); color: var(--acc-ink); font-weight: 600; }
+.mem-row .ms { flex: none; width: 3.2em; font: 600 12px var(--font-mono); opacity: .8; }
+.mem-row .mn { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mem-row.wait .mn { opacity: .4; }
+.mem-row.stale .mn { opacity: .55; font-style: italic; }
+.mem-row.end { margin-bottom: 5px; }
+@media (min-width: 1100px) {
+  .shell.has-mem { max-width: 1810px; grid-template-columns: 230px 290px minmax(0, 1fr); grid-template-areas: "top top top" "mem side ask" "mem side rack" "mem side tabs" "stat stat stat"; }
+  .mem { grid-area: mem; overflow: hidden; min-height: 0; }
+  .mem-list { max-height: none; }
+}
+@media (min-width: 1100px) and (max-width: 1400px) { .shell.has-mem { grid-template-columns: 200px 250px minmax(0, 1fr); } }
+@media (max-width: 1099px) { .mem { order: 2; } }

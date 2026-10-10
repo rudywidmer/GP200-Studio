@@ -149,7 +149,7 @@
       this.loose = !!o.loose;
       this._frag = null;
       this._col = null;          // collecteur d'une lecture en cours (voir _ask) ; null = rien ne change dans la reception
-      this._reading = false;
+      this._reading = false; this._rq = null;
     }
 
     static supported(nav) {
@@ -352,11 +352,8 @@
     async readCurrentPatch(o) {
       o = o || {};
       const ms = o.timeoutMs || 1500;
-      if (!this.out || this.out.state === 'disconnected') throw new UsbError('noport', 'aucune sortie ouverte');
-      if (!this.inp) throw new UsbError('noread', "pas d'entree MIDI : lecture impossible");
-      if (this._reading) throw new UsbError('busy', 'une lecture est deja en cours');
-      this._reading = true;
-      try {
+      return this._serial(async () => {
+        this._readyToRead();
         const pc = (o.pc === undefined || o.pc === null) ? await this._readCurrentPc(ms) : o.pc;
         if (!(pc >= 0 && pc <= 255)) throw new UsbError('badread', 'numero de patch invalide');
         const same = d => !!d && (d[6] | (d[7] << 8)) === pc;
@@ -370,7 +367,32 @@
         }
         this.log('read_ok', pc, via);
         return { pc, data, via };
-      } finally { this._reading = false; }
+      });
+    }
+
+    /** Lit le patch ENREGISTRE dans l'emplacement `pc` (0..255) : 1176 octets. Lecture seule, rien n'est selectionne ni modifie sur la pedale. */
+    async readStoredPatch(pc, o) {
+      o = o || {};
+      if (!(pc >= 0 && pc <= 255) || Math.floor(pc) !== pc) throw new UsbError('badread', 'numero de patch invalide');
+      return this._serial(async () => {
+        this._readyToRead();
+        const data = await this._readBlock(buildPatchRead(pc, false), 0x18, 0x09, READ_SIZE, o.timeoutMs || 1500);
+        if ((data[6] | (data[7] << 8)) !== pc) throw new UsbError('badread', "le patch lu n'est pas celui demande");
+        return data;
+      });
+    }
+
+    /** Les lectures se font l'une apres l'autre (un seul collecteur de reponses a la fois) : celle-ci attend la fin de la precedente. */
+    async _serial(fn) {
+      const prev = this._rq || Promise.resolve();
+      let release; this._rq = new Promise(r => { release = r; });
+      await prev;
+      this._reading = true;
+      try { return await fn(); } finally { this._reading = false; release(); }
+    }
+    _readyToRead() {
+      if (!this.out || this.out.state === 'disconnected') throw new UsbError('noport', 'aucune sortie ouverte');
+      if (!this.inp) throw new UsbError('noread', "pas d'entree MIDI : lecture impossible");
     }
 
     async close() {

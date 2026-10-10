@@ -311,6 +311,12 @@
     setU16BE(out, out.length - 2, checksum(out));
     return out;
   }
+  /** Nom du patch dans une lecture pedale : 16 octets a partir de l'octet 28 (= 0x44 du .prst), arrete au premier 0, octets non imprimables -> « ? ». */
+  function deviceReadName(data) {
+    let n = '';
+    for (let i = 28; i < 44 && i < data.length; i++) { const c = data[i]; if (!c) break; n += c >= 32 && c < 127 ? String.fromCharCode(c) : '?'; }
+    return n.trim();
+  }
 
   function findBytes(data, pat) {
     outer: for (let i = 0; i + pat.length <= data.length; i++) {
@@ -1442,7 +1448,7 @@
     checkNames, checkSections, checkDivergence, normalizePayload, extractJson,
     safeFilename, safeDirname, forcedPrompt, applyPatchVol, fillDefaultCab, generate,
     PyFloat, pyJsonDumps, decodedToSpec, plainSpec, diffPresets, refine, carryOver,
-    prstFromDeviceRead, DEVICE_READ_SIZE,
+    prstFromDeviceRead, deviceReadName, DEVICE_READ_SIZE,
     crc32, buildZip,
     httpJson, callApi, listModels, openrouterModels, makePkce, openrouterAuthUrl, openrouterExchange, b64url,
   };

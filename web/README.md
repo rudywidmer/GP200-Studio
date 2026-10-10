@@ -89,6 +89,7 @@ node tests/run_tips_tests.js                                          # info-bul
 node tests/audit_tips.js --strict                                    # aucune info-bulle manquante dans l'interface (Chromium)
 node tests/e2e.js                                                  # Chromium, API simulées : génération, téléchargements, fournisseurs
 node tests/e2e_usb.js                                              # Chromium, fausse API Web MIDI
+node tests/e2e_read.js                                             # Chromium, fausse pédale qui rejoue la capture : lecture au branchement, changement de patch, débranchement / rebranchement, preset ouvert intact, pédale muette
 node tests/e2e_tune.js                                             # Chromium, faux pédalier + faux micro + horloge simulée
 node tests/fuzz_ui.js                                              # Chromium : tous les modèles de tous les slots + clics / doubles-clics sur le rack (aucune exception tolérée)
 node tests/e2e_refine.js                                           # Chromium, faux Gemini + fausse pédale : bibliothèque, ouvrir/glisser-déposer, affiner, CTRL, réglage en direct, mise en page
@@ -241,3 +242,23 @@ Un module à part (`web/src/gp200setlist.js` pour la logique, section « set lis
 - On demande d'abord le **tampon d'édition** (état actuel, réglages non enregistrés compris), puis, s'il manque ou désigne un autre patch, le patch enregistré. Si la pédale ne répond pas à la lecture simple, on refait l'ouverture de session de l'éditeur (`11/04 … 01 02`, `11/12`) puis on la referme (`02 02`) ; sinon, silence : rack vide et une ligne `read …` dans le rapport de diagnostic.
 - Vérifié sur la vraie pédale (patchs 64-A / 64-B, lecture ≈ 0,3 s après l'annonce).
 - Tests : `node tests/run_read_tests.js` (`tests/read_fixture.json` = extraits de la capture).
+
+## v0.27.1 — pédale débranchée puis rebranchée (ou éteinte puis rallumée)
+
+- Bug trouvé sur la vraie pédale : après un débranchement sauvage, la pédale remise sur un autre patch (63-C) puis rebranchée, le rack restait sur l'ancien (63-A). La lecture au branchement n'avait lieu que si le rack était **vide** ; avec un patch lu sur la pédale déjà affiché, elle était sautée.
+- Maintenant (`fetchWanted()` dans `app.js`) : au (re)branchement, la page relit le patch si le rack est vide **ou** s'il montre déjà un patch lu sur la pédale ; celui-ci est alors remplacé sur place (une seule entrée dans la liste). Un preset **ouvert, généré ou affiné** n'est jamais remplacé. Si la pédale n'est pas encore prête (elle redémarre), une seconde tentative a lieu 2,5 s plus tard.
+- Test : `node tests/e2e_read.js` (scénario 3 : débranchement, pédale remise sur un autre patch, rebranchement ; scénario 5 : un preset ouvert reste affiché). Le scénario 3 échoue sur la v0.27.
+
+
+## v0.28 — Mémoire de la pédale (colonne de gauche)
+
+Quand la pédale est reconnue, une colonne **« Mémoire de la pédale »** s'ajoute à gauche de « Mes presets » : les 256 emplacements (01-A … 64-D) avec le nom du patch enregistré dedans.
+
+- **Lecture seule.** Chaque nom vient de la requête `11/10` (patch enregistré), la même que celle de l'éditeur Valeton au démarrage (≈ 6 s pour les 256). Aucune écriture (`11/1c`, `11/0a`) n'est jamais envoyée.
+- **Clic sur un emplacement** : la pédale le charge (Bank Select + Program Change, comme au pied), puis la page le lit et l'affiche dans le rack. C'est le seul message envoyé en dehors des lectures.
+- **Chargement automatique** : démarre quelques secondes après le branchement, en commençant par le patch courant, mais seulement une fois la pédale connue (patch courant lu) ou le slot de travail confirmé : rien n'ouvre le port avant. Si la toute première lecture reste sans réponse, la lecture automatique est abandonnée (le bouton ↻ reste disponible).
+- **Noms périmés** : au rebranchement les noms déjà lus sont gardés mais grisés (« à relire ») puis relus ; un emplacement écrasé par la page (injection, set list) est relu aussitôt.
+- **Bouton ↻** : relit toute la mémoire. Une lecture est toujours mise en attente tant qu'un envoi, un réglage de volume ou la lecture du patch courant est en cours.
+- **Disposition** : 3 colonnes à partir de 1100 px (la page s'élargit à 1810 px au lieu de rétrécir la zone centrale) ; en dessous, la colonne passe sous le rack.
+- **Diagnostic** : « Signaler un problème » contient les lignes `memoire : N emplacements lus` ou `memoire : interrompue …`.
+- Tests : `tests/e2e_read.js` (pédale simulée : noms, clic, lecture, défilement, 1200/800 px), `run_read_tests.js` (`readStoredPatch`, `deviceReadName`).

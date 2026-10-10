@@ -187,7 +187,7 @@
       live_noconf: "⚠ La pédale n'a pas confirmé le chargement de : %s. Vérifie l'effet (ou relance « Envoyer ce module »).",
       pflag_tip: "Ce réglage ne s'entend pas en direct : la pédale ne le prend en compte qu'au chargement du preset (enregistre-le ou envoie-le depuis l'onglet Pédale).",
       lvl_line: 'Niveau mesuré (réglages par défaut) : %s dBFS, soit %s dB par rapport à la médiane (%s dBFS).',
-      render_err: "Erreur d'affichage.", reload: 'Recharger la page', diag_link: 'Signaler un problème', diag_link_tip: "Prépare un rapport de diagnostic que tu peux copier (rien n'est envoyé automatiquement).", diag_title: 'Un problème est survenu', diag_sub: "Rien n'est envoyé automatiquement. Copie le rapport (sans clé API) et colle-le dans un message ou une « issue » GitHub.", diag_copy: 'Copier le rapport', diag_copied: 'Copié ✓', diag_copy_ko: 'Copie impossible : sélectionne le texte ci-dessous.', diag_details: 'Détails', diag_hide: 'Masquer', diag_close: 'Fermer', pr_read: 'Lire le patch en cours', pr_read_tip: "Lit sur la pédale le patch actuellement chargé et l'affiche dans le rack (rien n'est écrit sur la pédale).", pr_read_help: "Au branchement, la page lit déjà le patch en cours. Ce bouton le relit si tu veux repartir de l'état actuel de la pédale.", pr_busy: 'Lecture de la pédale…', pr_done: 'Patch lu sur la pédale : %s (%s).', pr_fail: 'Lecture de la pédale impossible : %s', pr_timeout: "la pédale n'a pas répondu.", pr_noread: "pas d'entrée MIDI (lecture impossible).", tune_audio_refresh: 'Actualiser la liste', tune_audio_pick: "Entrée audio", tune_audio_found: "Entrée « GP-200 » détectée et sélectionnée.",
+      render_err: "Erreur d'affichage.", reload: 'Recharger la page', diag_link: 'Signaler un problème', diag_link_tip: "Prépare un rapport de diagnostic que tu peux copier (rien n'est envoyé automatiquement).", diag_title: 'Un problème est survenu', diag_sub: "Rien n'est envoyé automatiquement. Copie le rapport (sans clé API) et colle-le dans un message ou une « issue » GitHub.", diag_copy: 'Copier le rapport', diag_copied: 'Copié ✓', diag_copy_ko: 'Copie impossible : sélectionne le texte ci-dessous.', diag_details: 'Détails', diag_hide: 'Masquer', diag_close: 'Fermer', pr_read: 'Lire le patch en cours', pr_read_tip: "Lit sur la pédale le patch actuellement chargé et l'affiche dans le rack (rien n'est écrit sur la pédale).", pr_read_help: "Au branchement, la page lit déjà le patch en cours. Ce bouton le relit si tu veux repartir de l'état actuel de la pédale.", pr_busy: 'Lecture de la pédale…', pr_done: 'Patch lu sur la pédale : %s (%s).', pr_fail: 'Lecture de la pédale impossible : %s', pr_timeout: "la pédale n'a pas répondu.", pr_noread: "pas d'entrée MIDI (lecture impossible).", mem_title: 'Mémoire de la pédale', mem_sub: "Un clic sélectionne l'emplacement sur la pédale (comme au pied) et l'affiche. Rien n'est écrit.", mem_pick: "Sélectionner %s sur la pédale et l'afficher", mem_refresh: 'Relire les noms des 256 emplacements de la pédale', mem_count: 'Emplacements dont le nom a été lu', mem_loading: 'Lecture des noms… %s/%s', mem_err: 'Lecture interrompue : %s', tune_audio_refresh: 'Actualiser la liste', tune_audio_pick: "Entrée audio", tune_audio_found: "Entrée « GP-200 » détectée et sélectionnée.",
       tune_audio_guess: "Aucune entrée nommée « GP-200 » : choisis celle de la pédale dans la liste (la pédale apparaît comme une carte son USB).",
       tune_audio_denied: "L'accès à l'entrée audio a été refusé. Clique sur le cadenas à gauche de l'adresse, autorise le micro, puis réessaie.",
       tune_audio_none: "Aucune entrée audio trouvée. Vérifie que la pédale est branchée et allumée.",
@@ -397,7 +397,7 @@
       live_noconf: '⚠ The pedal did not confirm loading: %s. Check the effect (or run « Send this module » again).',
       pflag_tip: 'This setting is not audible live: the pedal only applies it when the preset is loaded (save it or send it from the Pedal tab).',
       lvl_line: 'Measured level (default settings): %s dBFS, %s dB versus the median (%s dBFS).',
-      render_err: 'Display error.', reload: 'Reload the page', diag_link: 'Report a problem', diag_link_tip: 'Prepares a diagnostic report you can copy (nothing is sent automatically).', diag_title: 'Something went wrong', diag_sub: 'Nothing is sent automatically. Copy the report (no API key in it) and paste it in a message or a GitHub issue.', diag_copy: 'Copy the report', diag_copied: 'Copied ✓', diag_copy_ko: 'Copy failed: select the text below.', diag_details: 'Details', diag_hide: 'Hide', diag_close: 'Close', pr_read: 'Read the current patch', pr_read_tip: 'Reads the patch currently loaded on the pedal and shows it in the rack (nothing is written to the pedal).', pr_read_help: "The page already reads the current patch when the pedal is connected. This button reads it again if you want to start from the pedal's current state.", pr_busy: 'Reading the pedal…', pr_done: 'Patch read from the pedal: %s (%s).', pr_fail: 'Could not read the pedal: %s', pr_timeout: 'the pedal did not answer.', pr_noread: 'no MIDI input (reading is not possible).', tune_audio_refresh: 'Refresh the list', tune_audio_pick: 'Audio input', tune_audio_found: 'A “GP-200” input was found and selected.',
+      render_err: 'Display error.', reload: 'Reload the page', diag_link: 'Report a problem', diag_link_tip: 'Prepares a diagnostic report you can copy (nothing is sent automatically).', diag_title: 'Something went wrong', diag_sub: 'Nothing is sent automatically. Copy the report (no API key in it) and paste it in a message or a GitHub issue.', diag_copy: 'Copy the report', diag_copied: 'Copied ✓', diag_copy_ko: 'Copy failed: select the text below.', diag_details: 'Details', diag_hide: 'Hide', diag_close: 'Close', pr_read: 'Read the current patch', pr_read_tip: 'Reads the patch currently loaded on the pedal and shows it in the rack (nothing is written to the pedal).', pr_read_help: "The page already reads the current patch when the pedal is connected. This button reads it again if you want to start from the pedal's current state.", pr_busy: 'Reading the pedal…', pr_done: 'Patch read from the pedal: %s (%s).', pr_fail: 'Could not read the pedal: %s', pr_timeout: 'the pedal did not answer.', pr_noread: 'no MIDI input (reading is not possible).', mem_title: 'Pedal memory', mem_sub: 'One click selects the slot on the pedal (like a footswitch) and shows it. Nothing is written.', mem_pick: 'Select %s on the pedal and show it', mem_refresh: 'Read the names of the 256 pedal slots again', mem_count: 'Slots whose name has been read', mem_loading: 'Reading names… %s/%s', mem_err: 'Reading interrupted: %s', tune_audio_refresh: 'Refresh the list', tune_audio_pick: 'Audio input', tune_audio_found: 'A “GP-200” input was found and selected.',
       tune_audio_guess: 'No input named “GP-200”: pick the pedal in the list (it shows up as a USB sound card).',
       tune_audio_denied: 'Audio input access was refused. Click the padlock left of the address, allow the microphone, then try again.',
       tune_audio_none: 'No audio input found. Check that the pedal is plugged in and on.',
@@ -471,6 +471,8 @@
     sl: { items: [], start: { bank: 1, letter: 'A' }, confirm: false, result: null, fillMsg: '' },     // set list : [{ f (fichier de la bibliotheque), name, bank, letter }]
     // lecture du patch charge sur la pedale (voir pedalFetch) : busy = lecture en cours, auto = lecture au branchement, t/rt = minuteries
     pr: { busy: false, auto: true, t: null, rt: null, last: null },
+    // memoire de la pedale (colonne de gauche) : items[pc] = { name, stale?, err? } ou null (pas encore lu) ; busy = lecture des noms en cours
+    mem: { items: Array.from({ length: 256 }, () => null), busy: false, auto: true, err: '', t: null, done: 0, todo: 0, shownPc: null, follow: false },
     tune: { open: false, audio: { state: 'idle', devs: [], id: '', guessed: false, err: '' }, sel: null, bank: null, letter: null, confirm: false, run: null, msg: null },
   };
   function load() {
@@ -1007,13 +1009,14 @@
   function render() {
     const app = document.getElementById('app');
     const q = sel => document.querySelector(sel);
-    const keep = { y: window.scrollY, side: q('.side') ? q('.side').scrollTop : 0, tab: q('.popbody') ? q('.popbody').scrollTop : (q('.tabbody') ? q('.tabbody').scrollTop : 0), tabName: s.tab };
+    const keep = { y: window.scrollY, side: q('.side') ? q('.side').scrollTop : 0, mem: q('.mem-list') ? q('.mem-list').scrollTop : 0, tab: q('.popbody') ? q('.popbody').scrollTop : (q('.tabbody') ? q('.tabbody').scrollTop : 0), tabName: s.tab };
     normSel();
     document.documentElement.lang = s.lang;
     if (pedalFound() && !s.inj.set && !s.inj.asked) { s.inj.open = true; s.inj.asked = true; }   // 1re connexion : on demande le slot avant tout
     let shell, modal, pop, slotd;
     try {
-      shell = h('div', { class: 'shell' }, topbar(), askZone(), sidePanel(), rackZone(), tabsZone(), statusbar());
+      const mem = memPanel();
+      shell = h('div', { class: 'shell' + (mem ? ' has-mem' : '') }, topbar(), askZone(), sidePanel(), mem, rackZone(), tabsZone(), statusbar());
       pop = popup();
       slotd = slotDialog();
       modal = setupModal();
@@ -1031,6 +1034,8 @@
     if (modal) app.appendChild(modal);
     window.scrollTo(0, keep.y);
     if (q('.side')) q('.side').scrollTop = keep.side;
+    if (q('.mem-list')) q('.mem-list').scrollTop = keep.mem;
+    memScroll();
     if ((q('.popbody') || q('.tabbody')) && keep.tabName === s.tab) (q('.popbody') || q('.tabbody')).scrollTop = keep.tab;
     const lb = document.getElementById('logbox'); if (lb) paintLog(lb);
     paintTune();
@@ -1553,7 +1558,7 @@
             ['A', 'B', 'C', 'D'].map(l => h('option', { value: l, selected: l === j.letter }, l)))),
           h('label', { class: 'check' }, h('input', { type: 'checkbox', id: 'inj-auto', checked: j.auto, onchange: e => { j.auto = e.target.checked; } }), T('inj_auto')),
           h('label', { class: 'check' }, h('input', { type: 'checkbox', id: 'listen-chk', checked: s.listen.want, onchange: e => { s.listen.want = e.target.checked; if (!s.listen.want) { s.listen.pc = null; s.listen.desync = false; s.listen.touched = false; liveStop(); } save(); render(); } }), T('listen_chk')),
-          h('button', { type: 'button', class: 'btn small go', id: 'inj-ok', onclick: () => { j.set = true; j.open = false; save(); render(); if (j.auto) scheduleInject(); } }, 'OK'))));
+          h('button', { type: 'button', class: 'btn small go', id: 'inj-ok', onclick: () => { j.set = true; j.open = false; save(); render(); if (j.auto) scheduleInject(); memSoon(2500); } }, 'OK'))));
   }
   function injectPanel(file) {
     const j = s.inj, u = s.usb, lines = [];
@@ -1778,6 +1783,7 @@
         if ((opt.initial || opt.manual) && !s.notice) s.notice = { kind: 'ok', text: T('pr_done', name || '?', slot) };
       }
       pr.last = { pc: r.pc, t: Date.now() };
+      if (s.mem.items.some(it => !it || it.stale)) memSoon(1200);                       // la pedale a repondu : la liste des noms peut suivre
       dg('read', 'ok ' + slot + ' via=' + r.via + ' name=' + name);
       changed = true;
     } catch (e) {
@@ -1792,15 +1798,18 @@
     }
     if (retry) {
       clearTimeout(pr.t);
-      pr.t = setTimeout(() => { pr.t = null; if (opt.initial ? (!s.res && pedalFound() && pr.auto) : (fromPedal() && pedalFound())) pedalFetch(Object.assign({}, opt, { retried: true })); }, retry);
+      pr.t = setTimeout(() => { pr.t = null; if (opt.initial ? fetchWanted() : (fromPedal() && pedalFound())) pedalFetch(Object.assign({}, opt, { retried: true })); }, retry);
     }
     return changed;
   }
-  /** Lecture au branchement (0,7 s apres, le temps que la pedale soit prete) : seulement si rien n'est affiche. */
+  /** Lecture au branchement voulue : rien n'est affiche, ou le rack montre deja un patch lu sur la pedale (pedale debranchee puis rebranchee, peut-etre sur
+   *  un autre patch : on relit et on remplace sur place). Un preset ouvert ou genere n'est jamais remplace. */
+  const fetchWanted = () => (!s.res || fromPedal()) && pedalFound() && s.pr.auto;
+  /** Lecture au branchement (0,7 s apres, le temps que la pedale soit prete). */
   function scheduleFetch() {
     const pr = s.pr;
     clearTimeout(pr.t);
-    pr.t = setTimeout(() => { pr.t = null; if (!s.res && pedalFound() && pr.auto) pedalFetch({ initial: true }); }, 700);
+    pr.t = setTimeout(() => { pr.t = null; if (fetchWanted()) pedalFetch({ initial: true, replace: true }); }, 700);
   }
   /** La pedale a change de patch alors que le rack montre la pedale : relit le nouveau (0,25 s de calme ; reessaie tant qu'un envoi ou une lecture est en cours). */
   function pedalRefetchSoon(pc) {
@@ -1811,10 +1820,123 @@
     const go = () => {
       pr.rt = null;
       if (!fromPedal() || !pedalFound()) return;
+      if (pr.last && pr.last.pc === pc && Date.now() - pr.last.t < 2000) return;                          // lu entre-temps (selection depuis la memoire de la pedale, par exemple)
       if ((pr.busy || s.inj.busy || s.usb.sending || s.ed.busy) && ++tries < 20) { pr.rt = setTimeout(go, 300); return; }
       pedalFetch({ pc, replace: true });
     };
     pr.rt = setTimeout(go, 250);
+  }
+
+  // ------------------------------------------- memoire de la pedale : les 256 emplacements (colonne de gauche), LECTURE SEULE
+  // Le nom de chaque emplacement est lu dans le patch enregistre (requete 11/10, comme l'editeur Valeton qui lit ses 256 patchs au demarrage : environ 6 s).
+  // Un clic sur un emplacement le selectionne sur la pedale (Bank Select + Program Change, comme au pied), puis le lit et l'affiche. Rien n'est jamais ecrit.
+  const memName = pc => USB.pcToSlotName(pc);
+  const memTodo = () => { const r = []; s.mem.items.forEach((it, pc) => { if (!it || it.stale) r.push(pc); }); return r; };
+  function memInvalidate() { s.mem.items.forEach(it => { if (it) it.stale = true; }); }
+  function memStale(pc) { const m = s.mem; m.items[pc] = Object.assign({ name: '' }, m.items[pc], { stale: true }); memSoon(1500); }
+  function memSoon(ms) { const m = s.mem; clearTimeout(m.t); m.t = setTimeout(() => { m.t = null; memLoad({}); }, ms); }
+  /** A chaque (re)branchement : les noms deja lus sont gardes mais marques « a relire » (la pedale a pu changer entre-temps). */
+  function scheduleMem() { memInvalidate(); memSoon(2500); }
+  /** Lit les noms manquants ou a relire, en commencant par le patch courant ; un envoi (injection, set list, harmonisation) ou la lecture du patch courant passent avant. */
+  async function memLoad(opt) {
+    opt = opt || {};
+    const m = s.mem, u = s.usb, ed = s.ed;
+    if (m.busy || !pedalFound() || !u.link || (!m.auto && !opt.manual)) return;
+    if (!opt.manual && !s.inj.set && !s.pr.last) return;                              // lecture automatique : seulement une fois la pedale connue (patch courant lu) ou le slot de travail confirme ; rien n'ouvre le port avant
+    if (opt.all) memInvalidate();
+    const start = s.listen.pc === null ? 0 : s.listen.pc;
+    const todo = memTodo().sort((a, b) => ((a - start + 256) % 256) - ((b - start + 256) % 256));
+    if (!todo.length) { if (opt.manual) render(); return; }
+    m.busy = true; m.err = ''; m.done = 0; m.todo = todo.length;
+    if (opt.manual) render();
+    let tmp = false, bad = 0;
+    try {
+      const link = u.link;
+      for (let k = 0; k < todo.length; k++) {
+        const pc = todo[k];
+        for (let i = 0; u.sending || s.inj.busy || tuneActive() || s.pr.busy; i++) {
+          if (i > 150) throw new USB.UsbError('busy', 'pedale occupee');
+          await sleep(200);
+        }
+        if (!pedalFound() || u.link !== link) throw new USB.UsbError('gone', 'pedale debranchee');
+        if (!ed.live && !tmp) {                                                        // la liaison a pu etre fermee par un envoi
+          if (linkReady()) { if (!(await liveEnsure())) throw new USB.UsbError('noport', 'port MIDI non ouvert'); }
+          else if (opt.manual) { link.select(u.outId); await link.open(); tmp = true; await sleep(IS_ANDROID ? 700 : 300); }
+          else throw new USB.UsbError('noport', 'liaison directe coupee');
+        }
+        let ok = false;
+        for (let a = 0; a < 2 && !ok; a++) {
+          try {
+            const data = await link.readStoredPatch(pc, { timeoutMs: IS_ANDROID ? 3000 : 1500 });
+            m.items[pc] = { name: G.deviceReadName(data) }; ok = true; bad = 0;
+          } catch (e) { if (!e || (e.code !== 'timeout' && e.code !== 'badread')) throw e; }
+        }
+        if (!ok) {
+          if (!opt.manual && m.done === 0) { m.auto = false; dg('read', 'memoire : la pedale ne repond pas, lecture automatique abandonnee'); break; }      // 1re lecture sans reponse : on n'insiste pas (le bouton ↻ reste la)
+          m.items[pc] = { name: '', err: true };
+          if (++bad >= 4) throw new USB.UsbError('timeout', 'plusieurs lectures sans reponse');
+        }
+        m.done++;
+        if (m.done % 8 === 0) { listenRender(); if (!tmp && ed.live) liveTouch(); }
+      }
+      if (m.done) dg('read', 'memoire : ' + m.done + ' emplacements lus');
+    } catch (e) {
+      m.err = readFailText(e);
+      dg('read', 'memoire : interrompue ' + ((e && e.code) || '') + ' ' + String((e && e.message) || e).slice(0, 120));
+    } finally {
+      if (tmp) { try { await u.link.close(); } catch (e) { /* rien */ } } else if (ed.live) liveTouch();
+      m.busy = false;
+      render();
+    }
+    if (!m.err && memTodo().length) memSoon(800);                                    // des emplacements ont ete reecrits pendant la lecture
+  }
+  /** Clic sur un emplacement : la pedale le charge (comme au pied), puis on le lit et on l'affiche (remplace le patch lu precedent, sinon s'ajoute a la liste). */
+  async function memPick(pc) {
+    const u = s.usb, ed = s.ed;
+    if (!pedalFound() || u.sending || s.inj.busy || tuneActive() || s.pr.busy) return;
+    const bank = (pc >> 2) + 1, letter = 'ABCD'[pc & 3];
+    let tmp = false;
+    try {
+      if (!ed.live) {
+        if (linkReady()) { if (!(await liveEnsure())) return; }
+        else { u.link.select(u.outId); await u.link.open(); tmp = true; await sleep(IS_ANDROID ? 700 : 300); }
+      }
+      u.link.selectPreset(bank, letter);
+      dg('read', 'selection ' + memName(pc));
+      if (tmp) await sleep(100);
+    } catch (e) { s.notice = { kind: 'err', text: T('pr_fail', readFailText(e)) }; render(); return; }
+    finally { if (tmp) { try { await u.link.close(); } catch (e) { /* rien */ } } else if (ed.live) liveTouch(); }
+    await sleep(300);                                                                // la pedale charge le patch
+    pedalFetch({ pc, show: true, replace: true, manual: true });
+  }
+  /** Centre le patch courant dans la liste (a l'apparition de la colonne et quand la pedale change de patch). */
+  function memScroll() {
+    const m = s.mem;
+    if (!m.follow) return;
+    const l = document.getElementById('mem-list'), r = l && l.querySelector('.mem-row.on');
+    if (!l || !r) return;
+    m.follow = false;
+    l.scrollTop = Math.max(0, r.offsetTop - (l.clientHeight - r.offsetHeight) / 2);
+  }
+  function memPanel() {
+    if (!pedalFound()) return null;
+    const m = s.mem, L = s.listen, u = s.usb, n = m.items.filter(Boolean).length;
+    if (m.shownPc !== L.pc) { m.shownPc = L.pc; m.follow = true; }
+    const locked = !!u.sending || s.inj.busy || s.pr.busy;
+    const rows = m.items.map((it, pc) => {
+      const on = L.pc === pc;
+      return h('button', { type: 'button', class: 'mem-row' + (on ? ' on' : '') + (it && it.stale ? ' stale' : '') + (it ? '' : ' wait') + (pc % 4 === 3 ? ' end' : ''),
+        'data-pc': String(pc), 'aria-pressed': String(on), disabled: locked, title: T('mem_pick', memName(pc)), onclick: () => memPick(pc) },
+        h('span', { class: 'ms', text: memName(pc) }), h('span', { class: 'mn', text: it ? (it.name || '–') : '…' }));
+    });
+    return h('aside', { class: 'mem zone', 'aria-label': T('mem_title') },
+      h('div', { class: 'side-h' }, h('h2', { text: T('mem_title') }),
+        h('button', { type: 'button', class: 'btn small ghost x-close', id: 'mem-refresh', title: T('mem_refresh'), 'aria-label': T('mem_refresh'), disabled: m.busy || locked,
+          onclick: () => memLoad({ manual: true, all: true }) }, '↻')),
+      h('div', { class: 'mem-st' }, h('span', { class: 'count', title: T('mem_count'), text: n + '/256' }), m.busy ? h('span', { class: 'help', text: T('mem_loading', m.done, m.todo) }) : null),
+      h('p', { class: 'help', text: T('mem_sub') }),
+      m.err ? h('p', { class: 'note err', role: 'status', text: T('mem_err', m.err) }) : null,
+      h('div', { class: 'mem-list', id: 'mem-list' }, rows));
   }
 
   /** Tient le port ouvert pour entendre la pedale (sinon il se referme apres 15 s d'inactivite) et le rouvre apres une injection. */
@@ -2055,8 +2177,10 @@
       link.onnotify = onPedalEvent; link.onrx = onPedalRaw;
       const sendParam0 = link.sendParam.bind(link);
       link.sendParam = (mod, par, val, prst) => { s.ed.psent.set(mod * 16 + par, Date.now()); return sendParam0(mod, par, val, prst); };   // garde anti-echo des reglages tournes en facade
-      link.onchange = () => { const had = !!u.outId; pedalRefresh(); diagPorts('change'); if (!had && u.outId) { scheduleInject(); scheduleFetch(); } if (s.ed.live && !u.outId) { liveStop(); s.ed.err = T('ed_live_ko', T('e_pedal_gone')); } if (!u.sending) render(); };
-      u.link = link; u.state = 'ready'; pedalRefresh(); diagPorts('connect'); scheduleInject(); scheduleFetch();
+      const push0 = link.pushPreset.bind(link);
+      link.pushPreset = async (bank, letter, prst, o) => { try { return await push0(bank, letter, prst, o); } finally { try { memStale(USB.slotToPc(bank, letter)); } catch (e) { /* rien */ } } };   // un emplacement ecrit : son nom est a relire
+      link.onchange = () => { const had = !!u.outId; pedalRefresh(); diagPorts('change'); if (!had && u.outId) { scheduleInject(); scheduleFetch(); scheduleMem(); } if (s.ed.live && !u.outId) { liveStop(); s.ed.err = T('ed_live_ko', T('e_pedal_gone')); } if (!u.sending) render(); };
+      u.link = link; u.state = 'ready'; pedalRefresh(); diagPorts('connect'); scheduleInject(); scheduleFetch(); scheduleMem();
     } catch (e) {
       u.state = /denied|security|not allowed|permission/i.test(String((e && e.name) + ' ' + (e && e.message))) ? 'denied' : 'error';
       u.error = usbErr(e);
