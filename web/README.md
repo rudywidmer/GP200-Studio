@@ -262,3 +262,11 @@ Quand la pédale est reconnue, une colonne **« Mémoire de la pédale »** s'aj
 - **Disposition** : 3 colonnes à partir de 1100 px (la page s'élargit à 1810 px au lieu de rétrécir la zone centrale) ; en dessous, la colonne passe sous le rack.
 - **Diagnostic** : « Signaler un problème » contient les lignes `memoire : N emplacements lus` ou `memoire : interrompue …`.
 - Tests : `tests/e2e_read.js` (pédale simulée : noms, clic, lecture, défilement, 1200/800 px), `run_read_tests.js` (`readStoredPatch`, `deviceReadName`).
+
+## v0.28.1 — Gemini : repli sur « flash-lite » en cas de surcharge, liste de modèles nettoyée
+
+Signalé avec une clé Gemini **gratuite** : `gemini-3.5-flash` renvoie souvent 503 (« high demand », les clés gratuites passent après les payantes) et la liste proposait des modèles inutilisables par l'appli.
+
+- **Repli sur 503 (Gemini uniquement).** Si le modèle répond encore 503 après les 2 relances habituelles (4 s puis 16 s), la génération en cours bascule **une seule fois** sur un modèle « flash-lite » pris dans la liste courante (stable avant preview, le plus récent d'abord ; avec la liste intégrée : `gemini-3.1-flash-lite`). Le journal indique « modèle remplacé par … ». Le modèle choisi dans les réglages n'est pas modifié ; la correction automatique qui suit reste sur le modèle de repli. Aucun repli si le modèle choisi est déjà un flash-lite, si le repli est aussi surchargé (l'erreur 503 habituelle s'affiche) ou pour une autre erreur (429, clé refusée…). **OpenRouter et Anthropic ne changent jamais de modèle.**
+- **Liste de modèles Gemini filtrée** (`geminiUsable`) : seuls les `gemini-…` qui génèrent du texte sont proposés. Sont retirés Gemma, Antigravity (modèle d'agent : « Developer instruction / JSON mode is not enabled »), embedding, voix (TTS), image, temps réel (live), audio, robotique, usage d'ordinateur, deep research. Si le filtre ne laisse rien, la liste intégrée est utilisée. Le modèle déjà choisi reste affiché même s'il n'est plus dans la liste.
+- Tests : `node tests/run_fallback_tests.js` (repli : Gemini seul, une seule bascule, autres fournisseurs inchangés) et `node tests/run_modelfilter_tests.js` (filtre de la liste, liste vide, autres fournisseurs inchangés).

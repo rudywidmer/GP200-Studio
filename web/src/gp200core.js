@@ -1245,6 +1245,14 @@
 
   function keyOf(cfg) { return String(cfg.apiKey || '').trim(); }
 
+  /** Modele de repli pour un 503 : un « flash-lite » de la liste fournie (cfg.fallbackModels), stable avant preview, recent avant ancien. */
+  function geminiLiteFallback(cfg) {
+    const rank = m => /preview|exp|latest/i.test(m) ? 1 : 0;
+    const c = (cfg.fallbackModels || []).filter(m => /flash-lite/i.test(m) && m !== cfg.model);
+    c.sort((a, b) => (rank(a) - rank(b)) || (a < b ? 1 : a > b ? -1 : 0));
+    return c[0] || null;
+  }
+
   async function callGemini(cfg, system, msgs, ctx) {
     const body = {
       system_instruction: { parts: [{ text: system }] },
@@ -1254,8 +1262,20 @@
     // le grounding Google Search est incompatible avec le mode JSON force
     if (cfg.webSearch) body.tools = [{ google_search: {} }];
     else body.generationConfig.responseMimeType = 'application/json';
-    const d = await httpJson(GEMINI_BASE + '/models/' + cfg.model + ':generateContent', body,
-      { 'content-type': 'application/json', 'x-goog-api-key': keyOf(cfg) }, ctx);
+    const hdr = { 'content-type': 'application/json', 'x-goog-api-key': keyOf(cfg) };
+    let d;
+    try {
+      d = await httpJson(GEMINI_BASE + '/models/' + cfg.model + ':generateContent', body, hdr, ctx);
+    } catch (e) {
+      // Modele surcharge (503 persistant apres les relances de httpJson, frequent avec une cle gratuite) :
+      // on bascule UNE fois sur un modele « flash-lite » pour cette generation (cfg est propre a la requete,
+      // le modele choisi dans les reglages n'est pas modifie). Gemini uniquement.
+      const fb = e instanceof ApiError && e.status === 503 ? geminiLiteFallback(cfg) : null;
+      if (!fb) throw e;
+      if (ctx.log) ctx.log('model_switch', fb);
+      cfg.model = fb;
+      d = await httpJson(GEMINI_BASE + '/models/' + fb + ':generateContent', body, hdr, ctx);
+    }
     const u = d.usageMetadata || {};
     ctx.log('tokens', u.promptTokenCount, u.candidatesTokenCount);
     const cands = d.candidates || [];
@@ -1381,6 +1401,17 @@
     return ['openrouter/free'].concat(scored.slice(0, 20).map(s => s[2]));
   }
 
+  /**
+   * Modeles Gemini utilisables pour generer du JSON texte avec consignes systeme.
+   * L'API liste aussi Gemma, Antigravity (agent), l'embedding, la voix (TTS), l'image,
+   * le temps reel (live), la robotique, l'usage d'ordinateur... : tous refuses ici
+   * (« Developer instruction / JSON mode is not enabled », ou sortie qui n'est pas du texte).
+   */
+  function geminiUsable(name) {
+    return /^gemini-/i.test(name)
+      && !/embed|tts|image|imagen|live|audio|robotics|computer-use|deep-research|aqa|veo|learnlm|vision|transcri|speech/i.test(name);
+  }
+
   /** Interroge le fournisseur pour la liste reelle des modeles (les noms changent vite). */
   async function listModels(cfg, fallback, ctx) {
     ctx = ctx || {};
@@ -1396,8 +1427,10 @@
           Object.assign({ retries: 0 }, ctx));
         const out = (d.models || [])
           .filter(m => (m.supportedGenerationMethods || m.supportedActions || []).indexOf('generateContent') >= 0)
-          .map(m => String(m.name).split('/').pop());
-        return Array.from(new Set(out)).sort();
+          .map(m => String(m.name).split('/').pop())
+          .filter(geminiUsable);
+        // liste vide apres filtrage (nommage inattendu) : on garde la liste integree plutot que rien
+        return out.length ? Array.from(new Set(out)).sort() : fallback;
       }
       if (cfg.provider === 'anthropic') {
         const d = await httpJson('https://api.anthropic.com/v1/models?limit=100', undefined, {

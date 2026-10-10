@@ -713,6 +713,8 @@
       provider: s.provider, apiKey: curKey(), model: curModel(), webSearch: !!s.web && s.provider !== 'openrouter',
       maxRetries: 2, pickup: s.pickup, lang: s.lang, maxTokens: 16000,
     };
+    // repli sur 503 : Gemini seulement (modeles « flash-lite » de la liste courante)
+    if (s.provider === 'gemini') cfg.fallbackModels = s.modelList.gemini || provInfo('gemini').models;
     dg('ai', 'request: provider=' + cfg.provider + ' model=' + cfg.model + ' web=' + cfg.webSearch + ' key=' + (cfg.apiKey ? 'set' : 'none'));
     const ctx = {
       signal: controller.signal, timeout: 240000,
