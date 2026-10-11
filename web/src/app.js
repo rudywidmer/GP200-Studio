@@ -1,20 +1,25 @@
 /* GP-200 Studio Web -- interface. Tout le moteur est dans gp200core.js (global GP200). */
 (function () {
   'use strict';
-  const G = self.GP200;
-  const USB = self.GP200USB;
+  const G200 = self.GP200;
+  const USB200 = self.GP200USB;
   const LUFS = self.GP200LUFS;
-  const TUNE = self.GP200TUNE;
-  const SL = self.GP200SETLIST;
-  const TIPS = self.GP200TIPS;
+  const TUNE200 = self.GP200TUNE;
+  const SL200 = self.GP200SETLIST;
+  const MM = self.MEMMOVE;                    // reorganisation de la memoire de la pedale (GP-200)
+  const SLSONG = self.SLSONG;                 // emplacements par chanson (GP-200 : banques x lettres)
+  const TIPS200 = self.GP200TIPS;
+  // Moteur de la pedale active. GP-200 : les objets ci-dessus, inchanges. GP-150 / GP-180 : une couche separee (gp150*.js), branchee par setProfile()
+  // seulement quand ce modele est reconnu ou choisi ; tout le reste du fichier lit ces six noms sans savoir lequel est actif.
+  let G = G200, USB = USB200, SL = SL200, TUNE = TUNE200, TIPS = TIPS200;
   const B = JSON.parse(document.getElementById('gp200-bundle').textContent);
-  const tb = new G.Tables(B.tables);
-  const template = Uint8Array.from(atob(B.template), c => c.charCodeAt(0));
+  let tb = new G.Tables(B.tables);
+  let template = Uint8Array.from(atob(B.template), c => c.charCodeAt(0));
   const STORE = 'gp200studio.web.v1', PKCE_KEY = 'gp200studio.web.pkce';
   // [Android] Chrome Android + cable USB OTG : memes trames, rythme plus prudent, textes d'aide propres. Faux ailleurs = rien ne change.
   const IS_ANDROID = /Android/i.test((typeof navigator !== 'undefined' && navigator.userAgent) || '');
   const PROVIDERS = ['gemini', 'openrouter', 'anthropic'];
-  const FAMILY = { PRE: 'GEN', DST: 'GEN', AMP: 'GEN', NR: 'CAB', CAB: 'CAB', EQ: 'CAB', WAH: 'FX', MOD: 'FX', DLY: 'FX', RVB: 'FX', VOL: 'FX' };
+  const FAMILY = { PRE: 'GEN', DST: 'GEN', AMP: 'GEN', NR: 'CAB', CAB: 'CAB', EQ: 'CAB', WAH: 'FX', MOD: 'FX', DLY: 'FX', RVB: 'FX', VOL: 'FX', NS: 'GEN' };
 
   // ------------------------------------------------------------------ textes
   const D = {
@@ -98,6 +103,8 @@
       sl_empty: "La set list est vide. Clique sur le ♥ à droite d'un preset de la liste de gauche pour le garder ici.",
       sl_name: 'Nom sur la pédale (16 caractères au maximum)', sl_slot_bank: 'Banque (1 à 64)', sl_slot_letter: 'Lettre',
       sl_fill_from: 'Emplacements consécutifs à partir de', sl_fill: 'Attribuer', sl_fill_title: 'Donne un emplacement à chaque preset de la liste, les uns après les autres, à partir de celui-ci.',
+      sl_song: 'Attribuer par chanson', sl_song_title: "Comme « Attribuer », mais les presets d'une même chanson restent ensemble dans UNE banque (lettres consécutives) ; si la chanson ne tient pas dans les lettres restantes, elle passe à la banque suivante. Les presets de la liste sont regroupés par chanson (ordre de première apparition).",
+      sl_song_msg: '%d chanson(s) rangée(s) de %s à la banque %d : chaque chanson reste dans une même banque.',
       sl_fill_over: "Pas assez de place : %d preset(s) restent sans emplacement (la dernière banque est 64-D).",
       sl_count: '%d preset(s) dans la set list.',
       sl_e_many: "Plus de 256 presets : la pédale n'a que 256 emplacements.", sl_e_name: 'Ligne %d : le nom est vide.', sl_e_range: 'Ligne %d : emplacement invalide.',
@@ -106,6 +113,33 @@
       sl_w_work: "Ligne %d : %s est l'emplacement de travail de la page (celui où chaque preset sélectionné est envoyé pour être écouté) ; il sera réécrit dès que tu sélectionneras un autre preset.",
       sl_need_pedal: 'Connecte la pédale pour envoyer la set list.',
       sl_send: 'Envoyer %d preset(s) dans la pédale', sl_confirm: 'Ces emplacements de la pédale vont être ÉCRASÉS :', sl_confirm_go: 'Écraser et envoyer',
+      mm_hint: 'Glisse un preset pour le déplacer ; Ctrl / ⌘ + clic ou Maj + clic pour en sélectionner plusieurs ; Alt + ↑ / ↓ pour le décaler.',
+      mm_goto: 'Déplacer la sélection (%d) vers', mm_goto_btn: 'Déplacer', mm_goto_tip: 'Place le bloc sélectionné à partir de cet emplacement (ordre conservé, les autres se décalent). Rien n’est écrit tant que tu n’as pas appliqué.', mm_goto_bank: 'Banque de destination (1 à 64)', mm_goto_letter: 'Lettre de destination', mm_ghost: '%d presets',
+      mm_pending: '%d emplacement(s) à réécrire. Rien n’est encore écrit dans la pédale.', mm_apply: 'Appliquer à la pédale…',
+      mm_from: 'Viendra de %s', mm_title: 'Réorganiser la mémoire de la pédale', mm_confirm_msg: '%d emplacement(s) vont être ÉCRASÉS avec le contenu indiqué :',
+      mm_backup_note: 'Avant d’écrire, la page lit le contenu actuel de ces emplacements dans la pédale et le télécharge dans un ZIP de sauvegarde. Chaque écriture est ensuite relue pour contrôle ; compte quelques secondes par emplacement.',
+      mm_inj_warn: 'Le slot de travail (%s) fait partie des emplacements concernés.', mm_go: 'Sauvegarder et appliquer', mm_close: 'Fermer',
+      mm_reading: 'Lecture de la pédale', mm_backup: 'Sauvegarde (ZIP)…', mm_writing: 'Écriture', mm_verify: 'Contrôle', mm_wait: 'Patientez, ne débranche pas la pédale…',
+      mm_read_fail: 'Lecture de %s impossible : rien n’a été écrit.', mm_changed: 'Le contenu de %s a changé depuis l’affichage (« %s » → « %s ») : rien n’a été écrit. Relis la mémoire (↻) puis recommence.',
+      mm_done: 'Terminé : %d emplacement(s) réécrit(s) ; relecture de contrôle : %d/%d identique(s). Une sauvegarde ZIP des contenus d’origine a été téléchargée.', mm_done_bad: ' À vérifier : %s.',
+      mm_fail0: 'Interrompu avant toute écriture : %s', mm_fail: 'Interrompu après %d emplacement(s) sur %d (écrits : %s). %s La sauvegarde ZIP des contenus d’origine a été téléchargée ; la mémoire de la pédale va être relue.',
+      mm_busy: 'La pédale est occupée (envoi, harmonisation ou lecture en cours) : réessaie dans un instant.',
+      mm_direct: 'Déplacer « %s » de %s vers %s : les presets entre les deux se décalent d’un cran.',
+      mm_grp_moved: 'Ce que tu as déplacé (%d)', mm_grp_shift: 'Décalés pour leur faire de la place (%d)',
+      mm_restore: 'Restaurer…', mm_restore_tip: 'Choisis le ZIP de sauvegarde créé avant une réorganisation (ou des .prst nommés « 07-B_nom.prst ») : chaque preset est réécrit dans son emplacement d’origine. Rien n’est écrit avant ta confirmation.',
+      mm_rest_title: 'Restaurer une sauvegarde', mm_rest_msg: '%d emplacement(s) vont être ÉCRASÉS avec le contenu de la sauvegarde :', mm_rest_cur: 'actuellement',
+      mm_rest_skip: '%d fichier(s) ignoré(s) (nom sans emplacement, taille ou somme de contrôle invalide) : %s', mm_rest_none: 'Aucun preset exploitable : les fichiers doivent s’appeler « 07-B_nom.prst » (comme dans la sauvegarde ZIP).', mm_rest_zip: 'ZIP illisible : %s',
+      mm_rest_note: 'Avant d’écrire, l’état actuel de ces emplacements est lu dans la pédale et téléchargé dans un ZIP « avant_restauration ». Chaque écriture est ensuite relue pour contrôle.', mm_rest_go: 'Sauvegarder l’état actuel et restaurer',
+      mm_rdone: 'Restauration terminée : %d emplacement(s) réécrit(s) ; relecture de contrôle : %d/%d identique(s). L’état d’avant restauration a été téléchargé dans un ZIP.',
+      mm_rfail: 'Restauration interrompue après %d emplacement(s) sur %d (écrits : %s). %s Le ZIP « avant_restauration » a été téléchargé ; la mémoire de la pédale va être relue.',
+      ctx_menu: 'Actions sur le preset : %s', ctx_dup: 'Dupliquer', ctx_rename: 'Renommer…', ctx_revert: "Revenir à l'original", ctx_delete: 'Supprimer cette copie',
+      ctx_revert_none: 'Aucune modification à annuler : ce preset est identique à son original.', ctx_busy: "Indisponible pendant l'harmonisation ou un envoi à la pédale.",
+      ctx_hint: "Clic droit (ou appui long) sur un preset : dupliquer, renommer, revenir à l'original.",
+      ctx_dup_done: 'Copie créée : « %s »', ctx_renamed: 'Preset renommé : « %s »', ctx_reverted: "Preset rétabli comme à l'origine : « %s »", ctx_deleted: 'Copie supprimée : « %s »',
+      rn_title: 'Renommer le preset', rn_label: 'Nouveau nom', rn_hint: '%d caractères maximum, sans accents (limite de la pédale).', rn_ok: 'Renommer',
+      fav_title: '♥ Favoris : %d', fav_export: 'Exporter (.zip)', fav_export_tip: 'Télécharge les %d favori(s) dans un ZIP (un .prst par preset, numérotés dans l’ordre de la set list), prêts à être rouverts plus tard ou harmonisés.',
+      fav_tune: 'Harmoniser', fav_tune_tip: 'Ouvre la fenêtre Volume avec uniquement tes favoris dans le lot à harmoniser.',
+      fav_setlist: 'Set list', fav_setlist_tip: 'Ouvre la set list : nom et emplacement de chaque favori, puis envoi dans la pédale ou ZIP.', fav_root: 'favoris',
       sl_zip: 'Télécharger la set list (ZIP)', sl_zip_hint: "La liste des presets n'est conservée que dans cet onglet du navigateur : télécharge la set list pour la garder.",
       sl_done: 'Terminé : %d preset(s) écrit(s) (%s). La pédale est positionnée sur %s.',
       sl_fail: 'Interrompu après %d preset(s) sur %d (écrits : %s). %s',
@@ -162,7 +196,7 @@
       ed_model: 'Modèle', ed_on: 'Module actif', ed_changing: 'Changement de modèle…', ed_applied: '%s appliqué.', ed_applied_live: '%s appliqué sur la pédale (pas encore enregistré).',
       ed_unsaved: "Sur la pédale, ces réglages restent provisoires jusqu'à l'envoi du preset (cadre « Envoyer sur la pédale »). Le fichier téléchargé contient déjà tes réglages.",
       tune_batch_hint: "Le lot : l'ordre est celui de la mesure ; tous les presets passent, un à la fois, par le même emplacement de travail. Tu peux mélanger des presets générés, ouverts ou affinés.",
-      tune_sel_empty: 'Aucun preset dans le lot : ajoute-en ci-dessous.', tune_add_title: 'Ajouter des presets à harmoniser (%d disponibles)', tune_add_all: 'Tout ajouter', tune_clear: 'Vider le lot',
+      tune_sel_empty: 'Aucun preset dans le lot : ajoute-en ci-dessous.', tune_add_title: 'Ajouter des presets à harmoniser (%d disponibles)', tune_add_fav: '♥ Ajouter les favoris (%d)', tune_add_fav_tip: 'Ajoute au lot les presets marqués ♥ dans la liste de gauche (ceux qui n\'y sont pas déjà).', tune_add_all: 'Tout ajouter', tune_clear: 'Vider le lot',
       tune_open_files: 'Ouvrir des .prst…', tune_up: 'Monter', tune_down: 'Descendre', tune_rm: 'Retirer du lot', tune_add: 'Ajouter', tune_none_avail: 'Tous les presets de la liste sont déjà dans le lot. Ouvre d\'autres .prst pour en ajouter.',
       tune_zip: 'Tout télécharger (zip)', tune_count: '%d preset(s) dans le lot',
       tune_title: 'Harmoniser le volume', tune_sub: "Tous tes presets au même niveau sonore, mesuré en LUFS, réglé automatiquement.",
@@ -187,7 +221,7 @@
       live_noconf: "⚠ La pédale n'a pas confirmé le chargement de : %s. Vérifie l'effet (ou relance « Envoyer ce module »).",
       pflag_tip: "Ce réglage ne s'entend pas en direct : la pédale ne le prend en compte qu'au chargement du preset (enregistre-le ou envoie-le depuis l'onglet Pédale).",
       lvl_line: 'Niveau mesuré (réglages par défaut) : %s dBFS, soit %s dB par rapport à la médiane (%s dBFS).',
-      render_err: "Erreur d'affichage.", reload: 'Recharger la page', diag_link: 'Signaler un problème', diag_link_tip: "Prépare un rapport de diagnostic que tu peux copier (rien n'est envoyé automatiquement).", diag_title: 'Un problème est survenu', diag_sub: "Rien n'est envoyé automatiquement. Copie le rapport (sans clé API) et colle-le dans un message ou une « issue » GitHub.", diag_copy: 'Copier le rapport', diag_copied: 'Copié ✓', diag_copy_ko: 'Copie impossible : sélectionne le texte ci-dessous.', diag_details: 'Détails', diag_hide: 'Masquer', diag_close: 'Fermer', pr_read: 'Lire le patch en cours', pr_read_tip: "Lit sur la pédale le patch actuellement chargé et l'affiche dans le rack (rien n'est écrit sur la pédale).", pr_read_help: "Au branchement, la page lit déjà le patch en cours. Ce bouton le relit si tu veux repartir de l'état actuel de la pédale.", pr_busy: 'Lecture de la pédale…', pr_done: 'Patch lu sur la pédale : %s (%s).', pr_fail: 'Lecture de la pédale impossible : %s', pr_timeout: "la pédale n'a pas répondu.", pr_noread: "pas d'entrée MIDI (lecture impossible).", mem_title: 'Mémoire de la pédale', mem_sub: "Un clic sélectionne l'emplacement sur la pédale (comme au pied) et l'affiche. Rien n'est écrit.", mem_pick: "Sélectionner %s sur la pédale et l'afficher", mem_refresh: 'Relire les noms des 256 emplacements de la pédale', mem_count: 'Emplacements dont le nom a été lu', mem_loading: 'Lecture des noms… %s/%s', mem_err: 'Lecture interrompue : %s', tune_audio_refresh: 'Actualiser la liste', tune_audio_pick: "Entrée audio", tune_audio_found: "Entrée « GP-200 » détectée et sélectionnée.",
+      help_manual: 'Mode d\'emploi', help_manual_tip: "Mode d'emploi en PDF (français).", render_err: "Erreur d'affichage.", reload: 'Recharger la page', diag_link: 'Signaler un problème', diag_link_tip: "Prépare un rapport de diagnostic que tu peux copier (rien n'est envoyé automatiquement).", diag_title: 'Un problème est survenu', diag_sub: "Rien n'est envoyé automatiquement. Copie le rapport (sans clé API) et colle-le dans un message ou une « issue » GitHub.", diag_copy: 'Copier le rapport', diag_copied: 'Copié ✓', diag_copy_ko: 'Copie impossible : sélectionne le texte ci-dessous.', diag_details: 'Détails', diag_hide: 'Masquer', diag_close: 'Fermer', pr_read: 'Lire le patch en cours', pr_read_tip: "Lit sur la pédale le patch actuellement chargé et l'affiche dans le rack (rien n'est écrit sur la pédale).", pr_read_help: "Au branchement, la page lit déjà le patch en cours. Ce bouton le relit si tu veux repartir de l'état actuel de la pédale.", pr_busy: 'Lecture de la pédale…', pr_done: 'Patch lu sur la pédale : %s (%s).', pr_fail: 'Lecture de la pédale impossible : %s', pr_timeout: "la pédale n'a pas répondu.", pr_noread: "pas d'entrée MIDI (lecture impossible).", mem_title: 'Mémoire de la pédale', mem_sub: "Un clic sélectionne l'emplacement sur la pédale (comme au pied) et l'affiche. Rien n'est écrit.", mem_pick: "Sélectionner %s sur la pédale et l'afficher", mem_refresh: 'Relire les noms des 256 emplacements de la pédale', mem_count: 'Emplacements dont le nom a été lu', mem_loading: 'Lecture des noms… %s/%s', mem_err: 'Lecture interrompue : %s', tune_audio_refresh: 'Actualiser la liste', tune_audio_pick: "Entrée audio", tune_audio_found: "Entrée « GP-200 » détectée et sélectionnée.",
       tune_audio_guess: "Aucune entrée nommée « GP-200 » : choisis celle de la pédale dans la liste (la pédale apparaît comme une carte son USB).",
       tune_audio_denied: "L'accès à l'entrée audio a été refusé. Clique sur le cadenas à gauche de l'adresse, autorise le micro, puis réessaie.",
       tune_audio_none: "Aucune entrée audio trouvée. Vérifie que la pédale est branchée et allumée.",
@@ -308,6 +342,8 @@
       sl_empty: 'The set list is empty. Click the ♥ to the right of a preset in the left-hand list to keep it here.',
       sl_name: 'Name on the pedal (16 characters at most)', sl_slot_bank: 'Bank (1 to 64)', sl_slot_letter: 'Letter',
       sl_fill_from: 'Consecutive slots starting at', sl_fill: 'Assign', sl_fill_title: 'Gives each preset in the list a slot, one after the other, starting with this one.',
+      sl_song: 'Assign by song', sl_song_title: 'Like "Assign", but the presets of one song stay together in ONE bank (consecutive letters); if a song does not fit in the letters left, it moves to the next bank. The presets in the list are grouped by song (order of first appearance).',
+      sl_song_msg: '%d song(s) placed from %s to bank %d: each song stays within one bank.',
       sl_fill_over: 'Not enough room: %d preset(s) are left without a slot (the last bank is 64-D).',
       sl_count: '%d preset(s) in the set list.',
       sl_e_many: 'More than 256 presets: the pedal only has 256 slots.', sl_e_name: 'Line %d: the name is empty.', sl_e_range: 'Line %d: invalid slot.',
@@ -316,6 +352,33 @@
       sl_w_work: "Line %d: %s is the page's working slot (where each selected preset is sent so you can hear it); it will be rewritten as soon as you select another preset.",
       sl_need_pedal: 'Connect the pedal to send the set list.',
       sl_send: 'Send %d preset(s) to the pedal', sl_confirm: 'These pedal slots will be OVERWRITTEN:', sl_confirm_go: 'Overwrite and send',
+      mm_hint: 'Drag a preset to move it; Ctrl / ⌘ + click or Shift + click to select several; Alt + ↑ / ↓ to nudge.',
+      mm_goto: 'Move the selection (%d) to', mm_goto_btn: 'Move', mm_goto_tip: 'Puts the selected block starting at that slot (order kept, the others shift). Nothing is written until you apply.', mm_goto_bank: 'Destination bank (1 to 64)', mm_goto_letter: 'Destination letter', mm_ghost: '%d presets',
+      mm_pending: '%d slot(s) to rewrite. Nothing has been written to the pedal yet.', mm_apply: 'Apply to the pedal…',
+      mm_from: 'Will come from %s', mm_title: 'Rearrange the pedal memory', mm_confirm_msg: '%d slot(s) will be OVERWRITTEN with the content shown:',
+      mm_backup_note: 'Before writing, the page reads the current content of these slots from the pedal and downloads it as a backup ZIP. Each write is then read back to check it; allow a few seconds per slot.',
+      mm_inj_warn: 'The working slot (%s) is among the affected slots.', mm_go: 'Back up and apply', mm_close: 'Close',
+      mm_reading: 'Reading the pedal', mm_backup: 'Backup (ZIP)…', mm_writing: 'Writing', mm_verify: 'Checking', mm_wait: 'Please wait, do not unplug the pedal…',
+      mm_read_fail: 'Could not read %s: nothing was written.', mm_changed: 'The content of %s changed since it was displayed ("%s" → "%s"): nothing was written. Reload the memory (↻) and try again.',
+      mm_done: 'Done: %d slot(s) rewritten; read-back check: %d/%d identical. A backup ZIP of the original contents was downloaded.', mm_done_bad: ' To check: %s.',
+      mm_fail0: 'Stopped before anything was written: %s', mm_fail: 'Stopped after %d slot(s) of %d (written: %s). %s The backup ZIP of the original contents was downloaded; the pedal memory will be read again.',
+      mm_busy: 'The pedal is busy (send, volume matching or read in progress): try again in a moment.',
+      mm_direct: 'Move “%s” from %s to %s: the presets in between shift by one slot.',
+      mm_grp_moved: 'What you moved (%d)', mm_grp_shift: 'Shifted to make room for them (%d)',
+      mm_restore: 'Restore…', mm_restore_tip: 'Choose the backup ZIP created before a rearrangement (or .prst files named “07-B_name.prst”): each preset is written back to its original slot. Nothing is written before you confirm.',
+      mm_rest_title: 'Restore a backup', mm_rest_msg: '%d slot(s) will be OVERWRITTEN with the content of the backup:', mm_rest_cur: 'currently',
+      mm_rest_skip: '%d file(s) ignored (no slot in the name, wrong size or bad checksum): %s', mm_rest_none: 'No usable preset: files must be named “07-B_name.prst” (as in the backup ZIP).', mm_rest_zip: 'Unreadable ZIP: %s',
+      mm_rest_note: 'Before writing, the current state of these slots is read from the pedal and downloaded as a “before_restore” ZIP. Each write is then read back to check it.', mm_rest_go: 'Back up the current state and restore',
+      mm_rdone: 'Restore finished: %d slot(s) rewritten; read-back check: %d/%d identical. The state from before the restore was downloaded as a ZIP.',
+      mm_rfail: 'Restore stopped after %d slot(s) of %d (written: %s). %s The “before_restore” ZIP was downloaded; the pedal memory will be read again.',
+      ctx_menu: 'Preset actions: %s', ctx_dup: 'Duplicate', ctx_rename: 'Rename…', ctx_revert: 'Revert to original', ctx_delete: 'Delete this copy',
+      ctx_revert_none: 'Nothing to undo: this preset is identical to its original.', ctx_busy: 'Not available during volume matching or a send to the pedal.',
+      ctx_hint: 'Right-click (or long-press) a preset: duplicate, rename, revert to the original.',
+      ctx_dup_done: 'Copy created: "%s"', ctx_renamed: 'Preset renamed: "%s"', ctx_reverted: 'Preset restored as originally generated: "%s"', ctx_deleted: 'Copy deleted: "%s"',
+      rn_title: 'Rename the preset', rn_label: 'New name', rn_hint: '%d characters maximum, no accents (pedal limit).', rn_ok: 'Rename',
+      fav_title: '♥ Favorites: %d', fav_export: 'Export (.zip)', fav_export_tip: 'Download the %d favorite(s) as a ZIP (one .prst per preset, numbered in set list order), ready to reopen later or to match volumes.',
+      fav_tune: 'Match volumes', fav_tune_tip: 'Opens the Volume window with only your favorites in the batch.',
+      fav_setlist: 'Set list', fav_setlist_tip: 'Opens the set list: name and slot for each favorite, then send to the pedal or ZIP.', fav_root: 'favorites',
       sl_zip: 'Download the set list (ZIP)', sl_zip_hint: 'The list of presets is only kept in this browser tab: download the set list to keep it.',
       sl_done: 'Done: %d preset(s) written (%s). The pedal is now on %s.',
       sl_fail: 'Stopped after %d of %d preset(s) (written: %s). %s',
@@ -372,7 +435,7 @@
       ed_model: 'Model', ed_on: 'Module on', ed_changing: 'Changing model…', ed_applied: '%s applied.', ed_applied_live: '%s applied on the pedal (not saved yet).',
       ed_unsaved: 'On the pedal these settings stay temporary until you send the preset ("Send to the pedal" box). The downloaded file already contains your settings.',
       tune_batch_hint: 'The batch: the order is the measuring order; presets go one at a time through the same working slot. You can mix generated, opened and refined presets.',
-      tune_sel_empty: 'No preset in the batch: add some below.', tune_add_title: 'Add presets to match (%d available)', tune_add_all: 'Add all', tune_clear: 'Clear the batch',
+      tune_sel_empty: 'No preset in the batch: add some below.', tune_add_title: 'Add presets to match (%d available)', tune_add_fav: '♥ Add favorites (%d)', tune_add_fav_tip: 'Adds the presets marked ♥ in the left-hand list to the batch (those not already in it).', tune_add_all: 'Add all', tune_clear: 'Clear the batch',
       tune_open_files: 'Open .prst files…', tune_up: 'Move up', tune_down: 'Move down', tune_rm: 'Remove from the batch', tune_add: 'Add', tune_none_avail: 'Every preset in the list is already in the batch. Open more .prst files to add them.',
       tune_zip: 'Download all (zip)', tune_count: '%d preset(s) in the batch',
       tune_title: 'Match the volume', tune_sub: 'All your presets at the same loudness, measured in LUFS and set automatically.',
@@ -397,7 +460,7 @@
       live_noconf: '⚠ The pedal did not confirm loading: %s. Check the effect (or run « Send this module » again).',
       pflag_tip: 'This setting is not audible live: the pedal only applies it when the preset is loaded (save it or send it from the Pedal tab).',
       lvl_line: 'Measured level (default settings): %s dBFS, %s dB versus the median (%s dBFS).',
-      render_err: 'Display error.', reload: 'Reload the page', diag_link: 'Report a problem', diag_link_tip: 'Prepares a diagnostic report you can copy (nothing is sent automatically).', diag_title: 'Something went wrong', diag_sub: 'Nothing is sent automatically. Copy the report (no API key in it) and paste it in a message or a GitHub issue.', diag_copy: 'Copy the report', diag_copied: 'Copied ✓', diag_copy_ko: 'Copy failed: select the text below.', diag_details: 'Details', diag_hide: 'Hide', diag_close: 'Close', pr_read: 'Read the current patch', pr_read_tip: 'Reads the patch currently loaded on the pedal and shows it in the rack (nothing is written to the pedal).', pr_read_help: "The page already reads the current patch when the pedal is connected. This button reads it again if you want to start from the pedal's current state.", pr_busy: 'Reading the pedal…', pr_done: 'Patch read from the pedal: %s (%s).', pr_fail: 'Could not read the pedal: %s', pr_timeout: 'the pedal did not answer.', pr_noread: 'no MIDI input (reading is not possible).', mem_title: 'Pedal memory', mem_sub: 'One click selects the slot on the pedal (like a footswitch) and shows it. Nothing is written.', mem_pick: 'Select %s on the pedal and show it', mem_refresh: 'Read the names of the 256 pedal slots again', mem_count: 'Slots whose name has been read', mem_loading: 'Reading names… %s/%s', mem_err: 'Reading interrupted: %s', tune_audio_refresh: 'Refresh the list', tune_audio_pick: 'Audio input', tune_audio_found: 'A “GP-200” input was found and selected.',
+      help_manual: 'User manual', help_manual_tip: 'User manual as a PDF (English).', render_err: 'Display error.', reload: 'Reload the page', diag_link: 'Report a problem', diag_link_tip: 'Prepares a diagnostic report you can copy (nothing is sent automatically).', diag_title: 'Something went wrong', diag_sub: 'Nothing is sent automatically. Copy the report (no API key in it) and paste it in a message or a GitHub issue.', diag_copy: 'Copy the report', diag_copied: 'Copied ✓', diag_copy_ko: 'Copy failed: select the text below.', diag_details: 'Details', diag_hide: 'Hide', diag_close: 'Close', pr_read: 'Read the current patch', pr_read_tip: 'Reads the patch currently loaded on the pedal and shows it in the rack (nothing is written to the pedal).', pr_read_help: "The page already reads the current patch when the pedal is connected. This button reads it again if you want to start from the pedal's current state.", pr_busy: 'Reading the pedal…', pr_done: 'Patch read from the pedal: %s (%s).', pr_fail: 'Could not read the pedal: %s', pr_timeout: 'the pedal did not answer.', pr_noread: 'no MIDI input (reading is not possible).', mem_title: 'Pedal memory', mem_sub: 'One click selects the slot on the pedal (like a footswitch) and shows it. Nothing is written.', mem_pick: 'Select %s on the pedal and show it', mem_refresh: 'Read the names of the 256 pedal slots again', mem_count: 'Slots whose name has been read', mem_loading: 'Reading names… %s/%s', mem_err: 'Reading interrupted: %s', tune_audio_refresh: 'Refresh the list', tune_audio_pick: 'Audio input', tune_audio_found: 'A “GP-200” input was found and selected.',
       tune_audio_guess: 'No input named “GP-200”: pick the pedal in the list (it shows up as a USB sound card).',
       tune_audio_denied: 'Audio input access was refused. Click the padlock left of the address, allow the microphone, then try again.',
       tune_audio_none: 'No audio input found. Check that the pedal is plugged in and on.',
@@ -440,8 +503,8 @@
     },
   };
   const SLOT_NAMES = {
-    fr: { PRE: 'Pré / Comp', WAH: 'Wah', DST: 'Drive', AMP: 'Ampli', NR: 'Noise Gate', CAB: 'Baffle / IR', EQ: 'Égaliseur', MOD: 'Modulation', DLY: 'Delay', RVB: 'Reverbe', VOL: 'Volume' },
-    en: { PRE: 'Pre / Comp', WAH: 'Wah', DST: 'Drive', AMP: 'Amp', NR: 'Noise Gate', CAB: 'Cab / IR', EQ: 'Equalizer', MOD: 'Modulation', DLY: 'Delay', RVB: 'Reverb', VOL: 'Volume' },
+    fr: { PRE: 'Pré / Comp', WAH: 'Wah', DST: 'Drive', AMP: 'Ampli', NR: 'Noise Gate', CAB: 'Baffle / IR', EQ: 'Égaliseur', MOD: 'Modulation', DLY: 'Delay', RVB: 'Reverbe', VOL: 'Volume', NS: 'Capture' },
+    en: { PRE: 'Pre / Comp', WAH: 'Wah', DST: 'Drive', AMP: 'Amp', NR: 'Noise Gate', CAB: 'Cab / IR', EQ: 'Equalizer', MOD: 'Modulation', DLY: 'Delay', RVB: 'Reverb', VOL: 'Volume', NS: 'Capture' },
   };
   // Prefixes connus, utilises UNIQUEMENT pour reperer une cle collee chez le mauvais fournisseur. Jamais pour dire qu'une cle est « fausse » :
   // les formats evoluent (Google emet aussi des cles qui ne commencent pas par AIza), seul le fournisseur sait si une cle est valide.
@@ -460,7 +523,7 @@
     modelList: {}, modelMsg: '',
     run: null,          // {running, status, log:[], error, controller}
     res: null, sel: { si: 0, vi: 0, slot: 'AMP' }, fresh: false, notice: null,
-    usb: { link: null, state: (USB && USB.MidiLink.supported()) ? 'idle' : 'unsupported', outId: null, ports: [], bank: 1, letter: 'A',
+    usb: { link: null, state: (USB && USB.MidiLink.supported()) ? 'idle' : 'unsupported', outId: null, ports: [], bank: 1, letter: 'A', model: 'gp200', modelSure: false,
            confirm: null, sending: null, result: null, flags: {}, error: '' },
     mode: 'new', tab: 'module', lib: [], ref: { instr: '' },
     ed: { live: false, want: true, busy: false, opening: null, msg: '', err: '', last: 0, timer: null, idle: null, pending: null, sync: { file: null, set: new Set() }, pm: new Map(), tails: new Map(), noConf: [], bsent: new Map(), psent: new Map(), vsent: 0 },
@@ -472,9 +535,155 @@
     // lecture du patch charge sur la pedale (voir pedalFetch) : busy = lecture en cours, auto = lecture au branchement, t/rt = minuteries
     pr: { busy: false, auto: true, t: null, rt: null, last: null },
     // memoire de la pedale (colonne de gauche) : items[pc] = { name, stale?, err? } ou null (pas encore lu) ; busy = lecture des noms en cours
-    mem: { items: Array.from({ length: 256 }, () => null), busy: false, auto: true, err: '', t: null, done: 0, todo: 0, shownPc: null, follow: false },
+    mem: { items: Array.from({ length: 256 }, () => null), busy: false, auto: true, err: '', t: null, done: 0, todo: 0, shownPc: null, follow: false, sel: [], anchor: null, plan: null, dragging: false, mv: null },
     tune: { open: false, audio: { state: 'idle', devs: [], id: '', guessed: false, err: '' }, sel: null, bank: null, letter: null, confirm: false, run: null, msg: null },
   };
+  // ================================================================ profils de pedale : GP-200 / GP-150 / GP-180
+  // Le GP-200 est le profil d'origine : ses objets (G200, USB200...) sont ceux qui existaient avant, et rien n'y est modifie. Les profils GP-150 et GP-180
+  // sont construits a la demande (profile()) a partir des fichiers gp150*.js, seulement quand ce modele est reconnu sur le port MIDI ou choisi a la main.
+  // Chaque modele garde son propre etat (bibliotheque, set list, emplacements, memoire de la pedale) : passer de l'un a l'autre ne perd rien.
+  const B150 = B.gp150 || null;
+  const MODEL_LABEL = { gp200: 'GP-200', gp150: 'GP-150', gp180: 'GP-180' };
+  const PROFILES = {
+    gp200: { id: 'gp200', label: 'GP-200', is200: true, G: G200, USB: USB200, SL: SL200, TUNE: TUNE200, TIPS: TIPS200, tb, template, nSlots: 256, letters: ['A', 'B', 'C', 'D'] },
+  };
+  let P = PROFILES.gp200;
+  const PSTASH = {};               // etat range des modeles qui ne sont pas affiches
+  const PSAVED = {};               // reglages memorises (localStorage) des modeles 150 / 180
+  let START_MODEL = null;          // dernier modele 150 / 180 affiche (a rouvrir hors ligne)
+  const b64bytes = b => Uint8Array.from(atob(b), c => c.charCodeAt(0));
+  function tips150(label) {
+    const ui = {};
+    for (const l of Object.keys(TIPS200.ui)) { ui[l] = {}; for (const k of Object.keys(TIPS200.ui[l])) { const v = TIPS200.ui[l][k]; ui[l][k] = typeof v === 'string' ? v.replace(/GP-200(?! Studio)/g, label).replace(/\(1 (à|to) 64\)/g, '(1 $1 200)') : v; } }
+    return Object.assign({}, TIPS200, { ui });
+  }
+  function profile(id) {
+    if (PROFILES[id]) return PROFILES[id];
+    if (!B150 || (id !== 'gp150' && id !== 'gp180') || !self.GP150 || !self.GP150USB || !self.GP150SETLIST) return null;
+    const E = self.GP150.forModel(id);
+    const g = Object.assign({}, G200, E);                          // appels IA, zip, OpenRouter... : ceux de l'application ; le format, lui, est celui de la pedale
+    if (self.GP150AGENT) Object.assign(g, self.GP150AGENT.forModel(id, E, G200));
+    else { g.generate = async () => { throw new Error('generation indisponible pour ' + id); }; g.refine = g.generate; }
+    const u = Object.assign({}, self.GP150USB, { parsePanelParam: () => null });
+    const label = MODEL_LABEL[id];
+    PROFILES[id] = { id, label, is200: false, G: g, USB: u, SL: self.GP150SETLIST.forModel(id), TUNE: self.GP150TUNE ? self.GP150TUNE.forModel(id, E) : null,
+      TIPS: tips150(label), tb: new g.Tables(B150.tables), template: b64bytes(B150.skeleton), nSlots: 200, letters: ['A'] };
+    return PROFILES[id];
+  }
+  const profileLocked = () => tuneActive() || !!s.usb.sending || s.inj.busy || !!(s.run && s.run.running);
+  function profileFresh(id) {
+    const sv = PSAVED[id] || {}, inj = { bank: 1, letter: 'A', auto: true, set: false, open: false, asked: false, busy: false, queued: null, t: null, msg: '', err: '', warn: '' };
+    // l'emplacement de travail doit etre re-confirme a chaque session : on ne retient que le numero propose (jamais « confirme »)
+    if (sv.inj && sv.inj.bank >= 1 && sv.inj.bank <= 200) inj.bank = sv.inj.bank | 0;
+    if (sv.inj && typeof sv.inj.auto === 'boolean') inj.auto = sv.inj.auto;
+    return { lib: [], res: null, sel: { si: 0, vi: 0, slot: 'AMP' }, armed: undefined,
+      sl: { items: [], start: { bank: 1, letter: 'A' }, confirm: false, result: null, fillMsg: '' },
+      mem: { items: Array.from({ length: PROFILES[id].nSlots }, () => null), busy: false, auto: true, err: '', t: null, done: 0, todo: 0, shownPc: null, follow: false, sel: [], anchor: null, plan: null, dragging: false, mv: null },
+      inj, ub: sv.usb && sv.usb.bank >= 1 && sv.usb.bank <= 200 ? sv.usb.bank | 0 : 1, ul: 'A',
+      tune: { open: false, sel: null, bank: null, letter: null, confirm: false, msg: null, run: null } };
+  }
+  function profileTake() {
+    const t = s.tune;
+    return { lib: s.lib, res: s.res, sel: s.sel, armed: s.armed, sl: s.sl, mem: s.mem, inj: s.inj, ub: s.usb.bank, ul: s.usb.letter,
+      tune: { open: t.open, sel: t.sel, bank: t.bank, letter: t.letter, confirm: t.confirm, msg: t.msg, run: t.run } };
+  }
+  function profilePut(st) {
+    s.lib = st.lib; s.res = st.res; s.sel = st.sel; s.armed = st.armed; s.sl = st.sl; s.mem = st.mem; s.inj = st.inj; s.usb.bank = st.ub; s.usb.letter = st.ul;
+    Object.assign(s.tune, st.tune);
+  }
+  /** Affiche un autre modele de pedale. Refuse (false) pendant un envoi, une mesure ou une generation. */
+  function setProfile(id) {
+    const p = profile(id);
+    if (!p || p === P || profileLocked()) return false;
+    const ed = s.ed;
+    liveStop();                                               // rend le port MIDI : ce qui suit ne parle plus a la pedale
+    for (const o of [s.mem, s.inj, s.pr]) { clearTimeout(o.t); o.t = null; }
+    clearTimeout(s.pr.rt); s.pr.rt = null; clearTimeout(s.listen.rt); s.listen.rt = null;
+    forgetPedalState();
+    ed.msg = ''; ed.err = '';
+    PSTASH[P.id] = profileTake();
+    P = p; G = p.G; USB = p.USB; SL = p.SL; TUNE = p.TUNE; TIPS = p.TIPS; tb = p.tb; template = p.template;
+    profilePut(PSTASH[id] || profileFresh(id));
+    s.usb.confirm = null; s.usb.result = null;
+    s.listen.pc = null; s.listen.desync = false; s.listen.touched = false; s.listen.last = '';
+    s.pr.last = null;
+    s.tab = 'module'; s.notice = null;
+    dg('model', 'profil ' + id);
+    save();
+    return true;
+  }
+  function persist150() {
+    const out = {}; let any = false;
+    for (const id of ['gp150', 'gp180']) {
+      const st = P.id === id ? { ub: s.usb.bank, inj: s.inj } : PSTASH[id];
+      if (st) { out[id] = { usb: { bank: st.ub }, inj: { bank: st.inj.bank, auto: st.inj.auto } }; any = true; }
+      else if (PSAVED[id]) { out[id] = PSAVED[id]; any = true; }
+    }
+    if (!any && P.is200) return null;
+    out.model = P.id;
+    return out;
+  }
+  /** Modeles de pedale dont un port de sortie MIDI est reconnu par son nom (liste vide si le nom ne dit rien, comme sur certains Android). */
+  function detectModels(access) {
+    const found = [], U = self.GP150USB;
+    if (!U || !access || !access.outputs) return found;
+    access.outputs.forEach(p => { if (p.state === 'disconnected') return; const m = U.modelOfPortName(p.name); if (m && found.indexOf(m) < 0 && (m === 'gp200' || profile(m))) found.push(m); });
+    return found;
+  }
+  /** Type d'un fichier .prst d'apres sa taille et sa somme de controle : 'gp200', 'gp150', 'gp180' ou null. */
+  function prstModel(buf) {
+    if (buf.length === USB_FILE_200) return 'gp200';
+    const C = self.GP150;
+    if (!C || !B150 || buf.length !== C.FILE_SIZE) return null;
+    for (let i = 0; i < 4; i++) if (buf[i] !== C.HEADER[i]) return null;
+    const ok = id => { try { const E = (profile(id) || {}).G; return !!E && E.checksumOk(buf); } catch (e) { return false; } };
+    const order = P.is200 ? ['gp150', 'gp180'] : [P.id, P.id === 'gp150' ? 'gp180' : 'gp150'];
+    for (const id of order) if (ok(id)) return id;
+    return order[0];
+  }
+  const USB_FILE_200 = G200.FILE_SIZE;
+  /** Textes propres au GP-150 / GP-180 (le reste vient de D ; « GP-200 » y est remplace par le modele). */
+  const PD = {
+    fr: {
+      tagline: 'Presets pour Valeton GP-200, générés par IA',
+      pedal_bank: 'Numéro (1 à 200)', sl_slot_bank: 'Numéro (1 à 200)',
+      sl_fill_over: "Pas assez de place : %d preset(s) restent sans emplacement (le dernier est le 200).",
+      sl_e_many: "Plus de 200 presets : la pédale n'a que 200 emplacements.", sl_name: 'Nom sur la pédale (13 caractères au maximum)',
+      ref_size: 'taille de %d octets au lieu de 1128', ref_bad: "Ce fichier n'est pas un preset GP-200 lisible (%s).",
+      mem_refresh: 'Relire les noms des 200 emplacements de la pédale',
+      pedal_confirm: "Ça va écraser ce qui se trouve actuellement sur %s. Ces presets de la pédale seront perdus : sauvegarde-les avant si tu y tiens. L'écriture est vérifiée par relecture, mais elle n'a pas encore été essayée sur une vraie pédale GP-200 : non testé sur matériel.",
+      sl_confirm: "Ces emplacements de la pédale vont être ÉCRASÉS (non testé sur matériel : l'écriture est vérifiée par relecture) :",
+      tune_confirm: "Chaque preset sera écrit dans %s pendant le réglage. Le contenu actuel de cet emplacement sera perdu. Non testé sur matériel : chaque écriture est vérifiée par relecture.",
+      inj_panel_msg: "Sur quel emplacement de la pédale injecter les presets ? Son contenu est remplacé à chaque injection : choisis un emplacement de travail, pas un preset que tu veux garder. Écriture non testée sur matériel (vérifiée par relecture).",
+      hw_untested: "Écriture GP-200 non testée sur matériel : rien n'est écrit sans ta confirmation, et chaque écriture est relue pour être vérifiée.",
+      model_label: 'Modèle de pédale', model_tip: 'Modèle de pédale affiché : suit la pédale détectée, ou à choisir pour préparer des presets sans pédale.',
+      model_locked: "Impossible de changer de modèle pendant un envoi, une mesure ou une génération.",
+      model_switched: 'Modèle changé : %s.', model_prst: 'Ce fichier est un preset %s : le modèle a été changé.', model_prst_other: "c'est un preset %s, alors que le modèle affiché est %s.",
+      model_other_pedal: '%s branchée', model_other_tip: "Une pédale %s est branchée, mais le modèle affiché est %s. Clique pour afficher le modèle de la pédale.",
+      model_unsure: "Le nom du port MIDI ne dit pas quel modèle est branché. Confirme le modèle avant d'écrire sur la pédale (ou change-le dans la liste « Modèle de pédale », en haut de la colonne « Mes presets »).",
+      model_confirm: "Oui, c'est un %s",
+    },
+    en: {
+      tagline: 'AI-generated presets for the Valeton GP-200',
+      pedal_bank: 'Number (1 to 200)', sl_slot_bank: 'Number (1 to 200)',
+      sl_fill_over: 'Not enough room: %d preset(s) are left without a slot (the last one is 200).',
+      sl_e_many: 'More than 200 presets: the pedal only has 200 slots.', sl_name: 'Name on the pedal (13 characters at most)',
+      ref_size: 'size is %d bytes instead of 1128', ref_bad: 'This file is not a readable GP-200 preset (%s).',
+      mem_refresh: 'Read the names of the 200 pedal slots again',
+      pedal_confirm: "This will overwrite what is currently on %s. Those pedal presets will be lost: back them up first if you want to keep them. The write is checked by reading it back, but it has not been tried on a real GP-200 yet: untested on hardware.",
+      sl_confirm: 'These pedal slots will be OVERWRITTEN (untested on hardware: the write is checked by reading it back):',
+      tune_confirm: 'Each preset will be written to %s while it is tuned. The current content of that slot will be lost. Untested on hardware: every write is checked by reading it back.',
+      inj_panel_msg: 'Which pedal slot should presets be injected into? Its content is replaced at every injection: pick a working slot, not a preset you want to keep. Writing is untested on hardware (checked by reading back).',
+      hw_untested: 'GP-200 writing is untested on hardware: nothing is written without your confirmation, and every write is read back to be checked.',
+      model_label: 'Pedal model', model_tip: 'Pedal model shown: follows the detected pedal, or pick one to prepare presets without a pedal.',
+      model_locked: 'Cannot change model during a send, a measurement or a generation.',
+      model_switched: 'Model changed: %s.', model_prst: 'This file is a %s preset: the model was changed.', model_prst_other: 'it is a %s preset, but the model shown is %s.',
+      model_other_pedal: '%s connected', model_other_tip: 'A %s pedal is connected, but the model shown is %s. Click to show the pedal\'s model.',
+      model_unsure: 'The MIDI port name does not say which model is connected. Confirm the model before writing to the pedal (or change it in the “Pedal model” list at the top of the “My presets” column).',
+      model_confirm: 'Yes, it is a %s',
+    },
+  };
+
   function load() {
     try {
       const o = JSON.parse(localStorage.getItem(STORE) || '{}');
@@ -491,22 +700,40 @@
       if (o.usb && 'ABCD'.indexOf(o.usb.letter) >= 0 && o.usb.letter) s.usb.letter = o.usb.letter;
       if (o.inj && o.inj.bank >= 1 && o.inj.bank <= USB.SLOT_MAX && 'ABCD'.indexOf(o.inj.letter) >= 0 && o.inj.letter) { s.inj.bank = o.inj.bank | 0; s.inj.letter = o.inj.letter; s.inj.set = !!o.inj.set; }
       if (o.inj && typeof o.inj.auto === 'boolean') s.inj.auto = o.inj.auto;
+      if (o.p150 && typeof o.p150 === 'object') {            // GP-150 / GP-180 : memorise a part, le GP-200 ci-dessus n'est jamais touche
+        for (const id of ['gp150', 'gp180']) if (o.p150[id] && typeof o.p150[id] === 'object') PSAVED[id] = o.p150[id];
+        if (o.p150.model === 'gp150' || o.p150.model === 'gp180') START_MODEL = o.p150.model;
+      }
     } catch (e) { /* stockage indisponible : on travaille en memoire */ }
   }
   function save() {
     try {
-      localStorage.setItem(STORE, JSON.stringify({
-        lang: s.lang, provider: s.provider, models: s.models, remember: s.remember, noAi: s.noAi, pickup: s.pickup, liveWant: s.ed.want, listen: s.listen.want, usb: { bank: s.usb.bank, letter: s.usb.letter }, inj: { bank: s.inj.bank, letter: s.inj.letter, auto: s.inj.auto, set: s.inj.set },
+      // les valeurs GP-200 sont toujours celles du GP-200, meme quand un autre modele est affiche (elles sont alors dans PSTASH)
+      const g = P.is200 ? { ub: s.usb.bank, ul: s.usb.letter, inj: s.inj } : (PSTASH.gp200 || { ub: 1, ul: 'A', inj: { bank: 1, letter: 'A', auto: true, set: false } });
+      const o = {
+        lang: s.lang, provider: s.provider, models: s.models, remember: s.remember, noAi: s.noAi, pickup: s.pickup, liveWant: s.ed.want, listen: s.listen.want, usb: { bank: g.ub, letter: g.ul }, inj: { bank: g.inj.bank, letter: g.inj.letter, auto: g.inj.auto, set: g.inj.set },
         keys: s.remember ? s.keys : {},
-      }));
+      };
+      const p150 = persist150();
+      if (p150) o.p150 = p150;
+      localStorage.setItem(STORE, JSON.stringify(o));
     } catch (e) { /* idem */ }
   }
+  // GP-200 : texte tel quel. GP-150 / GP-180 : les textes propres a ces pedales (PD) passent d'abord, puis « GP-200 » devient le modele reconnu ou choisi
+  // (« GP-200 Studio », le nom de l'application, reste inchange).
+  const relabel = str => (P.is200 || typeof str !== 'string') ? str : str.replace(/GP-200(?! Studio)/g, P.label);
+  const rawText = k => {
+    if (!P.is200 && PD[s.lang] && PD[s.lang][k] !== undefined) return PD[s.lang][k];
+    return (D[s.lang] && D[s.lang][k] !== undefined) ? D[s.lang][k] : (D.fr[k] !== undefined ? D.fr[k] : k);
+  };
   const T = (k, ...a) => {
-    let str = (D[s.lang] && D[s.lang][k] !== undefined) ? D[s.lang][k] : (D.fr[k] !== undefined ? D.fr[k] : k);
+    let str = relabel(rawText(k));
     if (typeof str !== 'string') return str;
     let i = 0;
     return str.replace(/%[sd]/g, () => (i < a.length ? a[i++] : ''));
   };
+  /** Liste de textes (etapes d'aide...) : memes regles que T. */
+  const TA = k => { const v = rawText(k); return Array.isArray(v) ? v.map(relabel) : v; };
   // ------------------------------------------------------------ diagnostic (v0.25)
   // Journal d'evenements en memoire + rapport copiable a la main. Rien n'est jamais envoye automatiquement ; aucune cle API dans le rapport.
   const DIAG = { ev: [], last: null, seen: new Map(), el: null, show: false, details: false, copied: '', manual: false };
@@ -571,6 +798,7 @@
     sec('Pedal / Web MIDI', () => {
       add('Web MIDI supported: ' + (USB && USB.MidiLink.supported() ? 'yes' : 'no'));
       add('State: ' + u.state + ' | port in use: ' + (((u.ports || []).find(x => x.id === u.outId) || {}).name || '-'));
+      if (!P.is200 || u.model !== 'gp200') add('Model shown: ' + P.id + ' | pedal link: ' + u.model + (u.modelSure ? ' (recognised by port name or chosen)' : ' (not recognised by name)'));
       if (u.link) { const p = u.link.ports(), f = a => a.map(x => (x.name || x.id) + (x.state ? ' [' + x.state + ']' : '')).join(' ; ') || '-'; add('Outputs: ' + f(p.outputs)); add('Inputs: ' + f(p.inputs)); }
       add('Live sync open: ' + (s.ed.live ? 'yes' : 'no') + ' | listening: ' + (s.listen.want ? 'on' : 'off') + ' | pedal patch: ' + (s.listen.pc === null ? '?' : s.listen.pc));
     });
@@ -753,7 +981,7 @@
     const ai = aiSetup(controller);
     let res = null;
     try {
-      res = await G.generate(ai.cfg, tb, demande, B.prompts, ai.hooks, s.roles.length ? s.roles.slice() : null);
+      res = await G.generate(ai.cfg, tb, demande, P.is200 ? B.prompts : B150.prompts, ai.hooks, s.roles.length ? s.roles.slice() : null);
       if (!res.files.length) throw new Error('err_gen_failed:' + (ai.cfg.maxRetries + 1));
     } catch (e) {
       s.run.error = friendly(e);
@@ -774,6 +1002,7 @@
   const groupsOf = res => (res.payload.sections || []).map(sc => res.files.filter(f => f.section === sc));
   function addRes(res, kind, label, quiet) {
     res.id = ++libId; res.kind = kind; res.label = label || res.headline || '';
+    res.files.forEach(snapOrig);                                  // etat d'origine, pour « Revenir a l'original » (menu contextuel)
     s.lib.push(res);
     if (quiet) { if (!s.res) { s.res = res; s.sel = { si: 0, vi: 0, slot: s.sel.slot || 'AMP' }; } return; }   // lot a harmoniser : on range le fichier, sans toucher a l'affichage ni a la pedale
     s.res = res; s.sel = { si: 0, vi: 0, slot: s.sel.slot || 'AMP' }; s.fresh = true;
@@ -819,12 +1048,17 @@
   async function openFiles(list) {
     const arr = Array.from(list || []);
     if (!arr.length) return;
-    let n = 0, badSum = false;
+    let n = 0, badSum = false, switched = false;
     const errs = [], added = [];
     const batch = s.tab === 'tune';          // ouverts depuis la fenetre Volume : ils rejoignent le lot, la fenetre reste ouverte, rien n'est envoye a la pedale
     for (const f of arr) {
       try {
         const buf = new Uint8Array(await f.arrayBuffer());
+        const fm = prstModel(buf);                                  // un preset d'un autre modele de pedale : on passe a ce modele (sauf pendant un lot de volume)
+        if (fm && fm !== P.id) {
+          if (!batch && setProfile(fm)) switched = true;
+          else { errs.push((f.name || '?') + ' : ' + T('model_prst_other', MODEL_LABEL[fm], P.label)); continue; }
+        }
         if (buf.length !== G.FILE_SIZE) throw new Error(T('ref_size', buf.length));
         const dec = G.decodePrst(buf, tb);
         if (!dec.checksum.valid) badSum = true;
@@ -844,7 +1078,7 @@
     if (n) { s.mode = 'refine'; s.tab = 'module'; }
     if (errs.length) s.notice = { kind: 'err', text: errs.join('\n') };
     else if (badSum) s.notice = { kind: 'warn', text: T('ref_checksum') };
-    else s.notice = { kind: 'ok', text: T('ref_opened', n) };
+    else s.notice = { kind: 'ok', text: (switched ? T('model_prst', P.label) + ' ' : '') + T('ref_opened', n) };
     render();
   }
 
@@ -864,7 +1098,7 @@
     const fromName = file.spec.name || file.filename;
     let out = null;
     try {
-      out = await G.refine(ai.cfg, tb, src, instr, B.prompts, ai.hooks, live ? 'live' : 'refine');
+      out = await G.refine(ai.cfg, tb, src, instr, P.is200 ? B.prompts : B150.prompts, ai.hooks, live ? 'live' : 'refine');
     } catch (e) {
       s.run.error = friendly(e);
       logLine('  ! ' + String((e && e.message) || e));
@@ -1009,18 +1243,20 @@
   }
 
   function render() {
+    if (s.mem.dragging) { s.mem.pendingRender = true; return; }           // pas de redessin pendant un glisser-deposer (il detruirait la ligne saisie)
     const app = document.getElementById('app');
     const q = sel => document.querySelector(sel);
     const keep = { y: window.scrollY, side: q('.side') ? q('.side').scrollTop : 0, mem: q('.mem-list') ? q('.mem-list').scrollTop : 0, tab: q('.popbody') ? q('.popbody').scrollTop : (q('.tabbody') ? q('.tabbody').scrollTop : 0), tabName: s.tab };
     normSel();
     document.documentElement.lang = s.lang;
     if (pedalFound() && !s.inj.set && !s.inj.asked) { s.inj.open = true; s.inj.asked = true; }   // 1re connexion : on demande le slot avant tout
-    let shell, modal, pop, slotd;
+    let shell, modal, pop, slotd, mvd;
     try {
       const mem = memPanel();
       shell = h('div', { class: 'shell' + (mem ? ' has-mem' : '') }, topbar(), askZone(), sidePanel(), mem, rackZone(), tabsZone(), statusbar());
       pop = popup();
       slotd = slotDialog();
+      mvd = memMoveDialog();
       modal = setupModal();
     } catch (e) {
       // une erreur d'affichage ne doit jamais vider la page : on garde l'ecran actuel et on previent
@@ -1033,11 +1269,13 @@
     app.appendChild(shell);
     if (pop) app.appendChild(pop);
     if (slotd) app.appendChild(slotd);
+    if (mvd) app.appendChild(mvd);
     if (modal) app.appendChild(modal);
     window.scrollTo(0, keep.y);
     if (q('.side')) q('.side').scrollTop = keep.side;
     if (q('.mem-list')) q('.mem-list').scrollTop = keep.mem;
     memScroll();
+    memRefocus();
     if ((q('.popbody') || q('.tabbody')) && keep.tabName === s.tab) (q('.popbody') || q('.tabbody')).scrollTop = keep.tab;
     const lb = document.getElementById('logbox'); if (lb) paintLog(lb);
     paintTune();
@@ -1055,13 +1293,50 @@
   }
 
   function slotName(slot) { return SLOT_NAMES[s.lang][slot]; }
-  const pedalFound = () => s.usb.state === 'ready' && !!s.usb.outId;
+  // Mode d'emploi : PDF publies sur GitHub Pages (meme origine que la page en ligne : l'attribut download declenche alors le telechargement direct ;
+  // ailleurs, le navigateur ouvre simplement le PDF dans un nouvel onglet).
+  const MANUAL_URL = {
+    fr: 'https://rudywidmer.github.io/GP200-Studio/Manual_fr.pdf',
+    en: 'https://rudywidmer.github.io/GP200-Studio/Manual_en.pdf'
+  };
+  function manualLink() {
+    const lang = s.lang === 'fr' ? 'fr' : 'en';
+    return { href: MANUAL_URL[lang], download: lang === 'fr' ? 'GP200-Studio_Mode-d-emploi.pdf' : 'GP200-Studio_User-Manual.pdf', target: '_blank', rel: 'noopener' };
+  }
+  const pedalFound = () => s.usb.state === 'ready' && !!s.usb.outId && s.usb.model === P.id;      // la pedale branchee est bien celle du modele affiche
+  /** GP-150 / GP-180 : l'ecriture n'est permise que si le modele est sur (reconnu par le nom du port, ou choisi a la main). Jamais de question pour le GP-200. */
+  const writeOk = () => P.is200 || s.usb.modelSure;
+  /** Note « modele non confirme » avec le bouton qui le confirme (la liaison est alors refaite pour ce modele). */
+  function modelUnsureNote() {
+    const u = s.usb, can = !!(u.link && u.link.access);
+    return h('div', { class: 'note', id: 'model-unsure' }, h('p', { text: T('model_unsure') }),
+      can ? h('button', { type: 'button', class: 'btn small', id: 'model-confirm', onclick: () => { pedalUse(u.link.access, P.id); render(); } }, T('model_confirm', P.label)) : null);
+  }
 
   // ---------------------------------------------------------- barre du haut
   function modeSwitch() {
     return h('div', { class: 'seg modes', role: 'group', 'aria-label': T('mode_label') },
       ['new', 'refine'].map(m => h('button', { type: 'button', id: 'mode-' + m, 'aria-pressed': String(s.mode === m),
         onclick: () => { if (s.mode !== m) { s.mode = m; s.notice = null; render(); } } }, T('mode_' + m))));
+  }
+
+  /** Choix du modele de pedale (GP-200 / GP-150 / GP-180) : suit la pedale detectee, ou se choisit a la main pour preparer des presets sans pedale. */
+  function modelSelect() {
+    if (!B150) return null;
+    return h('select', { id: 'model-select', class: 'model-sel', 'data-p150': '1', 'aria-label': T('model_label'), title: T('model_tip'), disabled: profileLocked(),
+      onchange: e => pickModel(e.target.value) },
+      ['gp200', 'gp150', 'gp180'].map(m => h('option', { value: m, selected: m === P.id }, MODEL_LABEL[m])));
+  }
+  function pickModel(id) {
+    if (id === P.id) return;
+    const u = s.usb, link = u.link;
+    if (!setProfile(id)) { s.notice = { kind: 'err', text: T('model_locked') }; render(); return; }
+    // une pedale branchee dont le modele n'a pas ete reconnu par son nom : le choix manuel fait foi, la liaison est refaite pour ce modele
+    if (link && link.access && u.state === 'ready' && !u.modelSure && u.model !== id) pedalUse(link.access, id);
+    else if (u.model === id && u.state === 'ready') u.modelSure = true;
+    s.notice = { kind: 'ok', text: T('model_switched', P.label) };
+    render();
+    if (pedalFound()) { scheduleFetch(); scheduleMem(); }
   }
 
   function topbar() {
@@ -1073,7 +1348,9 @@
     let pedal;
     if (u.state === 'unsupported') pedal = h('span', { class: 'chip-st off', id: 'pedal-chip', title: T('pedal_unsupported') }, dot(false), 'USB ✕');
     else if (u.state !== 'ready') pedal = h('button', { type: 'button', class: 'chip-st', id: 'pedal-chip', disabled: u.state === 'asking', onclick: pedalConnect }, dot(false), u.state === 'asking' ? T('pedal_asking') : T('chip_pedal_off'));
-    else if (found) pedal = h('button', { type: 'button', class: 'chip-st ok', id: 'pedal-chip', title: cur ? cur.name : '', onclick: () => { s.tab = 'pedal'; render(); } }, dot(true), 'GP-200');
+    else if (found) pedal = h('button', { type: 'button', class: 'chip-st ok', id: 'pedal-chip', title: cur ? cur.name : '', onclick: () => { s.tab = 'pedal'; render(); } }, dot(true), P.label);
+    else if (u.outId && u.model !== P.id) pedal = h('button', { type: 'button', class: 'chip-st', id: 'pedal-chip', title: T('model_other_tip', MODEL_LABEL[u.model], P.label),
+      onclick: () => { if (!u.modelSure && profile(P.id) && u.link && u.link.access) pedalUse(u.link.access, P.id); else if (!setProfile(u.model)) s.notice = { kind: 'err', text: T('model_locked') }; render(); } }, dot(false), T('model_other_pedal', MODEL_LABEL[u.model]));
     else pedal = h('button', { type: 'button', class: 'chip-st', id: 'pedal-chip', onclick: () => { pedalRefresh(); render(); } }, dot(false), T('chip_pedal_none'));
     const slotChip = found ? h('button', { type: 'button', class: 'chip-st' + (s.inj.set ? ' ok' : ''), id: 'slot-chip', title: T('inj_slot_tip'), 'aria-haspopup': 'dialog',
       onclick: () => { s.inj.open = true; render(); } }, s.inj.set ? T('inj_slot_btn', injName()) : T('inj_slot_choose')) : null;
@@ -1130,7 +1407,7 @@
   const KIND_BADGE = { gen: 'kind_gen', open: 'kind_open', refine: 'kind_refine', live: 'kind_live', pedal: 'kind_pedal' };
   function presetList() {
     if (!s.lib.length) return h('p', { class: 'help', id: 'lib-empty', text: T('lib_empty') });
-    return h('div', { class: 'lib' }, s.lib.map(res => {
+    return h('div', { class: 'lib' }, [...s.lib.map(res => {
       const gs = groupsOf(res), cur = res === s.res;
       const rows = [];
       gs.forEach((g, si) => {
@@ -1138,7 +1415,7 @@
         g.forEach((f, vi) => {
           const on = cur && s.sel.si === si && s.sel.vi === vi;
           const kept = slKept(f), kname = f.spec.name || f.filename;
-          rows.push(h('div', { class: 'lib-line' },
+          rows.push(h('div', { class: 'lib-line', oncontextmenu: ev => ctxOpen(ev, res, f), onpointerdown: ev => ctxLongPress(ev, res, f) },
             h('button', { type: 'button', class: 'lib-row' + (on ? ' on' : ''), 'aria-pressed': String(on), 'data-file': f.filename, onclick: () => selectFile(res, si, vi) },
               res.single ? null : h('span', { class: 'vl', text: f.variant.label || 'ABC'[vi] }),
               h('span', { class: 'ln', text: f.spec.name || f.filename }),
@@ -1151,7 +1428,170 @@
         h('div', { class: 'lib-h' }, h('b', { text: res.label || res.headline }), h('span', { class: 'badge', text: T(KIND_BADGE[res.kind] || 'kind_open') }),
           h('button', { type: 'button', class: 'x', 'aria-label': T('lib_remove'), title: T('lib_remove'), onclick: () => removeRes(res) }, '×')),
         rows);
-    }));
+    }), h('p', { class: 'help lib-hint', id: 'lib-hint', text: T('ctx_hint') })]);
+  }
+
+  // ---------------------------------------------- menu contextuel des presets (clic droit / appui long)
+  // Dupliquer, renommer, revenir a l'original (et supprimer une copie). Le menu est pose sur document.body, hors de #app : render() ne le touche pas
+  // (un champ de saisie dans la liste serait detruit a chaque redessin). Aucun fichier d'origine n'est jamais modifie par « Dupliquer ».
+  const cloneSpec = sp => JSON.parse(JSON.stringify(sp));
+  function snapOrig(f) { f.orig = { raw: Uint8Array.from(f.raw), spec: cloneSpec(f.spec), filename: f.filename }; }
+  const ctxBusy = () => tuneActive() || !!s.usb.sending || !!s.inj.busy;
+  const ctxChanged = f => !!f.orig && !(bytesEq(f.raw, f.orig.raw) && (f.spec.name || '') === (f.orig.spec.name || ''));
+  const ctxAlive = (res, f) => s.lib.indexOf(res) >= 0 && res.files.indexOf(f) >= 0;
+  const ctxNames = () => { const o = new Set(); s.lib.forEach(r => r.files.forEach(x => o.add(String(x.spec.name || '').toLowerCase()))); return o; };
+  const ctxFilenames = () => { const o = new Set(); s.lib.forEach(r => r.files.forEach(x => o.add(x.filename.toLowerCase()))); return o; };
+  function uniqueFilename(base, taken) {
+    let n = 1, cand = base + '.prst';
+    while (taken.has(cand.toLowerCase())) cand = base + '_' + (++n) + '.prst';
+    return cand;
+  }
+  /** Applique un nouveau nom a un preset (octets, decode, spec, nom de fichier). */
+  function applyName(res, f, name) {
+    const old = f.spec.name || '';
+    f.raw = SL.renameRaw(f.raw, name);
+    f.decoded = G.decodePrst(f.raw, tb);
+    f.spec.name = SL.cleanName(name);
+    const taken = ctxFilenames(); taken.delete(f.filename.toLowerCase());
+    f.filename = uniqueFilename(G.safeFilename(f.spec.name || 'preset'), taken);
+    if (res.single && res.headline === old) res.headline = f.spec.name;
+    ctxResync(res, f);
+  }
+  /** La pedale n'a plus le meme contenu que le preset affiche : on oublie ce qui lui a ete envoye (le prochain reglage renvoie le module) et on reinjecte si l'injection auto est active. */
+  function ctxResync(res, f) {
+    if (s.ed.sync.file === f) forgetPedalState();
+    if (res === s.res && curFile() === f) scheduleInject();
+  }
+  function ctxDuplicate(res, f) {
+    if (!ctxAlive(res, f) || ctxBusy()) return;
+    const names = ctxNames(), base = SL.cleanName(f.spec.name || f.decoded.name || 'preset') || 'preset';
+    let n = 2, nm;
+    for (;;) { const suf = ' ' + n; nm = SL.cleanName(base.slice(0, Math.max(1, SL.MAX_NAME - suf.length)).trim() + suf); if (!names.has(nm.toLowerCase())) break; n++; }
+    const raw = SL.renameRaw(f.raw, nm);
+    const nf = { ...f, raw, spec: cloneSpec(f.spec), decoded: G.decodePrst(raw, tb), variant: { ...f.variant }, warnings: (f.warnings || []).slice(), dup: true };
+    nf.spec.name = nm;
+    nf.tuned = f.tuned ? { ...f.tuned } : f.tuned;
+    nf.filename = uniqueFilename(G.safeFilename(nm), ctxFilenames());
+    snapOrig(nf);
+    res.files.splice(res.files.indexOf(f) + 1, 0, nf);
+    const si = (res.payload.sections || []).indexOf(f.section), vi = si >= 0 ? groupsOf(res)[si].indexOf(nf) : 0;
+    s.notice = { kind: 'ok', text: T('ctx_dup_done', nm) };
+    selectFile(res, Math.max(0, si), Math.max(0, vi));
+  }
+  function ctxRevert(res, f) {
+    if (!ctxAlive(res, f) || ctxBusy() || !ctxChanged(f)) return;
+    const o = f.orig, taken = ctxFilenames(); taken.delete(f.filename.toLowerCase());
+    f.raw = Uint8Array.from(o.raw); f.decoded = G.decodePrst(f.raw, tb); f.spec = cloneSpec(o.spec);
+    f.filename = taken.has(o.filename.toLowerCase()) ? uniqueFilename(o.filename.replace(/\.prst$/, ''), taken) : o.filename;
+    delete f.tuned;
+    if (res.single) res.headline = f.spec.name || res.headline;
+    s.notice = { kind: 'ok', text: T('ctx_reverted', f.spec.name || f.filename) };
+    ctxResync(res, f);
+    render();
+  }
+  function ctxDelete(res, f) {
+    if (!ctxAlive(res, f) || ctxBusy() || !f.dup) return;
+    const si = (res.payload.sections || []).indexOf(f.section), wasCur = res === s.res && curFile() === f;
+    const before = si >= 0 ? groupsOf(res)[si].indexOf(f) : 0;
+    res.files.splice(res.files.indexOf(f), 1);
+    if (ed_syncIs(f)) forgetPedalState();
+    if (res === s.res && s.sel.si === si && (wasCur || s.sel.vi > before)) s.sel.vi = Math.max(0, s.sel.vi - 1);
+    s.notice = { kind: 'ok', text: T('ctx_deleted', f.spec.name || f.filename) };
+    render();
+    if (wasCur) scheduleInject();
+  }
+  const ed_syncIs = f => s.ed.sync && s.ed.sync.file === f;
+
+  let ctx = null;                                       // { el, off, from }
+  function ctxClose(refocus) {
+    if (!ctx) return;
+    const c = ctx; ctx = null;
+    c.el.remove(); c.off();
+    if (refocus && c.from) setTimeout(() => { const b = document.querySelector('.lib-row[data-file="' + (window.CSS && CSS.escape ? CSS.escape(c.from) : c.from) + '"]'); if (b) b.focus(); }, 0);
+  }
+  function ctxPlace(el, x, y) {
+    el.style.left = '0px'; el.style.top = '0px';
+    const w = el.offsetWidth, hh = el.offsetHeight;
+    el.style.left = Math.max(8, Math.min(x, window.innerWidth - w - 8)) + 'px';
+    el.style.top = Math.max(8, Math.min(y, window.innerHeight - hh - 8)) + 'px';
+  }
+  function ctxOpen(ev, res, f) {
+    if (!ctxAlive(res, f)) return;
+    ev.preventDefault(); ev.stopPropagation();
+    if (ctx && ctx.t && Date.now() - ctx.t < 900) return;            // appui long deja traite : on ignore le contextmenu natif qui suit
+    let x = ev.clientX, y = ev.clientY;
+    if (!x && !y) { const r = ev.currentTarget.getBoundingClientRect(); x = r.left + 24; y = r.bottom - 4; }         // ouverture au clavier (touche Menu / Maj+F10)
+    ctxMenu(res, f, x, y);
+  }
+  function ctxMenu(res, f, x, y) {
+    ctxClose(false);
+    const busy = ctxBusy(), name = f.spec.name || f.filename;
+    const item = (id, label, fn, dis, tip) => h('button', { type: 'button', role: 'menuitem', class: 'ctx-item', id, disabled: !!dis, title: tip || label, onclick: () => { ctxClose(false); fn(); } }, label);
+    const el = h('div', { class: 'ctx-menu', id: 'ctx-menu', role: 'menu', 'aria-label': T('ctx_menu', name) },
+      item('ctx-dup', T('ctx_dup'), () => ctxDuplicate(res, f), busy, busy ? T('ctx_busy') : null),
+      item('ctx-rename', T('ctx_rename'), () => ctxRename(res, f, x, y), busy, busy ? T('ctx_busy') : null),
+      item('ctx-revert', T('ctx_revert'), () => ctxRevert(res, f), busy || !ctxChanged(f), busy ? T('ctx_busy') : (!ctxChanged(f) ? T('ctx_revert_none') : null)),
+      f.dup ? item('ctx-delete', T('ctx_delete'), () => ctxDelete(res, f), busy, busy ? T('ctx_busy') : null) : null);
+    ctxShow(el, x, y, f);
+    const first = el.querySelector('.ctx-item:not(:disabled)'); if (first) first.focus();
+  }
+  function ctxRename(res, f, x, y) {
+    if (!ctxAlive(res, f) || ctxBusy()) return;
+    const max = SL.MAX_NAME;
+    const input = h('input', { type: 'text', id: 'ctx-name', class: 'ctx-input', value: f.spec.name || '', maxlength: String(max), autocomplete: 'off', spellcheck: 'false', 'aria-label': T('rn_label'), title: T('rn_label') });
+    const commit = () => {
+      const nm = SL.cleanName(input.value);
+      if (!nm || !ctxAlive(res, f)) { input.focus(); return; }
+      ctxClose(false);
+      if (nm !== (f.spec.name || '')) { applyName(res, f, nm); s.notice = { kind: 'ok', text: T('ctx_renamed', nm) }; }
+      render();
+    };
+    const el = h('form', { class: 'ctx-menu ctx-rename', id: 'ctx-rename-form', role: 'dialog', 'aria-label': T('rn_title'), onsubmit: ev => { ev.preventDefault(); commit(); } },
+      h('b', { class: 'ctx-title', text: T('rn_title') }), input,
+      h('p', { class: 'help', style: 'margin:0', text: T('rn_hint', max) }),
+      h('div', { class: 'actions', style: 'margin:0' },
+        h('button', { type: 'submit', class: 'btn small go', id: 'ctx-rename-ok', title: T('rn_ok') }, T('rn_ok')),
+        h('button', { type: 'button', class: 'btn small', id: 'ctx-rename-cancel', title: T('cancel'), onclick: () => ctxClose(true) }, T('cancel'))));
+    ctxShow(el, x, y, f);
+    input.focus(); input.select();
+  }
+  function ctxShow(el, x, y, f) {
+    document.body.appendChild(el);
+    ctxPlace(el, x, y);
+    const onDown = ev => { if (!el.contains(ev.target)) ctxClose(false); };
+    const onKey = ev => {
+      if (ev.key === 'Escape') { ev.preventDefault(); ev.stopPropagation(); ctxClose(true); return; }
+      if (el.classList.contains('ctx-rename')) return;
+      const its = Array.from(el.querySelectorAll('.ctx-item:not(:disabled)')); if (!its.length) return;
+      const i = its.indexOf(document.activeElement);
+      if (ev.key === 'ArrowDown') { ev.preventDefault(); its[(i + 1) % its.length].focus(); }
+      else if (ev.key === 'ArrowUp') { ev.preventDefault(); its[(i - 1 + its.length) % its.length].focus(); }
+      else if (ev.key === 'Home') { ev.preventDefault(); its[0].focus(); }
+      else if (ev.key === 'End') { ev.preventDefault(); its[its.length - 1].focus(); }
+      else if (ev.key === 'Tab') { ev.preventDefault(); ctxClose(true); }
+    };
+    const onSize = () => ctxPlace(el, x, y);                    // clavier tactile / redimensionnement : on replace, on ne ferme pas (la saisie d'un nom ne doit pas sauter)
+    document.addEventListener('pointerdown', onDown, true);
+    document.addEventListener('keydown', onKey, true);
+    window.addEventListener('resize', onSize);
+    ctx = { el, from: f.filename, t: ctx ? ctx.t : 0, off: () => { document.removeEventListener('pointerdown', onDown, true); document.removeEventListener('keydown', onKey, true); window.removeEventListener('resize', onSize); } };
+  }
+  /** Appui long (ecran tactile) = clic droit. */
+  let lp = null;
+  function ctxLongPress(ev, res, f) {
+    if (ev.pointerType !== 'touch' && ev.pointerType !== 'pen') return;
+    clearTimeout(lp && lp.timer);
+    const x0 = ev.clientX, y0 = ev.clientY, line = ev.currentTarget;
+    const cancel = () => { clearTimeout(lp && lp.timer); line.removeEventListener('pointermove', move); line.removeEventListener('pointerup', cancel); line.removeEventListener('pointercancel', cancel); lp = null; };
+    const move = e => { if (Math.abs(e.clientX - x0) > 10 || Math.abs(e.clientY - y0) > 10) cancel(); };
+    lp = { timer: setTimeout(() => {
+      cancel();
+      if (!ctxAlive(res, f)) return;
+      const swallow = e => { e.preventDefault(); e.stopPropagation(); line.removeEventListener('click', swallow, true); };
+      line.addEventListener('click', swallow, true); setTimeout(() => line.removeEventListener('click', swallow, true), 700);
+      ctxMenu(res, f, x0, y0); if (ctx) ctx.t = Date.now();
+    }, 550) };
+    line.addEventListener('pointermove', move); line.addEventListener('pointerup', cancel); line.addEventListener('pointercancel', cancel);
   }
 
   function genOptions() {
@@ -1173,10 +1613,34 @@
           T('web') + (webOk ? '' : ' ' + T('web_na')))));
   }
 
+  /** Favoris (♥) : export direct en ZIP, lot de volume pre-rempli, ou set list. N'apparait que si au moins un preset est garde. */
+  function favZip() {
+    const items = slItems();
+    if (!items.length) return;
+    const d = new Date(), p2 = n => (n < 10 ? '0' : '') + n;
+    zipFiles(items.map((it, i) => ({ f: { ...it.f, folder: '', filename: p2(i + 1) + '_' + it.f.filename }, res: null })),
+      T('fav_root') + '_' + d.getFullYear() + p2(d.getMonth() + 1) + p2(d.getDate()) + '_' + p2(d.getHours()) + p2(d.getMinutes()));
+  }
+  function favTune() {
+    const items = slItems();
+    if (!items.length) return;
+    if (!tuneActive()) { tuneOpenForm(); s.tune.sel = items.map(it => it.f); s.tune.confirm = false; }
+    s.tab = 'tune'; render();
+  }
+  function favBar() {
+    const n = slItems().length;
+    if (!n) return null;
+    return h('div', { class: 'fav-bar', id: 'fav-bar', role: 'group', 'aria-label': T('fav_title', n) },
+      h('b', { class: 'fav-n', id: 'fav-n', text: T('fav_title', n) }),
+      h('div', { class: 'fav-btns' },
+        h('button', { type: 'button', class: 'btn small', id: 'fav-zip', title: T('fav_export_tip', n), onclick: favZip }, T('fav_export')),
+        h('button', { type: 'button', class: 'btn small', id: 'fav-tune', title: T('fav_tune_tip'), onclick: favTune }, T('fav_tune')),
+        h('button', { type: 'button', class: 'btn small', id: 'fav-setlist', title: T('fav_setlist_tip'), onclick: () => { s.tab = 'setlist'; render(); } }, T('fav_setlist'))));
+  }
   function sidePanel() {
     return h('aside', { class: 'side zone', 'aria-label': T('lib_title') },
-      h('div', { class: 'side-h' }, h('h2', { text: T('lib_title') }), s.lib.length ? h('span', { class: 'count', text: String(s.lib.length) }) : null),
-      presetList(), genOptions());
+      h('div', { class: 'side-h' }, h('h2', { text: T('lib_title') }), s.lib.length ? h('span', { class: 'count', text: String(s.lib.length) }) : null, modelSelect()),
+      favBar(), presetList(), genOptions());
   }
 
   // ------------------------------------------------------------------- rack
@@ -1196,7 +1660,7 @@
     const ij = file && pedalFound() ? injectPanel(file) : null;
     if (ij) zone.appendChild(ij);
     if (file) zone.appendChild(patchVolBlock(file));
-    const rack = h('ol', { class: 'rack' + (running ? ' scan' : '') + (s.fresh && res ? ' lit' : '') });
+    const rack = h('ol', { class: 'rack' + (G.MODULES.length > 11 ? ' r12' : '') + (running ? ' scan' : '') + (s.fresh && res ? ' lit' : '') });
     order.forEach((mi, pos) => {
       const slot = G.MODULES[mi], e = dec ? dec.modules[slot] : null;
       const has = !!(e && e.model), on = has && e.on;
@@ -1232,7 +1696,7 @@
     const file = curFile(), hasLog = !!(s.run && s.run.log.length);
     if (s.tab === 'log' && !hasLog) s.tab = 'module';
     const running = !!(s.run && s.run.running), tuning = tuneActive();
-    const names = TABS.filter(t => t !== 'module' && (t !== 'log' || hasLog));
+    const names = TABS.filter(t => t !== 'module' && (t !== 'log' || hasLog) && (t !== 'ctrl' || P.is200));
     const bar = h('div', { class: 'tabbar', role: 'toolbar' }, names.map(t => h('button', { type: 'button', class: 'tab', id: 'tabbtn-' + t, 'aria-haspopup': 'dialog', 'aria-expanded': String(s.tab === t),
       onclick: () => { s.tab = t; if (t === 'tune' && !s.lib.length && !tuneActive()) tuneOpenForm(); render(); } }, T('tab_' + t) + (t === 'setlist' && slItems().length ? ' (' + slItems().length + ')' : ''), (t === 'log' && running) || (t === 'tune' && tuning) ? h('span', { class: 'sdot on run' }) : null)));
     const body = h('div', { class: 'tabbody', id: 'tab-module' });
@@ -1263,7 +1727,7 @@
   }
 
   function welcome() {
-    return h('div', { class: 'welcome', id: 'welcome' }, h('h3', { text: T('w_title') }), h('ul', null, D[s.lang].w_items.map(x => h('li', { text: x }))));
+    return h('div', { class: 'welcome', id: 'welcome' }, h('h3', { text: T('w_title') }), h('ul', null, TA('w_items').map(x => h('li', { text: x }))));
   }
 
   // ------------------------------------------------------------------ resultat
@@ -1301,7 +1765,7 @@
         h('dt', { text: T('res_desc') }), h('dd', { text: d.description || '–' }),
         h('dt', { text: T('res_chain') }), h('dd', { text: d.chain_readable ? d.chain_readable.join(' → ') : '–' }),
         h('dt', { text: T('res_vol') }), h('dd', { text: String(d.patch_vol) }),
-        h('dt', { text: T('res_ctrl') }), h('dd', { text: ctrl || T('ctrl_none') }),
+        P.is200 ? [h('dt', { text: T('res_ctrl') }), h('dd', { text: ctrl || T('ctrl_none') })] : null,
         h('dt', { text: T('res_chk') }), h('dd', { text: d.checksum.valid ? T('res_chk_ok') : T('res_chk_ko') })));
       box.appendChild(h('p', { class: 'help', text: T('ref_now') }));
     }
@@ -1340,6 +1804,8 @@
 
   // ------------------------------------------------- reglage d'un module (direct)
   const clampN = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  /** Identifiant du modele dans le catalogue : GP-200, la categorie 10 (baffles) a son propre numero ; GP-150 / GP-180, toujours `id` (la categorie 10 y est la reverb). */
+  const midOf = (m, cat) => (P.is200 && cat === 10 ? m.model_id : m.id);
   const linkReady = () => pedalFound() && s.ed.want && !s.usb.sending && !tuneActive();      // on peut tenir le port ouvert
   const liveReady = () => linkReady() && !patchMismatch();                                    // on peut envoyer des reglages (la pedale est sur le patch affiche)
 
@@ -1471,7 +1937,7 @@
     if (ed.busy) return;
     const pick = tb.modelsForSlot(slot)[idx];
     if (!pick) return;
-    const m = pick[0], cat = pick[1], mid = cat === 10 ? m.model_id : m.id, name = m.name;
+    const m = pick[0], cat = pick[1], mid = midOf(m, cat), name = m.name;
     const k = G.MODULES.indexOf(slot), cur = file.decoded.modules[slot];
     const old = (cur && cur.params) || {}, params = {};
     for (const p of tb.paramsOf(mid, cat)) if (p.slot < G.N_SLOTS) params[p.name] = Object.prototype.hasOwnProperty.call(old, p.name) ? old[p.name] : p.default;
@@ -1499,7 +1965,7 @@
       ed.pm.set(k, key);
       if (r.confirmed === false) ed.noConf.push(e.model);
       // changer d'ampli fait recharger sa baffle par defaut a la pedale (audit du 04/10) : la baffle de l'ecran n'y est plus
-      if (slot === 'AMP') { ed.pm.delete(G.MODULES.indexOf('CAB')); unsync(file, 'CAB'); opt.reloaded = true; }
+      if (slot === 'AMP' && P.is200) { ed.pm.delete(G.MODULES.indexOf('CAB')); unsync(file, 'CAB'); opt.reloaded = true; }
     }
     const list = tb.paramsOf(e.model_id, e.category).filter(p => p.slot < G.N_SLOTS);
     const val = p => Number((e.params || {})[p.name]);
@@ -1556,11 +2022,12 @@
           h('p', { class: 'help', text: T('inj_panel_msg') }),
           h('label', { class: 'f' }, T('pedal_bank'), h('select', { id: 'inj-bank', onchange: e => { j.bank = +e.target.value; } },
             Array.from({ length: USB.SLOT_MAX }, (_, i) => h('option', { value: String(i + 1), selected: i + 1 === j.bank }, String(i + 1))))),
-          h('label', { class: 'f' }, T('pedal_letter'), h('select', { id: 'inj-letter', onchange: e => { j.letter = e.target.value; } },
-            ['A', 'B', 'C', 'D'].map(l => h('option', { value: l, selected: l === j.letter }, l)))),
+          P.letters.length > 1 ? h('label', { class: 'f' }, T('pedal_letter'), h('select', { id: 'inj-letter', onchange: e => { j.letter = e.target.value; } },
+            ['A', 'B', 'C', 'D'].map(l => h('option', { value: l, selected: l === j.letter }, l)))) : null,
+          writeOk() ? null : modelUnsureNote(),
           h('label', { class: 'check' }, h('input', { type: 'checkbox', id: 'inj-auto', checked: j.auto, onchange: e => { j.auto = e.target.checked; } }), T('inj_auto')),
           h('label', { class: 'check' }, h('input', { type: 'checkbox', id: 'listen-chk', checked: s.listen.want, onchange: e => { s.listen.want = e.target.checked; if (!s.listen.want) { s.listen.pc = null; s.listen.desync = false; s.listen.touched = false; liveStop(); } save(); render(); } }), T('listen_chk')),
-          h('button', { type: 'button', class: 'btn small go', id: 'inj-ok', onclick: () => { j.set = true; j.open = false; save(); render(); if (j.auto) scheduleInject(); memSoon(2500); } }, 'OK'))));
+          h('button', { type: 'button', class: 'btn small go', id: 'inj-ok', disabled: !writeOk(), onclick: () => { j.set = true; j.open = false; save(); render(); if (j.auto) scheduleInject(); memSoon(2500); } }, 'OK'))));
   }
   function injectPanel(file) {
     const j = s.inj, u = s.usb, lines = [];
@@ -1580,7 +2047,7 @@
   async function injectSlot(file, opt) {
     opt = opt || {};
     const u = s.usb, j = s.inj, ed = s.ed;
-    if (!file || !pedalFound() || tuneActive() || !j.set) return;
+    if (!file || !pedalFound() || tuneActive() || !j.set || !writeOk()) return;
     if (u.sending || j.busy) { j.queued = { manual: !opt.auto }; return; }     // une ecriture est en cours : on rejoue le preset affiche a la fin
     j.queued = null; j.busy = true; j.msg = ''; j.err = ''; j.warn = '';
     const bank = j.bank, letter = j.letter, name = injName(), raw = Uint8Array.from(file.raw);
@@ -1663,7 +2130,8 @@
     const L = s.listen;
     if (e.kind === 'patch') {
       L.pc = e.pc; L.last = T('listen_patch', USB.pcToSlotName(e.pc));
-      listenLog('patch', 'patch ' + USB.pcToSlotName(e.pc));
+      listenLog('patch', 'patch ' + USB.pcToSlotName(e.pc) + (e.changed ? ' (modele ou ordre change sur la pedale)' : ''));
+      if (e.changed && !fromPedal()) { L.touched = true; listenRender(); return; }      // GP-150 / GP-180 : un module a change de modele sur la pedale, l'ecran peut differer
       if (!s.inj.busy && !s.usb.sending) pedalPatchChanged(e.pc);
     } else if (e.kind === 'bypass') {
       const slot = G.MODULES[e.module];
@@ -1846,9 +2314,10 @@
     if (m.busy || !pedalFound() || !u.link || (!m.auto && !opt.manual)) return;
     if (!opt.manual && !s.inj.set && !s.pr.last) return;                              // lecture automatique : seulement une fois la pedale connue (patch courant lu) ou le slot de travail confirme ; rien n'ouvre le port avant
     if (opt.all) memInvalidate();
-    const start = s.listen.pc === null ? 0 : s.listen.pc;
-    const todo = memTodo().sort((a, b) => ((a - start + 256) % 256) - ((b - start + 256) % 256));
+    const start = s.listen.pc === null ? 0 : s.listen.pc, N = P.nSlots;
+    const todo = memTodo().sort((a, b) => ((a - start + N) % N) - ((b - start + N) % N));
     if (!todo.length) { if (opt.manual) render(); return; }
+    if (!P.is200 && u.link.readNames) return memLoadAll(opt, todo);
     m.busy = true; m.err = ''; m.done = 0; m.todo = todo.length;
     if (opt.manual) render();
     let tmp = false, bad = 0;
@@ -1869,8 +2338,8 @@
         let ok = false;
         for (let a = 0; a < 2 && !ok; a++) {
           try {
-            const data = await link.readStoredPatch(pc, { timeoutMs: IS_ANDROID ? 3000 : 1500 });
-            m.items[pc] = { name: G.deviceReadName(data) }; ok = true; bad = 0;
+            const rd = await link.readStoredPatch(pc, { timeoutMs: IS_ANDROID ? 3000 : 1500 });
+            m.items[pc] = { name: G.deviceReadName((rd && rd.data) || rd) }; ok = true; bad = 0;
           } catch (e) { if (!e || (e.code !== 'timeout' && e.code !== 'badread')) throw e; }
         }
         if (!ok) {
@@ -1892,11 +2361,51 @@
     }
     if (!m.err && memTodo().length) memSoon(800);                                    // des emplacements ont ete reecrits pendant la lecture
   }
+  /** GP-150 / GP-180 : les 200 noms viennent en UNE requete (au lieu de 200 lectures). */
+  async function memLoadAll(opt, todo) {
+    const m = s.mem, u = s.usb, ed = s.ed;
+    m.busy = true; m.err = ''; m.done = 0; m.todo = todo.length;
+    if (opt.manual) render();
+    let tmp = false;
+    try {
+      const link = u.link;
+      for (let i = 0; u.sending || s.inj.busy || tuneActive() || s.pr.busy; i++) {
+        if (i > 150) throw new USB.UsbError('busy', 'pedale occupee');
+        await sleep(200);
+      }
+      if (!pedalFound() || u.link !== link) throw new USB.UsbError('gone', 'pedale debranchee');
+      if (!ed.live) {
+        if (linkReady()) { if (!(await liveEnsure())) throw new USB.UsbError('noport', 'port MIDI non ouvert'); }
+        else if (opt.manual) { link.select(u.outId); await link.open(); tmp = true; await sleep(IS_ANDROID ? 700 : 300); }
+        else throw new USB.UsbError('noport', 'liaison directe coupee');
+      }
+      let names = null;
+      for (let a = 0; a < 2 && !names; a++) {
+        try { names = await link.readNames({ timeout: IS_ANDROID ? 12000 : 8000 }); } catch (e) { if (!e || (e.code !== 'timeout' && e.code !== 'badread')) throw e; }
+      }
+      if (!names) {
+        if (!opt.manual) { m.auto = false; dg('read', 'memoire : la pedale ne repond pas, lecture automatique abandonnee'); }
+        else throw new USB.UsbError('timeout', 'pas de reponse');
+      } else {
+        names.forEach(x => { if (x.index >= 0 && x.index < P.nSlots) m.items[x.index] = { name: x.name }; });
+        m.items.forEach((it, pc) => { if (!it || it.stale) m.items[pc] = { name: '' }; });          // jamais de « a relire » sans fin
+        m.done = names.length;
+        dg('read', 'memoire : ' + m.done + ' emplacements lus');
+      }
+    } catch (e) {
+      m.err = readFailText(e);
+      dg('read', 'memoire : interrompue ' + ((e && e.code) || '') + ' ' + String((e && e.message) || e).slice(0, 120));
+    } finally {
+      if (tmp) { try { await u.link.close(); } catch (e) { /* rien */ } } else if (ed.live) liveTouch();
+      m.busy = false;
+      render();
+    }
+  }
   /** Clic sur un emplacement : la pedale le charge (comme au pied), puis on le lit et on l'affiche (remplace le patch lu precedent, sinon s'ajoute a la liste). */
   async function memPick(pc) {
     const u = s.usb, ed = s.ed;
     if (!pedalFound() || u.sending || s.inj.busy || tuneActive() || s.pr.busy) return;
-    const bank = (pc >> 2) + 1, letter = 'ABCD'[pc & 3];
+    const bank = P.is200 ? (pc >> 2) + 1 : pc + 1, letter = P.is200 ? 'ABCD'[pc & 3] : 'A';
     let tmp = false;
     try {
       if (!ed.live) {
@@ -1920,26 +2429,399 @@
     m.follow = false;
     l.scrollTop = Math.max(0, r.offsetTop - (l.clientHeight - r.offsetHeight) / 2);
   }
+  // ---------------------------------------------- reorganiser la memoire (GP-200) : glisser-deposer, puis ecriture en une fois
+  // Glisser des presets ne change que l'AFFICHAGE (m.plan = permutation, voir memmove.js) ; rien n'est ecrit tant qu'on n'a pas confirme.
+  // A l'application : lecture des emplacements concernes, sauvegarde ZIP, ecriture (meme sequence que la Set list), relecture de controle.
+  const memReady = () => !!MM && P.is200 && !s.mem.busy && s.mem.items.length === 256 && s.mem.items.every(Boolean);
+  const memSrc = pos => (s.mem.plan ? s.mem.plan.order[pos] : pos);
+  const memSorted = () => Array.from(new Set(s.mem.sel || [])).sort((a, b) => a - b);
+  function memRowClick(ev, pos) {
+    const m = s.mem;
+    if (memReady() && (ev.ctrlKey || ev.metaKey)) { const i = m.sel.indexOf(pos); if (i >= 0) m.sel.splice(i, 1); else m.sel.push(pos); m.anchor = pos; render(); return; }
+    if (memReady() && ev.shiftKey && m.anchor === null && s.listen.pc !== null && s.listen.pc !== undefined && s.listen.pc >= 0 && s.listen.pc < m.items.length) m.anchor = s.listen.pc;   // pas d'ancre : on part du patch affiche
+    if (memReady() && ev.shiftKey && m.anchor !== null) { const a = Math.min(m.anchor, pos), b = Math.max(m.anchor, pos); m.sel = []; for (let i = a; i <= b; i++) m.sel.push(i); render(); return; }
+    m.sel = [pos]; m.anchor = pos;
+    if (m.plan) { render(); return; }                                    // plan en attente : le clic ne charge rien (le contenu affiche n'est plus celui de la pedale)
+    memPick(pos);
+  }
+  function memMarks() { document.querySelectorAll('.mem-row.drop-before, .mem-row.drop-after, .mem-row.dragging').forEach(el => el.classList.remove('drop-before', 'drop-after', 'dragging')); }
+  function memDragStart(ev, pos) {
+    const m = s.mem;
+    if (!memReady()) { ev.preventDefault(); return; }
+    if (m.sel.indexOf(pos) < 0) m.sel = [pos];
+    m.anchor = pos; m.dragging = true;
+    try { ev.dataTransfer.effectAllowed = 'move'; ev.dataTransfer.setData('text/plain', memSorted().map(memName).join(', ')); } catch (e) { /* rien */ }
+    document.querySelectorAll('.mem-row').forEach(el => { if (m.sel.indexOf(+el.getAttribute('data-pc')) >= 0) el.classList.add('dragging'); });
+    memGhost(ev);
+    memAutoStart();
+  }
+  /** Plusieurs presets saisis : le « fantome » du glisser montre le groupe (nombre + premiere et derniere place), pas seulement la ligne prise. */
+  function memGhost(ev) {
+    const sel = memSorted();
+    if (sel.length < 2 || !ev.dataTransfer || !ev.dataTransfer.setDragImage) return;
+    try {
+      const g = h('div', { class: 'mem-ghost', text: '⠿ ' + T('mm_ghost', sel.length) + ' · ' + memName(sel[0]) + ' → ' + memName(sel[sel.length - 1]) });
+      document.body.appendChild(g);
+      ev.dataTransfer.setDragImage(g, 14, 14);
+      setTimeout(() => { if (g.parentNode) g.parentNode.removeChild(g); }, 0);
+    } catch (e) { /* rien */ }
+  }
+  // Defilement automatique pendant le glisser : la liste ne montre qu'une dizaine de lignes, aller de 50-A a 01-A demande de defiler loin et vite.
+  let memAuto = { timer: null, y: null, since: 0 };
+  function memAutoStart() { if (!memAuto.timer) memAuto.timer = setInterval(memAutoTick, 16); }
+  function memAutoStop() { if (memAuto.timer) { clearInterval(memAuto.timer); memAuto.timer = null; } memAuto.y = null; memAuto.since = 0; }
+  function memAutoTick() {
+    const l = document.getElementById('mem-list');
+    if (!l || !s.mem.dragging || memAuto.y === null) return;
+    const r = l.getBoundingClientRect(), edge = Math.min(44, r.height / 4), y = memAuto.y;
+    const dTop = r.top + edge - y, dBot = y - (r.bottom - edge);
+    if (dTop <= 0 && dBot <= 0) { memAuto.since = 0; return; }
+    const now = Date.now(); if (!memAuto.since) memAuto.since = now;
+    if (now - memAuto.since < 350) return;                       // le pointeur doit s'attarder au bord : un depot rapide pres du bord ne fait pas defiler
+    const t = Math.min(1, (dTop > 0 ? dTop : dBot) / edge), v = Math.ceil(3 + 33 * t * t);
+    l.scrollTop += dTop > 0 ? -v : v;
+  }
+  function memDragOver(ev, pos) {
+    const m = s.mem;
+    if (!m.dragging) return;
+    ev.preventDefault();
+    memAuto.y = ev.clientY;
+    try { ev.dataTransfer.dropEffect = 'move'; } catch (e) { /* rien */ }
+    document.querySelectorAll('.mem-row.drop-before, .mem-row.drop-after').forEach(el => el.classList.remove('drop-before', 'drop-after'));
+    if (m.sel.indexOf(pos) < 0) ev.currentTarget.classList.add(pos > m.anchor ? 'drop-after' : 'drop-before');
+  }
+  function memDragEnd(flush) {
+    const m = s.mem;
+    memMarks(); memAutoStop();
+    m.dragging = false;
+    if (flush && m.pendingRender) { m.pendingRender = false; render(); }
+  }
+  /** Applique un deplacement au plan : r vient de MM.move / MM.nudge. */
+  function memApplyMove(r, sortedBefore, anchor) {
+    const m = s.mem;
+    if (!r) return false;
+    m.anchor = r.sel[Math.max(0, sortedBefore.indexOf(anchor))];
+    const moved = new Set(m.plan && m.plan.moved ? m.plan.moved : []); r.sel.forEach(p => moved.add(r.order[p]));   // contenus (par emplacement d'origine) que l'utilisateur a deplaces
+    m.sel = r.sel; m.plan = { order: r.order, moved: Array.from(moved) }; m.refocus = m.anchor;
+    return true;
+  }
+  function memDrop(ev, pos) {
+    const m = s.mem;
+    if (!m.dragging) return;
+    ev.preventDefault();
+    const sel = memSorted(), anchor = m.anchor;
+    memDragEnd(false);
+    const single = sel.length === 1 && !m.plan, from = sel[0];
+    const done = memApplyMove(MM.move(m.plan ? m.plan.order : MM.identity(m.items.length), sel, anchor, pos), sel, anchor);
+    if (done && single) m.mv = { phase: 'confirm', direct: true, from, to: m.sel[0], name: (m.items[from] || {}).name || '' };   // UN seul preset : la confirmation s'ouvre tout de suite au depot
+    m.pendingRender = false; render();
+  }
+  /** « Déplacer la sélection vers » : le bloc sélectionné commence à la banque / lettre choisies (sans glisser sur de longues distances). */
+  function memGoto() {
+    const m = s.mem, g = m.go || (m.go = { bank: 1, letter: 'A' });
+    const sel = memSorted();
+    if (!sel.length || !memReady()) return;
+    const start = (g.bank - 1) * 4 + Math.max(0, ['A', 'B', 'C', 'D'].indexOf(g.letter));
+    const r = MM.moveTo(m.plan ? m.plan.order : MM.identity(m.items.length), sel, start);
+    if (!r) return;
+    memApplyMove(r, sel, sel[0]);
+    m.pendingRender = false; render();
+    const l = document.getElementById('mem-list'), row0 = l && l.querySelector('.mem-row[data-pc="' + Math.min(start, m.items.length - 1) + '"]');
+    if (l && row0) l.scrollTop = Math.max(0, row0.offsetTop - 4);
+  }
+  function memKey(ev) {
+    const m = s.mem;
+    if (!ev.altKey || (ev.key !== 'ArrowUp' && ev.key !== 'ArrowDown') || !memReady()) return;
+    const el = ev.target && ev.target.closest ? ev.target.closest('.mem-row') : null;
+    if (!el) return;
+    ev.preventDefault();
+    const pos = +el.getAttribute('data-pc');
+    if (m.sel.indexOf(pos) < 0) { m.sel = [pos]; m.anchor = pos; }
+    const sel = memSorted(), dir = ev.key === 'ArrowUp' ? -1 : 1, anchor = dir < 0 ? sel[0] : sel[sel.length - 1];
+    if (memApplyMove(MM.nudge(m.plan ? m.plan.order : MM.identity(m.items.length), sel, dir), sel, anchor)) render();
+  }
+  function memRefocus() {
+    const m = s.mem;
+    if (m.refocus === null || m.refocus === undefined) return;
+    const pos = m.refocus; m.refocus = null;
+    const b = document.querySelector('.mem-row[data-pc="' + pos + '"]');
+    if (b) { b.focus({ preventScroll: true }); b.scrollIntoView({ block: 'nearest' }); }
+  }
+  function memPlanCancel() { const m = s.mem; m.plan = null; m.sel = []; m.anchor = null; render(); }
+
+  function memGotoBox(n, locked) {
+    const m = s.mem, g = m.go || (m.go = { bank: 1, letter: 'A' });
+    return h('div', { class: 'mem-goto', id: 'mem-goto', role: 'group', 'aria-label': T('mm_goto', n), title: T('mm_goto_tip') },
+      h('span', { class: 'help', text: T('mm_goto', n) }),
+      h('div', { class: 'mem-goto-row' },
+        h('select', { id: 'mem-goto-bank', 'aria-label': T('mm_goto_bank'), title: T('mm_goto_bank'), disabled: locked, onchange: e => { g.bank = +e.target.value; } },
+          Array.from({ length: 64 }, (_, i) => h('option', { value: String(i + 1), selected: g.bank === i + 1 }, (i + 1 < 10 ? '0' : '') + (i + 1)))),
+        h('select', { id: 'mem-goto-letter', 'aria-label': T('mm_goto_letter'), title: T('mm_goto_letter'), disabled: locked, onchange: e => { g.letter = e.target.value; } },
+          ['A', 'B', 'C', 'D'].map(l => h('option', { value: l, selected: g.letter === l }, l))),
+        h('button', { type: 'button', class: 'btn small', id: 'mem-goto-btn', title: T('mm_goto_tip'), disabled: locked, onclick: memGoto }, T('mm_goto_btn'))));
+  }
   function memPanel() {
-    if (!pedalFound()) return null;
+    if (!pedalFound()) {
+      const m0 = s.mem; if (m0.plan || m0.mv) { m0.plan = null; m0.sel = []; if (m0.mv && m0.mv.phase !== 'run') m0.mv = null; }
+      return null;
+    }
     const m = s.mem, L = s.listen, u = s.usb, n = m.items.filter(Boolean).length;
     if (m.shownPc !== L.pc) { m.shownPc = L.pc; m.follow = true; }
     const locked = !!u.sending || s.inj.busy || s.pr.busy;
-    const rows = m.items.map((it, pc) => {
-      const on = L.pc === pc;
-      return h('button', { type: 'button', class: 'mem-row' + (on ? ' on' : '') + (it && it.stale ? ' stale' : '') + (it ? '' : ' wait') + (pc % 4 === 3 ? ' end' : ''),
-        'data-pc': String(pc), 'aria-pressed': String(on), disabled: locked, title: T('mem_pick', memName(pc)), onclick: () => memPick(pc) },
-        h('span', { class: 'ms', text: memName(pc) }), h('span', { class: 'mn', text: it ? (it.name || '–') : '…' }));
+    const can = memReady() && !locked, plan = m.plan, selSet = new Set(m.sel || []), showSel = !!plan || selSet.size > 1;
+    const rows = m.items.map((_, pos) => {
+      const src = memSrc(pos), it = m.items[src], on = L.pc === pos, moved = !!plan && src !== pos;
+      return h('button', { type: 'button', class: 'mem-row' + (on ? ' on' : '') + (it && it.stale ? ' stale' : '') + (it ? '' : ' wait') + (pos % (P.is200 ? 4 : 10) === (P.is200 ? 3 : 9) ? ' end' : '') + (moved ? ' moved' : '') + (showSel && selSet.has(pos) ? ' sel' : ''),
+        'data-pc': String(pos), 'aria-pressed': String(on), disabled: locked, title: moved ? T('mm_from', memName(src)) : T('mem_pick', memName(pos)), draggable: can ? 'true' : null,
+        onclick: ev => memRowClick(ev, pos), ondragstart: ev => memDragStart(ev, pos), ondragover: ev => memDragOver(ev, pos), ondrop: ev => memDrop(ev, pos) },
+        h('span', { class: 'ms', text: memName(pos) }), h('span', { class: 'mn', text: it ? (it.name || '–') : '…' }));
     });
+    const nChg = plan ? MM.changed(plan.order).length : 0;
     return h('aside', { class: 'mem zone', 'aria-label': T('mem_title') },
       h('div', { class: 'side-h' }, h('h2', { text: T('mem_title') }),
         h('button', { type: 'button', class: 'btn small ghost x-close', id: 'mem-refresh', title: T('mem_refresh'), 'aria-label': T('mem_refresh'), disabled: m.busy || locked,
           onclick: () => memLoad({ manual: true, all: true }) }, '↻')),
-      h('div', { class: 'mem-st' }, h('span', { class: 'count', title: T('mem_count'), text: n + '/256' }), m.busy ? h('span', { class: 'help', text: T('mem_loading', m.done, m.todo) }) : null),
+      h('div', { class: 'mem-st' }, h('span', { class: 'count', title: T('mem_count'), text: n + '/' + P.nSlots }), m.busy ? h('span', { class: 'help', text: T('mem_loading', m.done, m.todo) }) : null,
+        MM && P.is200 ? h('button', { type: 'button', class: 'btn small ghost', id: 'mem-restore', title: T('mm_restore_tip'), disabled: locked || !memReady() || !!plan, onclick: memRestorePick }, T('mm_restore')) : null),
       h('p', { class: 'help', text: T('mem_sub') }),
+      memReady() && !plan ? h('p', { class: 'help mem-dnd-hint', id: 'mem-dnd-hint', text: T('mm_hint') }) : null,
+      memReady() && showSel && selSet.size > 0 ? memGotoBox(selSet.size, locked) : null,
+      plan ? h('div', { class: 'mem-plan', id: 'mem-plan', role: 'group', 'aria-label': T('mm_title') },
+        h('p', { class: 'help', id: 'mem-plan-n', text: T('mm_pending', nChg) }),
+        h('div', { class: 'mem-plan-btns' },
+          h('button', { type: 'button', class: 'btn small go', id: 'mem-apply', title: T('mm_apply'), disabled: locked || !nChg || !writeOk(), onclick: () => { m.mv = { phase: 'confirm' }; render(); } }, T('mm_apply')),
+          h('button', { type: 'button', class: 'btn small', id: 'mem-cancel', title: T('cancel'), onclick: memPlanCancel }, T('cancel')))) : null,
       m.err ? h('p', { class: 'note err', role: 'status', text: T('mem_err', m.err) }) : null,
-      h('div', { class: 'mem-list', id: 'mem-list' }, rows));
+      h('div', { class: 'mem-list', id: 'mem-list', onkeydown: memKey }, rows));
   }
+
+  // -- application du plan : lecture, sauvegarde, ecriture, controle
+  function mmPaint(pct, label) {
+    const mv = s.mem.mv; if (!mv) return;
+    mv.pct = pct; mv.label = label;
+    const b = document.getElementById('mm-bar'), l = document.getElementById('mm-label');
+    if (b) b.style.width = Math.max(0, Math.min(100, pct)).toFixed(0) + '%';
+    if (l) l.textContent = label;
+  }
+  function memBackupZip(list, prefix) {
+    const d = new Date(), p2 = n => (n < 10 ? '0' : '') + n;
+    zipFiles(list.map(({ pc, data }) => {
+      const raw = G.prstFromDeviceRead(data, template), name = G.deviceReadName(data);
+      return { f: { filename: memName(pc) + '_' + G.safeFilename(name || 'patch') + '.prst', folder: '', raw, spec: { name, slot: memName(pc) } }, res: null };
+    }), (prefix || (s.lang === 'fr' ? 'sauvegarde_pedale_' : 'pedal_backup_')) + d.getFullYear() + p2(d.getMonth() + 1) + p2(d.getDate()) + '_' + p2(d.getHours()) + p2(d.getMinutes()));
+  }
+  // -- restaurer une sauvegarde (ZIP cree avant une reorganisation, ou .prst nommes « 07-B_nom.prst ») : meme securites que le deplacement
+  function memRestorePick() {
+    if (!memReady() || s.usb.sending || s.inj.busy || s.pr.busy || s.mem.mv) return;
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = '.zip,.prst,application/zip,application/octet-stream'; inp.multiple = true; inp.style.display = 'none';
+    document.body.appendChild(inp);
+    inp.addEventListener('change', () => { const fl = Array.from(inp.files || []); inp.remove(); if (fl.length) memRestoreLoad(fl); });
+    inp.addEventListener('cancel', () => inp.remove());
+    inp.click();
+  }
+  async function memRestoreLoad(files) {
+    const m = s.mem, found = new Map(), skipped = []; let zipErr = null;
+    const take = (name, buf) => {
+      const pc = MM.slotOfName(name), base = String(name).split(/[\\/]/).pop();
+      if (pc === null || buf.length !== G.FILE_SIZE) { skipped.push(base); return; }
+      let dec; try { dec = G.decodePrst(buf, tb); } catch (e) { skipped.push(base); return; }
+      if (!dec.checksum.valid) { skipped.push(base); return; }
+      found.set(pc, { pos: pc, raw: buf, name: dec.name || base });
+    };
+    for (const f of files) {
+      try {
+        const buf = new Uint8Array(await f.arrayBuffer());
+        if (/\.zip$/i.test(f.name || '') || (buf[0] === 0x50 && buf[1] === 0x4b)) { for (const e of await MM.unzip(buf)) if (/\.prst$/i.test(e.name)) take(e.name, e.data); }
+        else take(f.name || '', buf);
+      } catch (e) { zipErr = f.name || '?'; }
+    }
+    m.plan = null; m.sel = []; m.anchor = null;
+    if (!found.size) m.mv = { kind: 'restore', phase: 'err', text: zipErr ? T('mm_rest_zip', zipErr) : T('mm_rest_none') };
+    else m.mv = { kind: 'restore', phase: 'rconfirm', rest: Array.from(found.values()).sort((a, b) => a.pos - b.pos), skipped };
+    render();
+  }
+  async function memRestoreRun() {
+    const m = s.mem, u = s.usb, mv = m.mv;
+    if (!mv || mv.phase !== 'rconfirm' || !mv.rest || !MM) return;
+    if (!pedalFound() || !P.is200 || !writeOk() || tuneActive() || u.sending || s.inj.busy || s.pr.busy || m.busy) { mv.phase = 'err'; mv.text = T('mm_busy'); render(); return; }
+    const rest = mv.rest.slice(), chg = rest.map(r => r.pos);
+    clearTimeout(s.inj.t); s.inj.t = null; clearTimeout(m.t); m.t = null;
+    await liveStop();
+    mv.phase = 'run'; mv.pct = 1; mv.label = T('mm_reading') + '…'; u.flags = {}; u.result = null; u.sending = { label: mv.label };
+    render();
+    const written = []; let cur = null;
+    try {
+      u.link.select(u.outId);
+      await u.link.open();
+      await sleep(IS_ANDROID ? 700 : 300);
+      const link = u.link, before = new Map(), readOne = async pc => {
+        let data = null;
+        for (let a = 0; a < 3 && !data; a++) {
+          try { data = await link.readStoredPatch(pc, { timeoutMs: IS_ANDROID ? 3000 : 1500 }); } catch (e) { if (!e || (e.code !== 'timeout' && e.code !== 'badread')) throw e; }
+        }
+        if (!data) throw new USB.UsbError('timeout', T('mm_read_fail', memName(pc)));
+        return data;
+      };
+      for (let k = 0; k < chg.length; k++) {                                       // 1. etat actuel des emplacements concernes
+        const pc = chg[k]; before.set(pc, await readOne(pc));
+        mmPaint(1 + ((k + 1) / chg.length) * 19, T('mm_reading') + ' · ' + memName(pc) + ' (' + (k + 1) + '/' + chg.length + ')');
+      }
+      mmPaint(21, T('mm_backup'));                                                  // 2. sauvegarde AVANT toute ecriture
+      memBackupZip(chg.map(pc => ({ pc, data: before.get(pc) })), s.lang === 'fr' ? 'avant_restauration_' : 'before_restore_');
+      await sleep(300);
+      for (let k = 0; k < chg.length; k++) {                                       // 3. ecriture
+        const r = rest[k], bank = (r.pos >> 2) + 1, letter = 'ABCD'[r.pos & 3];
+        cur = r.pos;
+        await link.pushPreset(bank, letter, r.raw, {
+          onProgress: (step, total) => mmPaint(22 + ((k * (total + 2) + step) / (chg.length * (total + 2))) * 62,
+            T('mm_writing') + ' · ' + memName(r.pos) + ' (' + (k + 1) + '/' + chg.length + ')'),
+        });
+        written.push(r.pos); cur = null;
+      }
+      await sleep(400);
+      const bad = [];
+      for (let k = 0; k < chg.length; k++) {                                       // 4. relecture de controle
+        const r = rest[k], got = await readOne(r.pos);
+        if (!MM.sameStored(r.raw.subarray(40, 40 + MM.STORED_SIZE), got)) bad.push(memName(r.pos));
+        m.items[r.pos] = { name: G.deviceReadName(got) };
+        mmPaint(85 + ((k + 1) / chg.length) * 14, T('mm_verify') + ' · ' + memName(r.pos) + ' (' + (k + 1) + '/' + chg.length + ')');
+      }
+      await sleep(350);
+      u.link.selectPreset((chg[0] >> 2) + 1, 'ABCD'[chg[0] & 3]);
+      mv.phase = 'done'; mv.text = T('mm_rdone', chg.length, chg.length - bad.length, chg.length) + (bad.length ? T('mm_done_bad', bad.join(', ')) : '');
+      dg('read', 'sauvegarde restauree : ' + chg.length + ' emplacements, ' + bad.length + ' ecart(s) a la relecture');
+    } catch (e) {
+      const why = usbErr(e);
+      if (!written.length && cur === null) { mv.phase = 'err'; mv.text = T('mm_fail0', why); mv.rest = null; }
+      else {
+        mv.phase = 'err'; mv.text = T('mm_rfail', written.length, chg.length, written.map(memName).join(', ') + (cur !== null ? (written.length ? ' + ' : '') + memName(cur) + ' (?)' : ''), why);
+        chg.forEach(pc => { m.items[pc] = Object.assign({ name: '' }, m.items[pc], { stale: true }); });
+        memSoon(1500);
+      }
+    } finally {
+      try { await u.link.close(); } catch (e) { /* rien */ }
+      u.sending = null;
+      forgetPedalState();
+      render();
+    }
+  }
+  async function memMoveRun() {
+    const m = s.mem, u = s.usb, mv = m.mv;
+    if (!mv || mv.phase !== 'confirm' || !m.plan || !MM) return;
+    if (!pedalFound() || !P.is200 || !writeOk() || tuneActive() || u.sending || s.inj.busy || s.pr.busy || m.busy) { mv.phase = 'err'; mv.text = T('mm_busy'); render(); return; }
+    const order = m.plan.order.slice(), chg = MM.changed(order);
+    if (!chg.length) { m.mv = null; m.plan = null; m.sel = []; render(); return; }
+    const shown = pc => (m.items[pc] && m.items[pc].name) || '';
+    clearTimeout(s.inj.t); s.inj.t = null; clearTimeout(m.t); m.t = null;
+    await liveStop();
+    mv.phase = 'run'; mv.pct = 1; mv.label = T('mm_reading') + '…'; u.flags = {}; u.result = null; u.sending = { label: mv.label };
+    render();
+    const written = []; let cur = null;
+    try {
+      u.link.select(u.outId);
+      await u.link.open();
+      await sleep(IS_ANDROID ? 700 : 300);
+      const link = u.link, src = new Map(), readOne = async pc => {
+        let data = null;
+        for (let a = 0; a < 3 && !data; a++) {
+          try { data = await link.readStoredPatch(pc, { timeoutMs: IS_ANDROID ? 3000 : 1500 }); } catch (e) { if (!e || (e.code !== 'timeout' && e.code !== 'badread')) throw e; }
+        }
+        if (!data) throw new USB.UsbError('timeout', T('mm_read_fail', memName(pc)));
+        return data;
+      };
+      for (let k = 0; k < chg.length; k++) {                                       // 1. lecture des contenus actuels (source de tout deplacement)
+        const pc = chg[k], data = await readOne(pc), nm = G.deviceReadName(data), exp = shown(pc);
+        if (exp && nm !== exp) throw new USB.UsbError('changed', T('mm_changed', memName(pc), exp, nm));
+        src.set(pc, data);
+        mmPaint(1 + ((k + 1) / chg.length) * 19, T('mm_reading') + ' · ' + memName(pc) + ' (' + (k + 1) + '/' + chg.length + ')');
+      }
+      mmPaint(21, T('mm_backup'));                                                  // 2. sauvegarde AVANT toute ecriture
+      memBackupZip(chg.map(pc => ({ pc, data: src.get(pc) })));
+      await sleep(300);
+      for (let k = 0; k < chg.length; k++) {                                       // 3. ecriture (meme sequence que la Set list)
+        const pos = chg[k], raw = G.prstFromDeviceRead(src.get(order[pos]), template), bank = (pos >> 2) + 1, letter = 'ABCD'[pos & 3];
+        cur = pos;
+        await link.pushPreset(bank, letter, raw, {
+          onProgress: (step, total) => mmPaint(22 + ((k * (total + 2) + step) / (chg.length * (total + 2))) * 62,
+            T('mm_writing') + ' · ' + memName(pos) + ' (' + (k + 1) + '/' + chg.length + ')'),
+        });
+        written.push(pos); cur = null;
+      }
+      await sleep(400);
+      const bad = [];
+      for (let k = 0; k < chg.length; k++) {                                       // 4. relecture de controle
+        const pos = chg[k], got = await readOne(pos), want = src.get(order[pos]);
+        if (!MM.sameStored(want, got)) bad.push(memName(pos));
+        m.items[pos] = { name: G.deviceReadName(got) };
+        mmPaint(85 + ((k + 1) / chg.length) * 14, T('mm_verify') + ' · ' + memName(pos) + ' (' + (k + 1) + '/' + chg.length + ')');
+      }
+      await sleep(350);
+      u.link.selectPreset((chg[0] >> 2) + 1, 'ABCD'[chg[0] & 3]);
+      mv.phase = 'done'; mv.text = T('mm_done', chg.length, chg.length - bad.length, chg.length) + (bad.length ? T('mm_done_bad', bad.join(', ')) : '');
+      m.plan = null; m.sel = []; m.anchor = null;
+      dg('read', 'memoire reorganisee : ' + chg.length + ' emplacements, ' + bad.length + ' ecart(s) a la relecture');
+    } catch (e) {
+      const why = (e && e.code === 'changed') ? e.message : usbErr(e);
+      if (!written.length && cur === null) { mv.phase = 'err'; mv.text = T('mm_fail0', why); }                       // rien d'ecrit : le plan reste, on peut recommencer
+      else {
+        mv.phase = 'err'; mv.text = T('mm_fail', written.length, chg.length, written.map(memName).join(', ') + (cur !== null ? (written.length ? ' + ' : '') + memName(cur) + ' (?)' : ''), why);
+        m.plan = null; m.sel = []; m.anchor = null;
+        chg.forEach(pc => { m.items[pc] = Object.assign({ name: '' }, m.items[pc], { stale: true }); });
+        memSoon(1500);
+      }
+      if (e && e.code === 'changed') { memInvalidate(); memSoon(1500); }
+    } finally {
+      try { await u.link.close(); } catch (e) { /* rien */ }
+      u.sending = null;
+      forgetPedalState();
+      render();
+    }
+  }
+  function memMoveDialog() {
+    const m = s.mem, mv = m.mv;
+    if (!mv || !pedalFound()) return null;
+    const close = () => { if (mv.direct && m.plan && mv.phase !== 'run') { m.plan = null; m.sel = []; m.anchor = null; } m.mv = null; render(); };   // deplacement direct annule : tout redevient comme avant
+    const head = h('header', { class: 'pop-head' }, h('h2', { id: 'mm-title', text: T(mv.kind === 'restore' ? 'mm_rest_title' : 'mm_title') }),
+      mv.phase === 'run' ? null : h('button', { type: 'button', class: 'btn small ghost x-close', id: 'mm-x', 'aria-label': T('pop_close'), onclick: close }, '✕'));
+    let body;
+    if (mv.phase === 'rconfirm' && mv.rest) {
+      const injPc = s.inj.set ? USB.slotToPc(s.inj.bank, s.inj.letter) : -1;
+      body = h('div', { class: 'injpanel', id: 'mm-confirm', role: 'alertdialog', 'aria-labelledby': 'mm-title' },
+        h('p', { class: 'help', text: T('mm_rest_msg', mv.rest.length) }),
+        h('ul', { class: 'mm-list', id: 'mm-list' }, mv.rest.map(r => h('li', { text: memName(r.pos) + '  ←  ' + r.name + '   (' + T('mm_rest_cur') + ' : ' + ((m.items[r.pos] || {}).name || '–') + ')' }))),
+        mv.skipped && mv.skipped.length ? h('p', { class: 'note', text: T('mm_rest_skip', mv.skipped.length, mv.skipped.slice(0, 4).join(', ') + (mv.skipped.length > 4 ? '…' : '')) }) : null,
+        mv.rest.some(r => r.pos === injPc) ? h('p', { class: 'note', text: T('mm_inj_warn', memName(injPc)) }) : null,
+        h('p', { class: 'help', text: T('mm_rest_note') }),
+        h('div', { class: 'actions' },
+          h('button', { type: 'button', class: 'btn go', id: 'mm-go', title: T('mm_rest_go'), onclick: memRestoreRun }, T('mm_rest_go')),
+          h('button', { type: 'button', class: 'btn', id: 'mm-no', title: T('cancel'), onclick: close }, T('cancel'))));
+    } else if (mv.phase === 'confirm' && m.plan) {
+      const chg = MM.changed(m.plan.order), injPc = s.inj.set ? USB.slotToPc(s.inj.bank, s.inj.letter) : -1;
+      const mvd = new Set(m.plan.moved || []), line = pos => h('li', { text: memName(pos) + '  ←  ' + memName(m.plan.order[pos]) + '  ' + ((m.items[m.plan.order[pos]] || {}).name || '–') });
+      const gA = chg.filter(pos => mvd.has(m.plan.order[pos])), gB = chg.filter(pos => !mvd.has(m.plan.order[pos]));
+      body = h('div', { class: 'injpanel', id: 'mm-confirm', role: 'alertdialog', 'aria-labelledby': 'mm-title' },
+        mv.direct ? h('p', { class: 'note', id: 'mm-direct', text: T('mm_direct', mv.name || '–', memName(mv.from), memName(mv.to)) }) : null,
+        h('p', { class: 'help', text: T('mm_confirm_msg', chg.length) }),
+        h('ul', { class: 'mm-list', id: 'mm-list' }, gA.length && gB.length ? [
+          h('li', { class: 'mm-grp', text: T('mm_grp_moved', gA.length) }), ...gA.map(line),
+          h('li', { class: 'mm-grp', text: T('mm_grp_shift', gB.length) }), ...gB.map(line)] : chg.map(line)),
+        chg.indexOf(injPc) >= 0 ? h('p', { class: 'note', text: T('mm_inj_warn', memName(injPc)) }) : null,
+        h('p', { class: 'help', text: T('mm_backup_note') }),
+        h('div', { class: 'actions' },
+          h('button', { type: 'button', class: 'btn go', id: 'mm-go', title: T('mm_go'), onclick: memMoveRun }, T('mm_go')),
+          h('button', { type: 'button', class: 'btn', id: 'mm-no', title: T('cancel'), onclick: close }, T('cancel'))));
+    } else if (mv.phase === 'run') {
+      body = h('div', { class: 'injpanel', id: 'mm-run' }, h('p', { class: 'help', text: T('mm_wait') }),
+        h('div', { class: 'prog', role: 'progressbar' }, h('div', { class: 'bar' }, h('i', { id: 'mm-bar', style: 'width:' + Math.max(1, Math.min(100, mv.pct || 1)).toFixed(0) + '%' })), h('span', { id: 'mm-label', text: mv.label || '' })));
+    } else {
+      body = h('div', { class: 'injpanel', id: 'mm-end' }, h('p', { class: 'note ' + (mv.phase === 'done' ? 'ok' : 'err'), id: 'mm-result', role: mv.phase === 'done' ? 'status' : 'alert', text: mv.text || '' }),
+        h('div', { class: 'actions' }, h('button', { type: 'button', class: 'btn go', id: 'mm-close', title: T('mm_close'), onclick: close }, T('mm_close'))));
+    }
+    return h('div', { class: 'modal-veil', id: 'mm-modal', onclick: e => { if (e.target === e.currentTarget && mv.phase !== 'run') close(); } },
+      h('div', { class: 'modal slotbox mmbox', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'mm-title' }, head, body));
+  }
+  document.addEventListener('dragend', () => { if (s.mem.dragging) memDragEnd(true); });
 
   /** Tient le port ouvert pour entendre la pedale (sinon il se referme apres 15 s d'inactivite) et le rouvre apres une injection. */
   function listenTick() {
@@ -2023,7 +2905,7 @@
     const has = !!(e && e.model);
     const box = h('div', { class: 'module', id: 'module-box' });
     const list = tb.modelsForSlot(slot);
-    const curIdx = has ? list.findIndex(x => x[1] === e.category && (x[1] === 10 ? x[0].model_id : x[0].id) === e.model_id) : -1;
+    const curIdx = has ? list.findIndex(x => x[1] === e.category && midOf(x[0], x[1]) === e.model_id) : -1;
     const groups = new Map();
     list.forEach((x, i) => { const g = x[0].category_label || ''; if (!groups.has(g)) groups.set(g, []); groups.get(g).push([x, i]); });
     const opts = [];
@@ -2033,10 +2915,10 @@
       opts.push(g && groups.size > 1 ? h('optgroup', { label: g }, os) : os);
     });
     const mid = has ? e.model_id : 0, cat = has ? e.category : 0;
-    const desc = has && cat !== 10 ? tb.description(mid, cat) : '';
+    const desc = has && !(P.is200 && cat === 10) ? tb.description(mid, cat) : '';
     const fdb = v => { const x = (Math.round(v * 10) / 10).toFixed(1); return s.lang === 'fr' ? x.replace('.', ',') : x; };
-    const lvl = has && B.audit && B.audit.lv && (slot === 'AMP' || slot === 'DST') && cat !== 15 ? B.audit.lv[mid + ',' + cat] : undefined;
-    const lvMed = B.audit && B.audit.med ? B.audit.med[slot] : undefined;
+    const lvl = P.is200 && has && B.audit && B.audit.lv && (slot === 'AMP' || slot === 'DST') && cat !== 15 ? B.audit.lv[mid + ',' + cat] : undefined;
+    const lvMed = P.is200 && B.audit && B.audit.med ? B.audit.med[slot] : undefined;
     const lvEl = lvl !== undefined && lvMed !== undefined ? h('p', { class: 'what lvl', id: 'mod-level', text: T('lvl_line', fdb(lvl), (lvl - lvMed >= 0 ? '+' : '') + fdb(lvl - lvMed), fdb(lvMed)) }) : null;
     box.appendChild(h('div', { class: 'mhead' },
       h('div', { class: 'mtitle' }, h('h3', { text: slotName(slot) }), desc ? h('p', { class: 'what', text: desc }) : null, lvEl),
@@ -2044,7 +2926,7 @@
       has ? h('span', { class: 'mstate' + (e.on ? ' on' : ''), id: 'ed-state', title: T('slot_tip') }, h('span', { class: 'led' }), e.on ? T('active') : T('bypass')) : null));
     if (!has) { box.appendChild(h('p', { class: 'help', text: T('inspector_hint') })); return box; }
 
-    const pst = (B.audit && B.audit.ps && B.audit.ps[mid + ',' + cat]) || {};
+    const pst = (P.is200 && B.audit && B.audit.ps && B.audit.ps[mid + ',' + cat]) || {};
     const ul = h('ul', { class: 'params sliders' });
     for (const p of tb.paramsOf(mid, cat)) {
       if (p.slot >= G.N_SLOTS) continue;
@@ -2053,6 +2935,13 @@
       const lo = Math.min(p.min, p.max), hi = Math.max(p.min, p.max), step = p.step > 0 ? p.step : 1;
       let range = null;
       const ptip = TIPS.paramTip(p, s.lang);
+      if (p.options) {                                    // reglage a choix (GP-150 / GP-180) : une liste, la valeur est le numero du choix
+        const cur = Math.round(Number(val));
+        ul.appendChild(h('li', null, h('span', { class: 'pn', title: ptip }, p.name),
+          h('select', { class: 'popt', 'aria-label': p.name, 'data-param': p.name, title: ptip, onchange: ev => edParam(file, slot, p, +ev.target.value) },
+            p.options.map((o, i) => h('option', { value: String(i), selected: i === cur }, o)))));
+        continue;
+      }
       const num = h('input', { type: 'number', class: 'num', min: String(lo), max: String(hi), step: String(step), value: numShow(val, step), 'aria-label': p.name + ' (valeur)', 'data-num': p.name, title: ptip + '\n' + TIPS.ui[s.lang].param_num,
         oninput: ev => { const v = Number(ev.target.value); if (ev.target.value === '' || isNaN(v)) return; const c = clampN(v, lo, hi); range.value = String(c); edParam(file, slot, p, c); },
         onchange: ev => { const v = clampN(Number(ev.target.value) || 0, lo, hi); ev.target.value = numStr(v); range.value = String(v); } });
@@ -2089,6 +2978,8 @@
       n && !running ? h('p', { class: 'note ' + (n.kind === 'err' ? 'err' : n.kind === 'ok' ? 'ok' : ''), id: 'status-note', role: n.kind === 'err' ? 'alert' : 'status', style: 'white-space:pre-line' },
         n.text, h('button', { type: 'button', class: 'x', 'aria-label': 'OK', onclick: () => { s.notice = null; render(); } }, '×')) : null,
       h('span', { class: 'st-right' },
+        h('a', Object.assign({ class: 'linkbtn help-link', id: 'help-manual', title: T('help_manual_tip') }, manualLink()),
+          h('span', { class: 'help-q', 'aria-hidden': 'true' }, '?'), T('help_manual')),
         h('button', { type: 'button', class: 'linkbtn', id: 'diag-link', title: T('diag_link_tip'), onclick: () => diagShow(true) }, T('diag_link')),
         B.build ? h('span', { class: 'ver', id: 'build-version', title: B.build.iso, text: T('ver', B.build.version, buildDate()) }) : null));
   }
@@ -2174,20 +3065,38 @@
     u.state = 'asking'; u.result = null; u.error = ''; render();
     try {
       const access = await USB.MidiLink.request();
-      const link = new USB.MidiLink({ loose: IS_ANDROID, chunkDelay: IS_ANDROID ? 60 : undefined, log: (kind, ...a) => { dg('midi', 'link ' + kind + ' ' + a.join(' ')); if (kind === 'no_ack') u.flags.noAck = true; if (kind === 'input_blind') u.flags.blind = true; } });
-      link.attach(access);
-      link.onnotify = onPedalEvent; link.onrx = onPedalRaw;
-      const sendParam0 = link.sendParam.bind(link);
-      link.sendParam = (mod, par, val, prst) => { s.ed.psent.set(mod * 16 + par, Date.now()); return sendParam0(mod, par, val, prst); };   // garde anti-echo des reglages tournes en facade
-      const push0 = link.pushPreset.bind(link);
-      link.pushPreset = async (bank, letter, prst, o) => { try { return await push0(bank, letter, prst, o); } finally { try { memStale(USB.slotToPc(bank, letter)); } catch (e) { /* rien */ } } };   // un emplacement ecrit : son nom est a relire
-      link.onchange = () => { const had = !!u.outId; pedalRefresh(); diagPorts('change'); if (!had && u.outId) { scheduleInject(); scheduleFetch(); scheduleMem(); } if (s.ed.live && !u.outId) { liveStop(); s.ed.err = T('ed_live_ko', T('e_pedal_gone')); } if (!u.sending) render(); };
-      u.link = link; u.state = 'ready'; pedalRefresh(); diagPorts('connect'); scheduleInject(); scheduleFetch(); scheduleMem();
+      pedalUse(access);
     } catch (e) {
       u.state = /denied|security|not allowed|permission/i.test(String((e && e.name) + ' ' + (e && e.message))) ? 'denied' : 'error';
       u.error = usbErr(e);
     }
     render();
+  }
+  /** Cree la liaison MIDI : detecte le modele branche (nom du port), affiche le bon profil, puis ouvre la liaison de ce modele.
+   *  forced : modele impose par l'utilisateur (le nom du port ne dit rien). */
+  function pedalUse(access, forced) {
+    const u = s.usb;
+    const det = forced ? [] : detectModels(access);
+    let model = forced || P.id;
+    if (!forced && det.length && det.indexOf(P.id) < 0) {
+      model = det[0];
+      if (setProfile(model)) s.notice = { kind: 'ok', text: T('model_switched', P.label) };
+    }
+    const U = (profile(model) || P).USB;
+    const link = new U.MidiLink(Object.assign({ loose: IS_ANDROID, chunkDelay: IS_ANDROID ? 60 : undefined, log: (kind, ...a) => { dg('midi', 'link ' + kind + ' ' + a.join(' ')); if (kind === 'no_ack') u.flags.noAck = true; if (kind === 'input_blind') u.flags.blind = true; } }, model === 'gp200' ? {} : { model }));
+    link.attach(access);
+    link.onnotify = onPedalEvent; if (model === 'gp200') link.onrx = onPedalRaw;
+    const sendParam0 = link.sendParam.bind(link);
+    link.sendParam = (mod, par, val, prst) => { s.ed.psent.set(mod * 16 + par, Date.now()); return sendParam0(mod, par, val, prst); };   // garde anti-echo des reglages tournes en facade
+    const push0 = link.pushPreset.bind(link);
+    link.pushPreset = async (bank, letter, prst, o) => { try { return await push0(bank, letter, prst, o); } finally { try { memStale(U.slotToPc(bank, letter)); } catch (e) { /* rien */ } } };   // un emplacement ecrit : son nom est a relire
+    link.onchange = () => {
+      const had = !!u.outId; pedalRefresh(); diagPorts('change'); if (!had && u.outId) { scheduleInject(); scheduleFetch(); scheduleMem(); } if (s.ed.live && !u.outId) { liveStop(); s.ed.err = T('ed_live_ko', T('e_pedal_gone')); }
+      // la pedale de ce modele a disparu et une autre est branchee : on passe a son modele
+      if (!u.outId && !u.sending && !profileLocked()) { const d2 = detectModels(link.access); if (d2.length && d2.indexOf(u.model) < 0) { pedalUse(link.access); render(); return; } }
+      if (!u.sending) render();
+    };
+    u.link = link; u.model = model; u.modelSure = !!forced || det.indexOf(model) >= 0; u.state = 'ready'; pedalRefresh(); diagPorts('connect'); scheduleInject(); scheduleFetch(); scheduleMem();
   }
   function setPedalProgress(pct, label) {
     const b = document.getElementById('pedal-bar'), l = document.getElementById('pedal-label');
@@ -2196,10 +3105,14 @@
   }
   function pedalJobs(kind, gr) {
     const u = s.usb;
-    return kind === 'three' ? gr.slice(0, 3).map((f, i) => ({ f, letter: 'ABCD'[i] })) : [{ f: gr[s.sel.vi], letter: u.letter }];
+    return kind === 'three' ? gr.slice(0, P.is200 ? 3 : Math.min(3, 201 - u.bank)).map((f, i) => ({ f, bank: tripleSlot(i).bank, letter: tripleSlot(i).letter })) : [{ f: gr[s.sel.vi], bank: u.bank, letter: u.letter }];
   }
+  /** i-eme emplacement d'un envoi « 3 variantes » : GP-200, les lettres A, B, C d'une banque ; GP-150 / GP-180, trois numeros qui se suivent. */
+  const tripleSlot = i => (P.is200 ? { bank: s.usb.bank, letter: 'ABCD'[i] } : { bank: s.usb.bank + i, letter: 'A' });
+  const tripleName = i => { const q = tripleSlot(i); return slotName2(q.bank, q.letter); };
   async function pedalSend(kind, gr) {
-    const u = s.usb, jobs = pedalJobs(kind, gr), bank = u.bank;
+    const u = s.usb, jobs = pedalJobs(kind, gr);
+    if (!writeOk()) return;
     await liveStop();
     u.confirm = null; u.result = null; u.flags = {}; u.sending = { label: T('pedal_hs') };
     render();
@@ -2208,13 +3121,13 @@
       await u.link.open();
       for (let k = 0; k < jobs.length; k++) {
         const j = jobs[k], suffix = jobs.length > 1 ? T('pedal_job', k + 1, jobs.length) : '';
-        await u.link.pushPreset(bank, j.letter, j.f.raw, {
+        await u.link.pushPreset(j.bank, j.letter, j.f.raw, {
           onProgress: (step, total) => setPedalProgress(((k * (total + 2) + step) / (jobs.length * (total + 2))) * 100,
             (step === 0 ? T('pedal_hs') : step <= total ? T('pedal_chunk', step, total) : T('pedal_hs').replace(/…$/, '') + ' ✓') + suffix),
         });
       }
-      if (jobs.length > 1) { await sleep(350); u.link.selectPreset(bank, jobs[0].letter); }
-      u.result = { kind: 'ok', text: T('pedal_done', jobs.map(j => slotName2(bank, j.letter)).join(', ')) };
+      if (jobs.length > 1) { await sleep(350); u.link.selectPreset(jobs[0].bank, jobs[0].letter); }
+      u.result = { kind: 'ok', text: T('pedal_done', jobs.map(j => slotName2(j.bank, j.letter)).join(', ')) };
     } catch (e) {
       u.result = { kind: 'err', text: usbErr(e) };
     } finally {
@@ -2230,7 +3143,7 @@
     if (u.state === 'unsupported') { box.appendChild(h('p', { class: 'note', text: T(IS_ANDROID ? 'pedal_unsupported_android' : 'pedal_unsupported') })); return box; }
     if (tuneActive()) { box.appendChild(h('p', { class: 'note', text: T('tune_pedal_busy') })); return box; }
     if (u.state !== 'ready') {
-      box.appendChild(h('ol', { class: 'help' }, (IS_ANDROID ? D[s.lang].pedal_steps_android : D[s.lang].pedal_steps).map(x => h('li', { text: x }))));
+      box.appendChild(h('ol', { class: 'help' }, (IS_ANDROID ? TA('pedal_steps_android') : TA('pedal_steps')).map(x => h('li', { text: x }))));
       if (u.state === 'denied' || u.state === 'error') box.appendChild(h('p', { class: 'note err', role: 'alert', text: u.error }));
       box.appendChild(h('div', null, h('button', { type: 'button', class: 'btn', id: 'pedal-connect', disabled: u.state === 'asking', onclick: pedalConnect },
         u.state === 'asking' ? T('pedal_asking') : T('pedal_connect'))));
@@ -2240,7 +3153,7 @@
     const cur = u.ports.find(p => p.id === u.outId);
     box.appendChild(h('p', { class: 'pstate' + (found ? ' ok' : ''), role: 'status' }, h('span', { class: 'pled' }),
       found ? T('pedal_found', cur ? cur.name : '') : T('pedal_none') + (IS_ANDROID ? ' ' + T('pedal_none_android') : '')));
-    if ((!found && u.ports.length) || u.ports.filter(p => /gp-200/i.test(p.name)).length > 1) {
+    if ((!found && u.ports.length) || u.ports.filter(p => new RegExp(P.label, 'i').test(p.name)).length > 1) {
       box.appendChild(h('label', { class: 'f', style: 'max-width:340px' }, T('pedal_port'),
         h('select', { id: 'pedal-port', disabled: busy, onchange: e => { u.outId = e.target.value || null; render(); } },
           h('option', { value: '' }, '–'), u.ports.map(p => h('option', { value: p.id, selected: p.id === u.outId }, p.name || p.id)))));
@@ -2252,23 +3165,24 @@
     if (found && !gr.length) box.appendChild(h('p', { class: 'help', text: T('pedal_nofile') }));
     if (found && gr.length) {
       const bankStr = n => slotName2(u.bank, n);
-      const n3 = Math.min(3, gr.length);
+      const n3 = Math.min(3, gr.length, P.is200 ? 3 : 201 - u.bank);
       box.appendChild(h('div', { class: 'row slotrow' },
         h('label', { class: 'f' }, T('pedal_bank'), h('select', { id: 'pedal-bank', disabled: busy, onchange: e => { u.bank = +e.target.value; u.confirm = null; save(); render(); } },
           Array.from({ length: USB.SLOT_MAX }, (_, i) => h('option', { value: String(i + 1), selected: i + 1 === u.bank }, String(i + 1))))),
-        h('label', { class: 'f' }, T('pedal_letter'), h('select', { id: 'pedal-letter', disabled: busy, onchange: e => { u.letter = e.target.value; u.confirm = null; save(); render(); } },
-          ['A', 'B', 'C', 'D'].map(l => h('option', { value: l, selected: l === u.letter }, l))))));
+        P.letters.length > 1 ? h('label', { class: 'f' }, T('pedal_letter'), h('select', { id: 'pedal-letter', disabled: busy, onchange: e => { u.letter = e.target.value; u.confirm = null; save(); render(); } },
+          ['A', 'B', 'C', 'D'].map(l => h('option', { value: l, selected: l === u.letter }, l)))) : null));
+      if (!writeOk()) box.appendChild(modelUnsureNote());
       if (u.confirm) {
-        const names = u.confirm === 'three' ? Array.from({ length: n3 }, (_, i) => bankStr('ABCD'[i])).join(', ') : bankStr(u.letter);
+        const names = u.confirm === 'three' ? Array.from({ length: n3 }, (_, i) => tripleName(i)).join(', ') : bankStr(u.letter);
         box.appendChild(h('div', { class: 'note', role: 'alertdialog' }, h('p', { text: T('pedal_confirm', names) }),
           h('div', { class: 'actions', style: 'margin-top:10px' },
             h('button', { type: 'button', class: 'btn go small', id: 'pedal-yes', onclick: () => pedalSend(u.confirm, gr) }, T('pedal_confirm_go')),
             h('button', { type: 'button', class: 'btn small', onclick: () => { u.confirm = null; render(); } }, T('cancel')))));
       } else {
         box.appendChild(h('div', { class: 'actions' },
-          h('button', { type: 'button', class: 'btn', id: 'pedal-one', disabled: busy, onclick: () => { u.confirm = 'one'; u.result = null; render(); } }, T('pedal_send_one', bankStr(u.letter))),
-          n3 > 1 ? h('button', { type: 'button', class: 'btn', id: 'pedal-three', disabled: busy, onclick: () => { u.confirm = 'three'; u.result = null; render(); } },
-            T('pedal_send_three', n3, Array.from({ length: n3 }, (_, i) => bankStr('ABCD'[i])).join(', '))) : null));
+          h('button', { type: 'button', class: 'btn', id: 'pedal-one', disabled: busy || !writeOk(), onclick: () => { u.confirm = 'one'; u.result = null; render(); } }, T('pedal_send_one', bankStr(u.letter))),
+          n3 > 1 ? h('button', { type: 'button', class: 'btn', id: 'pedal-three', disabled: busy || !writeOk(), onclick: () => { u.confirm = 'three'; u.result = null; render(); } },
+            T('pedal_send_three', n3, Array.from({ length: n3 }, (_, i) => tripleName(i)).join(', '))) : null));
       }
     }
     if (busy) box.appendChild(h('div', { class: 'prog', role: 'progressbar' }, h('div', { class: 'bar' }, h('i', { id: 'pedal-bar', style: 'width:2%' })), h('span', { id: 'pedal-label', text: u.sending.label })));
@@ -2297,6 +3211,18 @@
     sl.confirm = false; sl.result = null; sl.fillMsg = '';
     render();
   }
+  /** « Attribuer par chanson » (GP-200) : regroupe les favoris par chanson puis range chaque chanson dans une seule banque (setlistsong.js). */
+  function slAssignBySong() {
+    const sl = s.sl, from = SL.slotLabel(sl.start.bank, sl.start.letter);
+    slEdit(a => {
+      const g = SLSONG.group(a, it => tuneResOf(it.f));
+      a.splice(0, a.length, ...g.items);
+      const pk = SLSONG.pack(g.sizes, sl.start, USB.SLOT_MAX);
+      let k = 0;
+      pk.slots.forEach(gr => gr.forEach(sp => { const it = a[k++]; it.bank = sp ? sp.bank : ''; it.letter = sp ? sp.letter : ''; }));
+      sl.fillMsg = pk.overflow ? T('sl_fill_over', pk.overflow) : T('sl_song_msg', g.sizes.length, from, pk.lastBank);
+    });
+  }
   const slPlan = () => SL.plan(slItems().map(it => ({ name: it.name, bank: it.bank, letter: it.letter })), { work: s.inj.set ? [{ bank: s.inj.bank, letter: s.inj.letter, why: 'inj' }] : [] });
   function slEdit(fn) { const sl = s.sl; fn(slItems()); sl.confirm = false; sl.result = null; render(); }
   function setSlProgress(pct, label) {
@@ -2308,7 +3234,7 @@
 
   async function slSend() {
     const sl = s.sl, u = s.usb, items = slItems(), pl = slPlan();
-    if (!pl.ok || !pedalFound() || tuneActive() || u.sending || s.inj.busy) return;
+    if (!pl.ok || !pedalFound() || tuneActive() || u.sending || s.inj.busy || !writeOk()) return;
     const jobs = pl.jobs.map(j => ({ ...j, raw: SL.renameRaw(items[j.i].f.raw, j.name) }));
     clearTimeout(s.inj.t); s.inj.t = null;
     await liveStop();
@@ -2368,7 +3294,7 @@
     const sl = s.sl, u = s.usb, items = slItems(), pl = slPlan(), foot = h('div', { class: 'sl-foot', id: 'sl-foot' });
     const msgs = slMessages(pl, items);
     if (msgs.length) foot.appendChild(h('ul', { class: 'sl-msgs', id: 'sl-msgs' }, msgs));
-    const found = pedalFound(), busy = !!u.sending, can = pl.ok && found && !busy && !s.inj.busy;
+    const found = pedalFound(), busy = !!u.sending, can = pl.ok && found && !busy && !s.inj.busy && writeOk();
     if (!can) sl.confirm = false;
     if (sl.confirm) {
       foot.appendChild(h('div', { class: 'note', role: 'alertdialog', id: 'sl-confirm' }, h('p', { text: T('sl_confirm') }),
@@ -2404,12 +3330,13 @@
       h('div', { class: 'sl-fillrow' },
         h('span', { class: 'help', style: 'margin:0 0 6px', text: T('sl_fill_from') }),
         h('label', { class: 'f' }, T('sl_slot_bank'), bankSel(sl.start.bank, e => { sl.start.bank = +e.target.value || 1; }, 'sl-fill-bank', T('sl_slot_bank'), true)),
-        h('label', { class: 'f' }, T('sl_slot_letter'), letSel(sl.start.letter, e => { sl.start.letter = e.target.value || 'A'; }, 'sl-fill-letter', T('sl_slot_letter'), true)),
+        P.letters.length > 1 ? h('label', { class: 'f' }, T('sl_slot_letter'), letSel(sl.start.letter, e => { sl.start.letter = e.target.value || 'A'; }, 'sl-fill-letter', T('sl_slot_letter'), true)) : null,
         h('button', { type: 'button', class: 'btn small', id: 'sl-fill', disabled: busy, title: T('sl_fill_title'), onclick: () => slEdit(a => {
           const fl = SL.fill(sl.start.bank, sl.start.letter, a.length);
           a.forEach((it, i) => { const sp = fl.slots[i]; it.bank = sp ? sp.bank : ''; it.letter = sp ? sp.letter : ''; });
           sl.fillMsg = fl.overflow ? T('sl_fill_over', a.length - fl.slots.length) : '';
-        }) }, T('sl_fill'))),
+        }) }, T('sl_fill')),
+        P.letters.length > 1 && SLSONG ? h('button', { type: 'button', class: 'btn small', id: 'sl-fill-song', disabled: busy, title: T('sl_song_title'), onclick: slAssignBySong }, T('sl_song')) : null),
       sl.fillMsg ? h('p', { class: 'note', id: 'sl-fill-msg', text: sl.fillMsg }) : null));
 
     body.appendChild(h('div', { class: 'stepbox', id: 'sl-batch' },
@@ -2418,7 +3345,7 @@
         h('input', { type: 'text', class: 'sl-name', id: 'sl-name-' + i, value: it.name, maxlength: String(SL.MAX_NAME), autocomplete: 'off', spellcheck: 'false', 'aria-label': T('sl_name'), title: T('sl_name'), disabled: busy,
           oninput: e => { it.name = e.target.value; sl.confirm = false; sl.result = null; slRepaintFoot(); } }),
         bankSel(it.bank, e => { it.bank = e.target.value === '' ? '' : +e.target.value; sl.confirm = false; sl.result = null; render(); }, 'sl-bank-' + i, T('sl_slot_bank')),
-        letSel(it.letter, e => { it.letter = e.target.value; sl.confirm = false; sl.result = null; render(); }, 'sl-letter-' + i, T('sl_slot_letter')),
+        P.letters.length > 1 ? letSel(it.letter, e => { it.letter = e.target.value; sl.confirm = false; sl.result = null; render(); }, 'sl-letter-' + i, T('sl_slot_letter')) : null,
         h('span', { class: 'tmv' },
           ib('sl-up-' + i, T('tune_up'), '↑', () => slEdit(a => { const x = a.splice(i, 1)[0]; a.splice(i - 1, 0, x); }), i === 0),
           ib('sl-down-' + i, T('tune_down'), '↓', () => slEdit(a => { const x = a.splice(i, 1)[0]; a.splice(i + 1, 0, x); }), i === items.length - 1),
@@ -2491,7 +3418,7 @@
     try {
       const devs = await LUFS.MicSource.listInputs();
       a.devs = devs;
-      const guess = devs.find(d => /gp-?200|valeton/i.test(d.label));
+      const guess = devs.find(d => new RegExp('gp-?' + P.label.slice(3) + '|valeton', 'i').test(d.label));
       const act = devs.find(d => d.active);
       a.guessed = !!guess;
       a.id = guess ? guess.id : (act ? act.id : (devs[0] ? devs[0].id : ''));
@@ -2594,7 +3521,7 @@
     if (out.action) {
       try {
         const a = out.action;
-        if (a.type === 'patch') s.usb.link.sendPatchVol(a.value); else s.usb.link.sendParam(a.module, a.param, a.value, it.entry.data);
+        if (a.type === 'patch') s.usb.link.sendPatchVol(a.value, it.entry.data); else s.usb.link.sendParam(a.module, a.param, a.value, it.entry.data);
       } catch (e) { return tuneFail(T('tune_err_usb', usbErr(e))); }
       eng.reset(); r.view.itg = null;
     }
@@ -2681,7 +3608,7 @@
 
     if (!t.open) {
       body.appendChild(h('p', { class: 'help', text: T('tune_what') }));
-      body.appendChild(h('ol', { class: 'help' }, D[s.lang].tune_steps.map(x => h('li', { text: x }))));
+      body.appendChild(h('ol', { class: 'help' }, TA('tune_steps').map(x => h('li', { text: x }))));
       body.appendChild(h('div', null, h('button', { type: 'button', class: 'btn', id: 'tune-open', onclick: () => { tuneOpenForm(); render(); } }, T('tune_title'))));
       if (run && run.finished) body.appendChild(tuneSummary(run));
       return box;
@@ -2714,10 +3641,11 @@
       h('div', { class: 'row slotrow' },
         h('label', { class: 'f' }, T('pedal_bank'), h('select', { id: 'tune-bank', onchange: e => { t.bank = +e.target.value; t.confirm = false; render(); } },
           Array.from({ length: USB.SLOT_MAX }, (_, i) => h('option', { value: String(i + 1), selected: i + 1 === t.bank }, String(i + 1))))),
-        h('label', { class: 'f' }, T('pedal_letter'), h('select', { id: 'tune-letter', onchange: e => { t.letter = e.target.value; t.confirm = false; render(); } },
-          ['A', 'B', 'C', 'D'].map(l => h('option', { value: l, selected: l === t.letter }, l)))))));
+        P.letters.length > 1 ? h('label', { class: 'f' }, T('pedal_letter'), h('select', { id: 'tune-letter', onchange: e => { t.letter = e.target.value; t.confirm = false; render(); } },
+          ['A', 'B', 'C', 'D'].map(l => h('option', { value: l, selected: l === t.letter }, l)))) : null)));
 
     const files = tuneFiles(), lib = tuneLibFiles(), avail = lib.filter(x => files.indexOf(x.f) < 0);
+    const favNew = slItems().map(it => it.f).filter(f => files.indexOf(f) < 0);       // favoris (♥) pas encore dans le lot
     const ib = (id, label, txt, fn, dis) => h('button', { type: 'button', class: 'btn small ghost', id, 'aria-label': label, title: label, disabled: !!dis, onclick: fn }, txt);
     body.appendChild(h('div', { class: 'stepbox', id: 'tune-batch' }, h('h3', { text: 'D · ' + T('tune_d') }),
       h('p', { class: 'help', text: T('tune_batch_hint') }),
@@ -2733,6 +3661,7 @@
       h('p', { class: 'help', id: 'tune-count', text: T('tune_count', files.length) }),
       h('div', { class: 'row', style: 'gap:8px;flex-wrap:wrap' },
         h('button', { type: 'button', class: 'btn small', id: 'tune-open-files', onclick: () => { const i = document.getElementById('prst-file'); if (i) i.click(); } }, T('tune_open_files')),
+        favNew.length ? h('button', { type: 'button', class: 'btn small', id: 'tune-add-fav', title: T('tune_add_fav_tip'), onclick: () => tuneEditSel(a => { favNew.forEach(f => a.push(f)); }) }, T('tune_add_fav', favNew.length)) : null,
         avail.length ? h('button', { type: 'button', class: 'btn small', id: 'tune-add-all', onclick: () => tuneEditSel(a => { avail.forEach(x => a.push(x.f)); }) }, T('tune_add_all')) : null,
         files.length ? h('button', { type: 'button', class: 'btn small ghost', id: 'tune-clear', onclick: () => tuneEditSel(a => { a.length = 0; }) }, T('tune_clear')) : null),
       h('details', { class: 'tavail', id: 'tune-add', open: !!t.addOpen || (!files.length && avail.length > 0), ontoggle: e => { t.addOpen = e.target.open; } },
@@ -2823,6 +3752,7 @@
 
   // ------------------------------------------------------------------ demarrage
   load();
+  if (START_MODEL) setProfile(START_MODEL);        // dernier modele GP-150 / GP-180 utilise (la pedale branchee, elle, decide ensuite)
   diagInit();
   if (!PROVIDERS.every(p => B.providers[p])) throw new Error('providers manquants');
   setupGlobal();

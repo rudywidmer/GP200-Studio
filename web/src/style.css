@@ -339,11 +339,12 @@ body.dragging #dropveil { display: flex; }
 .side-h { display: flex; align-items: center; gap: 8px; }
 .side-h h2 { font-size: 16px; }
 .count { font-size: 12px; color: var(--acc-ink); background: var(--acc); border-radius: 999px; padding: 0 8px; font-weight: 600; }
-.lib { display: grid; gap: 10px; }
+.lib { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }   /* piste bornee a la colonne : un titre long ne l'elargit plus */
 .lib-entry { border: 1px solid var(--line-soft); border-radius: var(--r-ctl); background: var(--bg-field); padding: 6px; display: grid; gap: 3px; }
 .lib-entry.cur { border-color: var(--acc-lo); }
-.lib-h { display: flex; align-items: center; gap: 6px; padding: 2px 4px; }
-.lib-h b { font-weight: 600; font-size: 14px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lib-h { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; padding: 2px 4px; }
+.lib-h .badge { margin-left: auto; }
+.lib-h b { font-weight: 600; font-size: 14px; flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; line-height: 1.25; }   /* le titre passe a la ligne au lieu d'elargir la colonne */
 .x { border: 0; background: none; color: var(--ink-dim); cursor: pointer; font-size: 18px; line-height: 1; padding: 0 4px; border-radius: 4px; }
 .x:hover { color: var(--err); background: rgba(226,86,74,.12); }
 .lib-sec { font-size: 12px; color: var(--ink-label); padding: 5px 4px 0; text-transform: none; }
@@ -472,6 +473,8 @@ input.num { width: 78px; min-height: 30px; padding: 2px 6px; text-align: right; 
 .render-error { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 50; background: #3a1512; color: #ffd9d4; border: 1px solid var(--led-on, #ff5a4a); border-radius: 10px; padding: 10px 14px; }
 .linkbtn { background: none; border: 0; padding: 0; font: inherit; color: var(--ink-label); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
 .linkbtn:hover { color: var(--ink); }
+.help-link { white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+.help-q { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid currentColor; font-size: 12px; font-weight: 700; line-height: 1; text-decoration: none; }
 .diag { position: fixed; right: 12px; bottom: 12px; z-index: 85; width: min(400px, calc(100vw - 24px)); display: grid; gap: 8px; padding: 10px 12px; font-size: 14px;
   background: var(--bg-panel); color: var(--ink); border: 1px solid var(--line-strong); border-left: 3px solid var(--warn); border-radius: 10px; box-shadow: 0 6px 24px rgba(0,0,0,.5); }
 .diag.err { border-left-color: var(--err); }
@@ -576,3 +579,52 @@ input.num { width: 78px; min-height: 30px; padding: 2px 6px; text-align: right; 
 }
 @media (min-width: 1100px) and (max-width: 1400px) { .shell.has-mem { grid-template-columns: 200px 250px minmax(0, 1fr); } }
 @media (max-width: 1099px) { .mem { order: 2; } }
+
+/* --- GP-150 / GP-180 : 12 modules dans le rack, choix du modele --- */
+@media (min-width: 1100px) { .rack.r12 { grid-template-columns: repeat(12, minmax(0, 1fr)); } }
+@media (min-width: 961px) and (max-width: 1099px) { .rack.r12 { grid-template-columns: repeat(12, minmax(0, 1fr)); } }
+.side-h .model-sel { margin-left: auto; flex: none; width: 82px; min-height: 28px; height: 28px; padding: 0 18px 0 8px; font-size: 12px; }
+.popt { min-height: 32px; }
+
+/* Favoris (♥) : export / volume / set list, au-dessus de la liste des presets */
+.fav-bar { display: grid; gap: 6px; padding: 8px; border: 1px solid var(--acc-lo); border-radius: var(--r-ctl); background: var(--bg-field); }
+.fav-bar .fav-n { font-size: 13px; font-weight: 600; }
+.fav-bar .fav-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.fav-bar .fav-btns .btn { flex: 1 1 auto; min-width: 0; }
+
+/* Menu contextuel des presets (clic droit / appui long) et fenetre « Renommer » */
+.lib-hint { margin: 0; font-size: 12px; color: var(--ink-label); }
+.lib-line { -webkit-touch-callout: none; }
+.ctx-menu { position: fixed; z-index: 200; min-width: 190px; max-width: min(300px, calc(100vw - 16px)); display: grid; gap: 2px; padding: 6px; background: var(--bg-panel); border: 1px solid var(--line-strong);
+  border-radius: var(--r-ctl); box-shadow: 0 10px 28px rgba(0,0,0,.55); }
+.ctx-item { display: block; width: 100%; text-align: left; border: 1px solid transparent; background: none; color: var(--ink); padding: 7px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+.ctx-item:hover:not(:disabled), .ctx-item:focus-visible { background: var(--bg-hi); border-color: var(--line); }
+.ctx-item:disabled { color: var(--ink-ghost); cursor: not-allowed; }
+.ctx-rename { gap: 8px; padding: 10px; width: 280px; }
+.ctx-rename .ctx-title { font-size: 14px; }
+.ctx-rename .ctx-input { width: 100%; min-height: 32px; padding: 4px 8px; border-radius: var(--r-ctl); border: 1px solid var(--line-strong); background: var(--bg-field); }
+
+/* Reorganiser la memoire de la pedale (glisser-deposer) */
+.mem-row { -webkit-user-select: none; user-select: none; }
+.mem-row[draggable="true"] { cursor: grab; }
+.mem-row.sel { background: rgba(26,159,199,.22); box-shadow: inset 0 0 0 1px var(--acc-lo); }
+.mem-row.moved .mn { color: var(--acc-hi); font-style: italic; }
+.mem-row.moved { box-shadow: inset 3px 0 0 var(--acc); }
+.mem-row.sel.moved { box-shadow: inset 0 0 0 1px var(--acc-lo), inset 3px 0 0 var(--acc); }
+.mem-row.dragging { opacity: .45; }
+.mem-row.drop-before { box-shadow: inset 0 3px 0 var(--acc-hi); }
+.mem-row.drop-after { box-shadow: inset 0 -3px 0 var(--acc-hi); }
+.mem-ghost { position: fixed; top: -200px; left: -200px; padding: 7px 12px; border-radius: 8px; background: var(--acc); color: var(--acc-ink); font: 600 13px var(--font-mono, monospace); white-space: nowrap; box-shadow: 0 4px 14px rgba(0,0,0,.45); }
+.mem-goto { display: grid; gap: 4px; padding: 8px; border: 1px solid var(--acc-lo); border-radius: var(--r-ctl); background: var(--bg-field); }
+.mem-goto .help { margin: 0; font-size: 12px; }
+.mem-goto-row { display: flex; gap: 6px; align-items: center; }
+.mem-goto-row select { min-width: 0; }
+.mem-dnd-hint { margin: 0; font-size: 12px; color: var(--ink-label); }
+.mem-plan { display: grid; gap: 6px; padding: 8px; border: 1px solid var(--acc-lo); border-radius: var(--r-ctl); background: var(--bg-field); }
+.mem-plan p { margin: 0; }
+.mem-plan-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.mem-plan-btns .btn { flex: 1 1 auto; min-width: 0; }
+.mmbox { width: min(560px, calc(100vw - 24px)); }
+.mm-list .mm-grp { margin-top: 6px; font-weight: 700; color: var(--acc); font-family: var(--font-ui, inherit); }
+.mm-list .mm-grp:first-child { margin-top: 0; }
+.mm-list { list-style: none; margin: 0; padding: 6px 8px; max-height: 34vh; overflow: auto; border: 1px solid var(--line-soft); border-radius: var(--r-ctl); background: var(--bg-field); font: 13px/1.6 var(--font-mono); }
