@@ -115,7 +115,7 @@
       sl_send: 'Envoyer %d preset(s) dans la pédale', sl_confirm: 'Ces emplacements de la pédale vont être ÉCRASÉS :', sl_confirm_go: 'Écraser et envoyer',
       mm_hint: 'Glisse un preset pour le déplacer ; Ctrl / ⌘ + clic ou Maj + clic pour en sélectionner plusieurs ; Alt + ↑ / ↓ pour le décaler.',
       mm_goto: 'Déplacer la sélection (%d) vers', mm_goto_btn: 'Déplacer', mm_goto_tip: 'Place le bloc sélectionné à partir de cet emplacement (ordre conservé, les autres se décalent). Rien n’est écrit tant que tu n’as pas appliqué.', mm_goto_bank: 'Banque de destination (1 à 64)', mm_goto_letter: 'Lettre de destination', mm_ghost: '%d presets',
-      mm_pending: '%d emplacement(s) à réécrire. Rien n’est encore écrit dans la pédale.', mm_apply: 'Appliquer à la pédale…',
+      mm_pending: '%d emplacement(s) à réécrire. Rien n’est encore écrit dans la pédale.', mm_apply: 'Appliquer à la pédale…', mm_undo: 'Annuler le dernier déplacement (%d)', mm_undo_tip: 'Défait le dernier déplacement ; chaque clic en défait un de plus', mm_cancel_all: 'Tout annuler', mm_cancel_all_tip: 'Abandonne tous les déplacements : la mémoire redevient comme sur la pédale',
       mm_from: 'Viendra de %s', mm_title: 'Réorganiser la mémoire de la pédale', mm_confirm_msg: '%d emplacement(s) vont être ÉCRASÉS avec le contenu indiqué :',
       mm_backup_note: 'Avant d’écrire, la page lit le contenu actuel de ces emplacements dans la pédale et le télécharge dans un ZIP de sauvegarde. Chaque écriture est ensuite relue pour contrôle ; compte quelques secondes par emplacement.',
       mm_inj_warn: 'Le slot de travail (%s) fait partie des emplacements concernés.', mm_go: 'Sauvegarder et appliquer', mm_close: 'Fermer',
@@ -124,7 +124,6 @@
       mm_done: 'Terminé : %d emplacement(s) réécrit(s) ; relecture de contrôle : %d/%d identique(s). Une sauvegarde ZIP des contenus d’origine a été téléchargée.', mm_done_bad: ' À vérifier : %s.',
       mm_fail0: 'Interrompu avant toute écriture : %s', mm_fail: 'Interrompu après %d emplacement(s) sur %d (écrits : %s). %s La sauvegarde ZIP des contenus d’origine a été téléchargée ; la mémoire de la pédale va être relue.',
       mm_busy: 'La pédale est occupée (envoi, harmonisation ou lecture en cours) : réessaie dans un instant.',
-      mm_direct: 'Déplacer « %s » de %s vers %s : les presets entre les deux se décalent d’un cran.',
       mm_grp_moved: 'Ce que tu as déplacé (%d)', mm_grp_shift: 'Décalés pour leur faire de la place (%d)',
       mm_restore: 'Restaurer…', mm_restore_tip: 'Choisis le ZIP de sauvegarde créé avant une réorganisation (ou des .prst nommés « 07-B_nom.prst ») : chaque preset est réécrit dans son emplacement d’origine. Rien n’est écrit avant ta confirmation.',
       mm_rest_title: 'Restaurer une sauvegarde', mm_rest_msg: '%d emplacement(s) vont être ÉCRASÉS avec le contenu de la sauvegarde :', mm_rest_cur: 'actuellement',
@@ -215,7 +214,7 @@
       listen_on: 'GP-200 sur %s', listen_other: "GP-200 sur %s, mais le preset affiché est dans %s : les réglages en direct sont suspendus pour ne pas modifier un autre patch.",
       listen_reloaded: "La pédale a rechargé %s depuis sa mémoire : les réglages faits depuis l'injection ne sont plus dessus.",
       listen_panel: "Un réglage tourné sur la pédale n'a pas pu être appliqué ici : l'écran peut différer de la pédale.",
-      listen_resend: 'Renvoyer le preset', listen_patch: 'patch %s', listen_byp_on: '%s activé sur la pédale', listen_byp_off: '%s coupé sur la pédale', listen_vol: 'volume du patch %d', listen_knob: 'réglage tourné (%s)',
+      listen_resend: 'Renvoyer le preset', listen_patch: 'patch %s', listen_byp_on: '%s activé sur la pédale', listen_byp_off: '%s coupé sur la pédale', listen_vol: 'volume du patch %d', listen_knob: 'réglage tourné (%s)', listen_model: 'modèle changé sur la pédale (%s)',
       listen_log: 'Ce que dit la pédale', listen_log_sub: 'Derniers messages reçus de la pédale. Utile pour décoder de nouveaux messages : copie ce journal et envoie-le.', listen_log_empty: "Rien reçu pour l'instant : change de patch ou tourne un bouton sur la pédale.", listen_copy: 'Copier le journal', listen_off: "L'écoute de la pédale est désactivée (case du panneau 📍).",
       inj_prog: 'Injection en %s… %d %%', inj_done: '✅ Injecté et sélectionné sur la pédale en %s.', inj_fail: "❌ Injection en %s impossible : %s",
       live_noconf: "⚠ La pédale n'a pas confirmé le chargement de : %s. Vérifie l'effet (ou relance « Envoyer ce module »).",
@@ -354,7 +353,7 @@
       sl_send: 'Send %d preset(s) to the pedal', sl_confirm: 'These pedal slots will be OVERWRITTEN:', sl_confirm_go: 'Overwrite and send',
       mm_hint: 'Drag a preset to move it; Ctrl / ⌘ + click or Shift + click to select several; Alt + ↑ / ↓ to nudge.',
       mm_goto: 'Move the selection (%d) to', mm_goto_btn: 'Move', mm_goto_tip: 'Puts the selected block starting at that slot (order kept, the others shift). Nothing is written until you apply.', mm_goto_bank: 'Destination bank (1 to 64)', mm_goto_letter: 'Destination letter', mm_ghost: '%d presets',
-      mm_pending: '%d slot(s) to rewrite. Nothing has been written to the pedal yet.', mm_apply: 'Apply to the pedal…',
+      mm_pending: '%d slot(s) to rewrite. Nothing has been written to the pedal yet.', mm_apply: 'Apply to the pedal…', mm_undo: 'Undo last move (%d)', mm_undo_tip: 'Undoes the last move; each click undoes one more', mm_cancel_all: 'Cancel all', mm_cancel_all_tip: 'Drops every move: the memory goes back to what the pedal holds',
       mm_from: 'Will come from %s', mm_title: 'Rearrange the pedal memory', mm_confirm_msg: '%d slot(s) will be OVERWRITTEN with the content shown:',
       mm_backup_note: 'Before writing, the page reads the current content of these slots from the pedal and downloads it as a backup ZIP. Each write is then read back to check it; allow a few seconds per slot.',
       mm_inj_warn: 'The working slot (%s) is among the affected slots.', mm_go: 'Back up and apply', mm_close: 'Close',
@@ -363,7 +362,6 @@
       mm_done: 'Done: %d slot(s) rewritten; read-back check: %d/%d identical. A backup ZIP of the original contents was downloaded.', mm_done_bad: ' To check: %s.',
       mm_fail0: 'Stopped before anything was written: %s', mm_fail: 'Stopped after %d slot(s) of %d (written: %s). %s The backup ZIP of the original contents was downloaded; the pedal memory will be read again.',
       mm_busy: 'The pedal is busy (send, volume matching or read in progress): try again in a moment.',
-      mm_direct: 'Move “%s” from %s to %s: the presets in between shift by one slot.',
       mm_grp_moved: 'What you moved (%d)', mm_grp_shift: 'Shifted to make room for them (%d)',
       mm_restore: 'Restore…', mm_restore_tip: 'Choose the backup ZIP created before a rearrangement (or .prst files named “07-B_name.prst”): each preset is written back to its original slot. Nothing is written before you confirm.',
       mm_rest_title: 'Restore a backup', mm_rest_msg: '%d slot(s) will be OVERWRITTEN with the content of the backup:', mm_rest_cur: 'currently',
@@ -454,7 +452,7 @@
       listen_on: 'GP-200 on %s', listen_other: 'GP-200 is on %s, but the displayed preset lives in %s: live changes are paused so another patch is not modified.',
       listen_reloaded: 'The pedal reloaded %s from its memory: changes made since the injection are no longer on it.',
       listen_panel: 'A setting turned on the pedal could not be applied here: the screen may differ from the pedal.',
-      listen_resend: 'Send the preset again', listen_patch: 'patch %s', listen_byp_on: '%s turned on at the pedal', listen_byp_off: '%s bypassed at the pedal', listen_vol: 'patch volume %d', listen_knob: 'setting turned (%s)',
+      listen_resend: 'Send the preset again', listen_patch: 'patch %s', listen_byp_on: '%s turned on at the pedal', listen_byp_off: '%s bypassed at the pedal', listen_vol: 'patch volume %d', listen_knob: 'setting turned (%s)', listen_model: 'model changed at the pedal (%s)',
       listen_log: 'What the pedal says', listen_log_sub: 'Latest messages received from the pedal. Handy to decode new messages: copy this log and send it over.', listen_log_empty: 'Nothing received yet: change patch or turn a knob on the pedal.', listen_copy: 'Copy the log', listen_off: 'Listening to the pedal is off (checkbox in the 📍 panel).',
       inj_prog: 'Injecting into %s… %d %%', inj_done: '✅ Injected and selected on the pedal in %s.', inj_fail: '❌ Could not inject into %s: %s',
       live_noconf: '⚠ The pedal did not confirm loading: %s. Check the effect (or run « Send this module » again).',
@@ -1961,7 +1959,9 @@
     const key = modKey(e), stop = () => !ed.live || (opt.abort && opt.abort());
     if (opt.force || ed.pm.get(k) !== key) {
       // la pedale confirme le chargement du modele (12/0C) : on attend cette confirmation au lieu de 400 ms a l'aveugle, et on renvoie si elle manque
+      ed.ownT = Date.now();                                               // la confirmation 12/0C qui va venir est la reponse a CET envoi (voir onPedalModel)
       const r = await u.link.changeEffect(k, e.model_id, e.category, { alreadyLoaded: ed.pm.get(k) === key });
+      ed.ownT = Date.now();
       ed.pm.set(k, key);
       if (r.confirmed === false) ed.noConf.push(e.model);
       // changer d'ampli fait recharger sa baffle par defaut a la pedale (audit du 04/10) : la baffle de l'ecran n'y est plus
@@ -2500,6 +2500,8 @@
   function memApplyMove(r, sortedBefore, anchor) {
     const m = s.mem;
     if (!r) return false;
+    if (!m.plan) m.hist = [];                                            // nouveau plan : l'historique repart de zero
+    (m.hist || (m.hist = [])).push({ plan: m.plan, sel: (m.sel || []).slice(), anchor: m.anchor });      // etat d'avant ce deplacement (les tableaux d'un plan ne sont jamais modifies : on les garde tels quels)
     m.anchor = r.sel[Math.max(0, sortedBefore.indexOf(anchor))];
     const moved = new Set(m.plan && m.plan.moved ? m.plan.moved : []); r.sel.forEach(p => moved.add(r.order[p]));   // contenus (par emplacement d'origine) que l'utilisateur a deplaces
     m.sel = r.sel; m.plan = { order: r.order, moved: Array.from(moved) }; m.refocus = m.anchor;
@@ -2511,9 +2513,7 @@
     ev.preventDefault();
     const sel = memSorted(), anchor = m.anchor;
     memDragEnd(false);
-    const single = sel.length === 1 && !m.plan, from = sel[0];
-    const done = memApplyMove(MM.move(m.plan ? m.plan.order : MM.identity(m.items.length), sel, anchor, pos), sel, anchor);
-    if (done && single) m.mv = { phase: 'confirm', direct: true, from, to: m.sel[0], name: (m.items[from] || {}).name || '' };   // UN seul preset : la confirmation s'ouvre tout de suite au depot
+    memApplyMove(MM.move(m.plan ? m.plan.order : MM.identity(m.items.length), sel, anchor, pos), sel, anchor);      // un ou plusieurs presets : le deplacement s'ajoute au plan, la confirmation n'est demandee qu'a « Appliquer »
     m.pendingRender = false; render();
   }
   /** « Déplacer la sélection vers » : le bloc sélectionné commence à la banque / lettre choisies (sans glisser sur de longues distances). */
@@ -2547,7 +2547,14 @@
     const b = document.querySelector('.mem-row[data-pc="' + pos + '"]');
     if (b) { b.focus({ preventScroll: true }); b.scrollIntoView({ block: 'nearest' }); }
   }
-  function memPlanCancel() { const m = s.mem; m.plan = null; m.sel = []; m.anchor = null; render(); }
+  function memPlanCancel() { const m = s.mem; m.plan = null; m.hist = []; m.sel = []; m.anchor = null; render(); }
+  /** « Annuler le dernier » : defait le dernier deplacement du plan, et ainsi de suite ; quand il n'en reste plus, le plan disparait (retour a l'etat d'origine). */
+  function memPlanUndo() {
+    const m = s.mem, prev = m.hist && m.hist.pop();
+    if (!prev || !prev.plan) { memPlanCancel(); return; }
+    m.plan = prev.plan; m.sel = prev.sel; m.anchor = prev.anchor; m.refocus = null;
+    render();
+  }
 
   function memGotoBox(n, locked) {
     const m = s.mem, g = m.go || (m.go = { bank: 1, letter: 'A' });
@@ -2590,7 +2597,8 @@
         h('p', { class: 'help', id: 'mem-plan-n', text: T('mm_pending', nChg) }),
         h('div', { class: 'mem-plan-btns' },
           h('button', { type: 'button', class: 'btn small go', id: 'mem-apply', title: T('mm_apply'), disabled: locked || !nChg || !writeOk(), onclick: () => { m.mv = { phase: 'confirm' }; render(); } }, T('mm_apply')),
-          h('button', { type: 'button', class: 'btn small', id: 'mem-cancel', title: T('cancel'), onclick: memPlanCancel }, T('cancel')))) : null,
+          h('button', { type: 'button', class: 'btn small', id: 'mem-undo', title: T('mm_undo_tip'), onclick: memPlanUndo }, T('mm_undo', (m.hist || []).length)),
+          h('button', { type: 'button', class: 'btn small', id: 'mem-cancel', title: T('mm_cancel_all_tip'), onclick: memPlanCancel }, T('mm_cancel_all')))) : null,
       m.err ? h('p', { class: 'note err', role: 'status', text: T('mem_err', m.err) }) : null,
       h('div', { class: 'mem-list', id: 'mem-list', onkeydown: memKey }, rows));
   }
@@ -2781,7 +2789,7 @@
   function memMoveDialog() {
     const m = s.mem, mv = m.mv;
     if (!mv || !pedalFound()) return null;
-    const close = () => { if (mv.direct && m.plan && mv.phase !== 'run') { m.plan = null; m.sel = []; m.anchor = null; } m.mv = null; render(); };   // deplacement direct annule : tout redevient comme avant
+    const close = () => { m.mv = null; render(); };
     const head = h('header', { class: 'pop-head' }, h('h2', { id: 'mm-title', text: T(mv.kind === 'restore' ? 'mm_rest_title' : 'mm_title') }),
       mv.phase === 'run' ? null : h('button', { type: 'button', class: 'btn small ghost x-close', id: 'mm-x', 'aria-label': T('pop_close'), onclick: close }, '✕'));
     let body;
@@ -2801,7 +2809,6 @@
       const mvd = new Set(m.plan.moved || []), line = pos => h('li', { text: memName(pos) + '  ←  ' + memName(m.plan.order[pos]) + '  ' + ((m.items[m.plan.order[pos]] || {}).name || '–') });
       const gA = chg.filter(pos => mvd.has(m.plan.order[pos])), gB = chg.filter(pos => !mvd.has(m.plan.order[pos]));
       body = h('div', { class: 'injpanel', id: 'mm-confirm', role: 'alertdialog', 'aria-labelledby': 'mm-title' },
-        mv.direct ? h('p', { class: 'note', id: 'mm-direct', text: T('mm_direct', mv.name || '–', memName(mv.from), memName(mv.to)) }) : null,
         h('p', { class: 'help', text: T('mm_confirm_msg', chg.length) }),
         h('ul', { class: 'mm-list', id: 'mm-list' }, gA.length && gB.length ? [
           h('li', { class: 'mm-grp', text: T('mm_grp_moved', gA.length) }), ...gA.map(line),
@@ -2829,9 +2836,44 @@
     if (!L.want || ed.live || ed.opening || ed.busy || s.inj.busy || !linkReady()) return;
     liveEnsure().then(ok => { if (ok) render(); });
   }
+  /** 12/0C : la pedale annonce qu'un module vient de changer de modele — confirmation de NOS envois, ou changement fait sur sa facade (essai du 11/10 : les 6 types de
+   *  bloc l'envoient ; changer d'ampli en envoie deux, la baffle par defaut puis l'ampli, a moins d'1 ms). L'identifiant annonce ne sert QU'A DECLENCHER : on ne l'affiche jamais,
+   *  l'ecran montre ce que l'on relit sur la pedale (pedalFetch, lecture seule). Rien n'est ecrit sur la pedale. */
+  function onPedalModel(m) {
+    const L = s.listen, ed = s.ed, pr = s.pr, c = USB.parseEffectConfirm(m);
+    if (!c) { listenLog('autre', '12/0C (' + m.length + ' o)', m); return; }
+    const slot = G.MODULES[c.module], sname = slot ? slotName(slot) : '?';
+    const mine = ed.busy || ed.opening || s.inj.busy || !!s.usb.sending || !!(s.run && s.run.running);
+    if (mine) ed.ownT = Date.now();
+    const own = mine || Date.now() - (ed.ownT || 0) < 1500;           // ce que la pedale confirme est un modele qu'on vient de lui envoyer (ou son echo)
+    listenLog('modele', (slot || 'module ' + c.module) + ' modèle ' + c.mid + ' cat ' + c.cat + (own ? ' (notre envoi)' : ' (façade)'), m);
+    if (own || !pedalFound()) return;
+    if (patchMismatch() || L.desync) return;                          // l'ecran montre autre chose que le patch courant : un bandeau plus precis le dit deja
+    if (!fromPedal()) { L.touched = true; L.last = T('listen_model', sname); listenRender(); return; }      // preset ouvert ou genere : on ne le remplace jamais
+    L.last = T('listen_model', sname);
+    const now = Date.now();
+    if (now - (pr.mT0 || 0) > 10000) pr.mN = 0;                        // garde-fou : au plus 8 relectures de suite
+    pr.mT0 = now;
+    if ((pr.mN = (pr.mN || 0) + 1) > 8) return;
+    pedalRefetchModel();
+  }
+  /** Relit le patch courant (tampon d'edition) 0,3 s apres la derniere annonce 12/0C ; reessaie tant qu'un envoi ou une lecture est en cours. */
+  function pedalRefetchModel() {
+    const pr = s.pr, L = s.listen;
+    clearTimeout(pr.mt);
+    let tries = 0;
+    const go = () => {
+      pr.mt = null;
+      if (!fromPedal() || !pedalFound() || !L.want || tuneActive()) return;
+      if (pr.busy || s.inj.busy || s.usb.sending || s.ed.busy) { if (++tries < 20) pr.mt = setTimeout(go, 300); return; }
+      pedalFetch({ pc: L.pc === null ? undefined : L.pc, replace: true });
+    };
+    pr.mt = setTimeout(go, 300);
+  }
   function onPedalRaw(m) {
-    // journal : on garde ce que le decodage ne sait pas lire (hors 12/0C : confirmations d'effets, tres frequentes)
-    if (!s.listen.want || m.length < 10 || m[8] !== 0x12 || m[9] === 0x0C) return;
+    // journal : on garde ce que le decodage ne sait pas lire (12/0C : voir onPedalModel)
+    if (!s.listen.want || m.length < 10 || m[8] !== 0x12) return;
+    if (m[9] === 0x0C) { if (!tuneActive()) onPedalModel(m); return; }
     if (m[9] === 0x08) return;                                     // deja journalise par onPedalEvent
     if (m[9] === 0x10 && USB.parsePanelParam(m)) return;           // idem ; un 12/10 que le decodage refuse reste dans le journal (variante de trame ?)
     listenLog('autre', '12/' + (m[9] < 16 ? '0' : '') + m[9].toString(16) + ' (' + m.length + ' o)', m);

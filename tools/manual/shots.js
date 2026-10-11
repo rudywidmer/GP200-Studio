@@ -216,9 +216,9 @@ async function dnd(page, from, to) {
 
   // 11 memoire : glisser-deposer
   await row(page, 156).scrollIntoViewIfNeeded();
-  await row(page, 156).click({ modifiers: ['Control'] }); await row(page, 157).click({ modifiers: ['Control'] });      // 2 presets : le deplacement reste un plan (un seul preset = confirmation immediate)
+  await row(page, 156).click({ modifiers: ['Control'] }); await row(page, 157).click({ modifiers: ['Control'] });      // 2 presets selectionnes
   await dnd(page, 156, 165); await page.waitForSelector('#mem-plan');
-  await mark(page, [{ sel: '#mem-plan', n: 1 }, { sel: '#mem-apply', n: 2 }, { sel: '#mem-cancel', n: 3 }, { sel: '.mem-row[data-pc="164"]', n: 4, at: 'tr' }, { sel: '.mem-row[data-pc="156"]', n: 5, at: 'tr' }]);
+  await mark(page, [{ sel: '#mem-plan', n: 1 }, { sel: '#mem-apply', n: 2 }, { sel: '#mem-undo', n: 3 }, { sel: '#mem-cancel', n: 4 }, { sel: '.mem-row[data-pc="164"]', n: 5, at: 'tr' }, { sel: '.mem-row[data-pc="156"]', n: 6, at: 'tr' }]);
   await shot(page, '11-memoire-plan', { clip: await clipOf(page, ['.mem.zone'], 4) }); await unmark(page);
   await page.click('#mem-apply'); await page.waitForSelector('#mm-confirm');
   await mark(page, [{ sel: '#mm-list', n: 1 }, { sel: '#mm-go', n: 2 }, { sel: '#mm-no', n: 3 }]);
